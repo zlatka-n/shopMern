@@ -10,7 +10,16 @@ require('dotenv').config({ path: './config.env' })
 app.use(cors())
 
 app.get('/', (req, res) => {
-  res.send('GET request made')
+
+  db
+    .getDb()
+    .collection('products')
+    .find({})
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+
 })
 
 app.listen(port, () => {
