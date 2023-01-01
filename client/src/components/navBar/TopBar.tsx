@@ -8,7 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import HomeIcon from "@mui/icons-material/Home";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import { Grid } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -27,27 +27,36 @@ export const TopBar = () => {
 
  return (
   <AppBar position="static">
-   <Grid
-    container
-    wrap={"nowrap"}
-    marginY={1}
-    alignItems="center"
-    // rowSpacing={2}
-   >
+   <Grid container wrap={"nowrap"} marginY={1} alignItems="center">
     <Grid item xs={8} marginX={5}>
-     <Grid container flexDirection={"row"}>
-      <HomeIcon />
-      <MailOutlineIcon />
-      <Typography>Contact us</Typography>
-      <HelpOutlineIcon />
-      <Typography>Help</Typography>
-     </Grid>
+     <Stack direction="row" alignItems="center" gap={1}>
+      <IconButton disableRipple>
+       <HomeIcon sx={{ color: "white" }} />
+      </IconButton>
+
+      <IconButton disableRipple>
+       <MailOutlineIcon sx={{ color: "white" }} />
+       <Typography color={"white"} marginLeft={1}>
+        Contact us
+       </Typography>
+      </IconButton>
+
+      <IconButton disableRipple>
+       <HelpOutlineIcon sx={{ color: "white" }} />
+       <Typography color={"white"} marginLeft={1}>
+        Help
+       </Typography>
+      </IconButton>
+     </Stack>
     </Grid>
 
     <Grid item xs={4} marginX={5}>
      <Grid container justifyContent="flex-end">
       <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+       <Typography color={"white"} marginLeft={1}>
+        Sign in
+       </Typography>
       </IconButton>
       <Menu
        sx={{ mt: "45px" }}
