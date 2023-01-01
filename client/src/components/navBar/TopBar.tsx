@@ -5,9 +5,6 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import Avatar from "@mui/material/Avatar";
 import MenuItem from "@mui/material/MenuItem";
-import HomeIcon from "@mui/icons-material/Home";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { Grid, Stack } from "@mui/material";
 import { topBarBtns } from "./utils";
 
@@ -31,8 +28,8 @@ export const TopBar = () => {
    <Grid container wrap={"nowrap"} marginY={1} alignItems="center">
     <Grid item xs={8} marginX={5}>
      <Stack direction="row" alignItems="center" gap={1}>
-      {topBarBtns.map(({ icon, name }) => (
-       <IconButton disableRipple>
+      {topBarBtns.map(({ icon, name, screen }) => (
+       <IconButton disableRipple key={screen}>
         {icon}
         {name ? (
          <Typography color={"white"} marginLeft={1}>
