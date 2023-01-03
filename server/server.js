@@ -11,15 +11,22 @@ app.use(cors())
 
 app.get('/', (req, res) => {
 
+  // db
+  //   .getDb()
+  //   .collection('products')
+  //   .find({})
+  //   .toArray(function (err, result) {
+  //     if (err) throw err;
+  //     res.json(result);
+  //   });
+
   db
     .getDb()
     .collection('products')
     .find({})
-    .toArray(function (err, result) {
-      if (err) throw err;
-      res.json(result);
-    });
-
+    .toArray()
+    .then(data => res.json(data))
+    .catch(error => res.json(error))
 })
 
 app.listen(port, () => {
