@@ -3,12 +3,15 @@ const app = express()
 const port = process.env.PORT || 4000
 const db = require('./conn')
 const cors = require('cors')
+const bodyParser = require('body-parser')
 const authRoutes = require('./routes/auth')
 
 require('dotenv').config({ path: './config.env' })
 
 
 app.use(cors())
+app.use(bodyParser.json())
+
 
 app.get('/', (req, res) => {
 
