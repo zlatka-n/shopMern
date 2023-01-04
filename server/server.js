@@ -3,6 +3,7 @@ const app = express()
 const port = process.env.PORT || 4000
 const db = require('./conn')
 const cors = require('cors')
+const authRoutes = require('./routes/auth')
 
 require('dotenv').config({ path: './config.env' })
 
@@ -28,6 +29,8 @@ app.get('/', (req, res) => {
     .then(data => res.json(data))
     .catch(error => res.json(error))
 })
+
+app.use('/account', authRoutes)
 
 app.listen(port, () => {
   db.connectToMongoDb((err) => console.log(err))
