@@ -11,13 +11,23 @@ router.post('/login', (req, res) => {
     .collection('users')
     .findOne({ email, password }, function (err, user) {
 
-      if (err) res.json(err)
+      if (err) res.send(err)
 
-      if (user) res.status(409).send('409: User already exists')
+      if (user) res.status(409).send({ "status": "409", "message": "User already exists in db", "detail": "Ensure that email is not already registered" })
 
       //TODO: create a new user in db
       if (!user) {
-        res.status(200).send('New user created')
+
+        db
+          .getDb()
+          .collection('users')
+          .insertOne({ email, password }, function (err) {
+
+            if (err) res.send(err)
+
+            res.status(200).send({ 'status': '200', 'message': 'New user was created' })
+
+          })
       }
     })
 
