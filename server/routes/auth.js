@@ -15,7 +15,6 @@ router.post('/login', (req, res) => {
 
       if (user) res.status(409).send({ "status": "409", "message": "User already exists in db", "detail": "Ensure that email is not already registered" })
 
-      //TODO: create a new user in db
       if (!user) {
 
         db
