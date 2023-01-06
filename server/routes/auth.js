@@ -7,27 +7,25 @@ router.post('/login', (req, res) => {
   const password = req.body.password
 
   db
-    .getDb()
-    .collection('users')
+    .getUsersCollection()
     .findOne({ email, password }, function (err, user) {
 
       if (err) res.send(err)
 
-      if (user) res.status(409).send({ "status": "409", "message": "User already exists in db", "detail": "Ensure that email is not already registered" })
-
-      if (!user) {
-
-        db
-          .getDb()
-          .collection('users')
-          .insertOne({ email, password }, function (err) {
-
-            if (err) res.send(err)
-
-            res.status(200).send({ 'status': '200', 'message': 'New user was created' })
-
-          })
+      if (user) {
+        res.status(409).send({ "status": "409", "message": "User already exists in db", "detail": "Ensure that email is not already registered" })
+        return
       }
+
+
+      db
+        .getUsersCollection()
+        .insertOne({ email, password }, function (err) {
+
+          if (err) res.send(err)
+
+          res.status(200).send({ 'status': '200', 'message': 'New user was created' })
+        })
     })
 
 })

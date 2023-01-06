@@ -19,5 +19,8 @@ module.exports = {
   },
   getDb: function () {
     return _db
+  },
+  getUsersCollection: function () {
+    return _db.collection('users')
   }
 }
