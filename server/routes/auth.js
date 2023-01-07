@@ -1,14 +1,16 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../conn')
+const bcrypt = require('bcrypt')
 
 router.post('/signup', (req, res) => {
   const email = req.body.email
   const password = req.body.password
+  const saltRounds = 10;
 
   db
     .getUsersCollection()
-    .findOne({ email, password }, function (err, user) {
+    .findOne({ email }, function (err, user) {
 
       if (err) res.send(err)
 
@@ -17,15 +19,19 @@ router.post('/signup', (req, res) => {
         return
       }
 
+      bcrypt.hash(password, saltRounds, function (err, hash) {
+        if (err) res.send(err)
 
-      db
-        .getUsersCollection()
-        .insertOne({ email, password }, function (err) {
+        db
+          .getUsersCollection()
+          .insertOne({ email, password: hash }, function (err) {
 
-          if (err) res.send(err)
+            if (err) res.send(err)
 
-          res.status(200).send({ 'status': '200', 'message': 'New user was created' })
-        })
+            res.status(200).send({ 'status': '200', 'message': 'New user was created' })
+          })
+      })
+
     })
 
 })
