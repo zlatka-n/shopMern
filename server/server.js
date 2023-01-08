@@ -21,7 +21,6 @@ function authenticateToken(req, res, next) {
 
   jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
     if (err) return res.status(403).send(err)
-
     req.user = user
 
     next()
@@ -29,11 +28,9 @@ function authenticateToken(req, res, next) {
 }
 
 app.get('/', authenticateToken, (req, res) => {
+  const authenticatedUser = req.user.email
 
-
-  const user = req.user.email
-
-  if (user) {
+  if (authenticatedUser) {
     db
       .getDb()
       .collection('products')
