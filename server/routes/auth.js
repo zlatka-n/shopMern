@@ -2,7 +2,14 @@ const express = require('express')
 const router = express.Router()
 const db = require('../db/conn')
 const bcrypt = require('bcrypt')
-let hash
+const jwt = require('jsonwebtoken')
+require('dotenv').config({ path: './config.env' })
+
+const secretToken = process.env.SECRET_TOKEN
+
+function createToken(account) {
+  jwt.sign({ account }, secretToken)
+}
 
 router.post('/signup', (req, res) => {
   const email = req.body.email
@@ -56,11 +63,16 @@ router.post('/login', (req, res) => {
 
           if (!result) res.send('wrong password')
 
-          if (result) res.send({ 'status': '200', 'message': 'User was logged in' })
+          if (result) {
+            const accessToken = jwt.sign({ email: user.email }, secretToken)
+            res.send({ "accessToken": accessToken })
+            // res.send({ 'status': '200', 'message': 'User was logged in' })
+          }
 
         })
       }
     })
 })
+
 
 module.exports = router
