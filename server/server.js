@@ -5,6 +5,7 @@ const db = require('./db/conn')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const authRoutes = require('./routes/auth')
+const jwt = require('jsonwebtoken')
 
 require('dotenv').config({ path: './config.env' })
 
@@ -12,25 +13,36 @@ require('dotenv').config({ path: './config.env' })
 app.use(cors())
 app.use(bodyParser.json())
 
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
 
-app.get('/', (req, res) => {
+  if (!token) return res.status(401).send({ 'status': '401', 'message': 'no token sent' })
 
-  // db
-  //   .getDb()
-  //   .collection('products')
-  //   .find({})
-  //   .toArray(function (err, result) {
-  //     if (err) throw err;
-  //     res.json(result);
-  //   });
+  jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
+    if (err) return res.status(403).send(err)
 
-  db
-    .getDb()
-    .collection('products')
-    .find({})
-    .toArray()
-    .then(data => res.json(data))
-    .catch(error => res.json(error))
+    req.user = user
+
+    next()
+  })
+}
+
+app.get('/', authenticateToken, (req, res) => {
+
+
+  const user = req.user.email
+
+  if (user) {
+    db
+      .getDb()
+      .collection('products')
+      .find({})
+      .toArray(function (err, result) {
+        if (err) throw err;
+        res.json(result);
+      });
+  }
 })
 
 app.use('/account', authRoutes)
