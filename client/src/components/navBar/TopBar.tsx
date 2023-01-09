@@ -1,28 +1,12 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
 import Avatar from "@mui/material/Avatar";
-import MenuItem from "@mui/material/MenuItem";
 import { Grid, Stack } from "@mui/material";
 import { topBarBtns } from "./utils";
-
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import { Link } from "react-router-dom";
 
 export const TopBar = () => {
- const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-  null
- );
-
- const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-  setAnchorElUser(event.currentTarget);
- };
-
- const handleCloseUserMenu = () => {
-  setAnchorElUser(null);
- };
-
  return (
   <AppBar position="static">
    <Grid container wrap={"nowrap"} marginY={1} alignItems="center">
@@ -43,34 +27,14 @@ export const TopBar = () => {
 
     <Grid item xs={4} marginX={5}>
      <Grid container justifyContent="flex-end">
-      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-       <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-       <Typography color={"white"} marginLeft={1}>
-        Sign in
-       </Typography>
-      </IconButton>
-      <Menu
-       sx={{ mt: "45px" }}
-       id="menu-appbar"
-       anchorEl={anchorElUser}
-       anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-       }}
-       keepMounted
-       transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-       }}
-       open={Boolean(anchorElUser)}
-       onClose={handleCloseUserMenu}
-      >
-       {settings.map((setting) => (
-        <MenuItem key={setting} onClick={handleCloseUserMenu}>
-         <Typography textAlign="center">{setting}</Typography>
-        </MenuItem>
-       ))}
-      </Menu>
+      <Link to={"/account/login"} style={{ textDecoration: "none" }}>
+       <IconButton sx={{ p: 0 }} disableRipple>
+        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+        <Typography color={"white"} marginLeft={1}>
+         Sign in
+        </Typography>
+       </IconButton>
+      </Link>
      </Grid>
     </Grid>
    </Grid>
