@@ -7,10 +7,6 @@ require('dotenv').config({ path: './config.env' })
 
 const secretToken = process.env.SECRET_TOKEN
 
-function createToken(account) {
-  jwt.sign({ account }, secretToken)
-}
-
 router.post('/signup', (req, res) => {
   const email = req.body.email
   const password = req.body.password
@@ -20,7 +16,7 @@ router.post('/signup', (req, res) => {
     .getUsersCollection()
     .findOne({ email }, function (err, user) {
 
-      if (err) res.send(err)
+      if (err) return res.send(err)
 
       if (user) {
         res.status(409).send({ "status": "409", "message": "User already exists in db", "detail": "Ensure that email is not already registered" })
@@ -29,7 +25,7 @@ router.post('/signup', (req, res) => {
 
       if (!user)
         bcrypt.hash(password, saltRounds, function (err, hash) {
-          if (err) res.send(err)
+          if (err) return res.send(err)
 
           db
             .getUsersCollection()
@@ -53,9 +49,9 @@ router.post('/login', (req, res) => {
   db
     .getUsersCollection()
     .findOne({ email }, function (err, user) {
-      if (err) res.send(err)
+      if (err) return res.send(err)
 
-      if (!user) res.status(404).send({ "status": "404", "message": "User does not exist in db", "detail": "Ensure that email is registered" })
+      if (!user) return res.status(404).send({ "status": "404", "message": "User does not exist in db", "detail": "Ensure that email is registered" })
 
       if (user) {
         bcrypt.compare(password, user.password, function (err, result) {
@@ -64,9 +60,18 @@ router.post('/login', (req, res) => {
           if (!result) res.send('wrong password')
 
           if (result) {
+            //TODO: add expiration to access token, create refresh token
+
             const accessToken = jwt.sign({ email: user.email }, secretToken)
-            res.send({ "accessToken": accessToken })
-            // res.send({ 'status': '200', 'message': 'User was logged in' })
+
+            //TODO: invalidate token when user logs out
+            const refreshToken = jwt.sign({ email: user.email }, secretToken)
+
+            res.cookie('accessToken', accessToken)
+            res.cookie('refreshToke', refreshToken)
+
+            ///TODO: store a jwt in a cookie, https://medium.com/@ryanchenkie_40935/react-authentication-how-to-store-jwt-in-a-cookie-346519310e81
+            res.send({ 'status': '200', 'message': 'User was logged in', "accessToken": accessToken })
           }
 
         })

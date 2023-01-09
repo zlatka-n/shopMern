@@ -6,16 +6,19 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const authRoutes = require('./routes/auth')
 const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
 
 require('dotenv').config({ path: './config.env' })
 
 
 app.use(cors())
 app.use(bodyParser.json())
+app.use(cookieParser())
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
+
 
   if (!token) return res.status(401).send({ 'status': '401', 'message': 'no token sent' })
 
