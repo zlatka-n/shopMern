@@ -16,13 +16,12 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
 
+  const tokenFromCookie = req.cookies && req.cookies.accessToken
 
-  if (!token) return res.status(401).send({ 'status': '401', 'message': 'no token sent' })
+  if (!tokenFromCookie) return res.status(401).send({ 'status': '401', 'message': 'no token sent' })
 
-  jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
+  jwt.verify(tokenFromCookie, process.env.SECRET_TOKEN, (err, user) => {
     if (err) return res.status(403).send(err)
     req.user = user
 

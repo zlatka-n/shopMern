@@ -68,7 +68,7 @@ router.post('/login', (req, res) => {
             const refreshToken = jwt.sign({ email: user.email }, secretToken)
 
             res.cookie('accessToken', accessToken)
-            res.cookie('refreshToke', refreshToken)
+            res.cookie('refreshToken', refreshToken)
 
             ///TODO: store a jwt in a cookie, https://medium.com/@ryanchenkie_40935/react-authentication-how-to-store-jwt-in-a-cookie-346519310e81
             res.send({ 'status': '200', 'message': 'User was logged in', "accessToken": accessToken })
