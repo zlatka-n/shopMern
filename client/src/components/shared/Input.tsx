@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { Control, useController, useForm } from "react-hook-form";
+import { Control, useController } from "react-hook-form";
 
 type Props = {
  control: Control<any>;
@@ -7,7 +7,7 @@ type Props = {
 };
 export const Input = ({ control, name }: Props) => {
  const {
-  field: { onChange, onBlur, value, ref },
+  field: { onChange, onBlur, value },
   // fieldState,
  } = useController({
   name,
@@ -15,12 +15,14 @@ export const Input = ({ control, name }: Props) => {
  });
 
  return (
-  <TextField
-   onChange={onChange}
-   onBlur={onBlur}
-   value={value}
-   name={name}
-   inputRef={ref}
-  />
+  <>
+   <TextField
+    variant="outlined"
+    onChange={onChange}
+    onBlur={onBlur}
+    value={value ?? ""}
+    name={name}
+   />
+  </>
  );
 };
