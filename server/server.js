@@ -5,46 +5,41 @@ const db = require('./db/conn')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const authRoutes = require('./routes/auth')
-const jwt = require('jsonwebtoken')
+const accountRoutes = require('./routes/account')
+
+// const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 
 require('dotenv').config({ path: './config.env' })
 
 
-app.use(cors())
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}))
+
 app.use(bodyParser.json())
 app.use(cookieParser())
 
-function authenticateToken(req, res, next) {
 
-  const tokenFromCookie = req.cookies && req.cookies.accessToken
+// app.get('/', authenticateToken, (req, res) => {
+//   console.log('get')
 
-  if (!tokenFromCookie) return res.status(401).send({ 'status': '401', 'message': 'no token sent' })
-
-  jwt.verify(tokenFromCookie, process.env.SECRET_TOKEN, (err, user) => {
-    if (err) return res.status(403).send(err)
-    req.user = user
-
-    next()
-  })
-}
-
-app.get('/', authenticateToken, (req, res) => {
-  const authenticatedUser = req.user.email
-
-  if (authenticatedUser) {
-    db
-      .getDb()
-      .collection('products')
-      .find({})
-      .toArray(function (err, result) {
-        if (err) throw err;
-        res.json(result);
-      });
-  }
-})
+//   const authenticatedUser = req.user.email
+//   if (authenticatedUser) {
+//     db
+//       .getDb()
+//       .collection('products')
+//       .find({})
+//       .toArray(function (err, result) {
+//         if (err) throw err;
+//         res.json(result);
+//       });
+//   }
+// })
 
 app.use('/account', authRoutes)
+app.use('/home', accountRoutes)
 
 app.listen(port, () => {
   db.connectToMongoDb((err) => console.log(err))
