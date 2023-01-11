@@ -62,13 +62,13 @@ router.post('/login', (req, res) => {
           if (result) {
             //TODO: add expiration to access token, create refresh token
 
-            const accessToken = jwt.sign({ email: user.email }, secretToken)
+            const accessToken = jwt.sign({ email: user.email }, secretToken, { expiresIn: '15m' })
 
             //TODO: invalidate token when user logs out
             const refreshToken = jwt.sign({ email: user.email }, secretToken)
 
-            res.cookie('accessToken', accessToken)
-            res.cookie('refreshToken', refreshToken)
+            res.cookie('accessToken', accessToken, { httpOnly: true })
+            res.cookie('refreshToken', refreshToken, { httpOnly: true })
 
             ///TODO: store a jwt in a cookie, https://medium.com/@ryanchenkie_40935/react-authentication-how-to-store-jwt-in-a-cookie-346519310e81
             res.send({ 'status': '200', 'message': 'User was logged in', "accessToken": accessToken })
