@@ -62,7 +62,11 @@ router.post('/login', (req, res) => {
           if (result) {
             //TODO: add expiration to access token, create refresh token
 
+            const date = new Date();
+            const expiration = date.setTime(date.getTime() + 15 * 60 * 1000); // 15 mins, in milliseconds
             const accessToken = jwt.sign({ email: user.email }, secretToken, { expiresIn: '15m' })
+
+            res.cookie('tokenExpiration', expiration)
 
             //TODO: invalidate token when user logs out
             const refreshToken = jwt.sign({ email: user.email }, secretToken)
