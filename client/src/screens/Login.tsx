@@ -1,12 +1,17 @@
 import { Box, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { postLogin } from "../api/axios";
 import { Input } from "../components/shared/Input";
 import { styles } from "../components/shared/styles";
+import { useNavigate } from "react-router-dom";
+
 export const Login = () => {
  const { handleSubmit, control } = useForm();
+ const navigate = useNavigate();
 
  const onSubmit = handleSubmit(async (data) => {
-  console.log(data);
+  postLogin({ email: data.email, password: data.password });
+  navigate("/");
  });
 
  return (
