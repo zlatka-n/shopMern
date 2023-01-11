@@ -1,7 +1,7 @@
 import { css } from "@emotion/css";
 
 export const styles = {
- input: css`
+ inputContainer: css`
   display: flex;
   flex-direction: column;
   width: 30vh;
