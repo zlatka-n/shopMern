@@ -1,27 +1,27 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { Input } from "../components/shared/Input";
 import { styles } from "../components/shared/styles";
 export const Login = () => {
- const {
-  handleSubmit,
-  // formState: { errors },
-  control,
- } = useForm();
- const onSubmit = (data: any) => console.log(data);
+ const { handleSubmit, control } = useForm();
+
+ const onSubmit = handleSubmit(async (data) => {
+  console.log(data);
+ });
 
  return (
-  <Box
-   height={"90vh"}
-   marginX={10}
-   display="flex"
-   flexDirection={"column"}
-   marginTop={2}
-  >
-   <form onSubmit={handleSubmit(onSubmit)} className={styles.inputContainer}>
-    <Input name="email" control={control} />
-    <Input name="password" control={control} />
-    <input type="submit" />
+  <Box height={"90vh"} marginX={10} display="flex" marginTop={15}>
+   <form onSubmit={onSubmit} className={styles.inputContainer}>
+    <Input name="email" control={control} placeholder="Email" />
+    <Input
+     name="password"
+     control={control}
+     placeholder="Password"
+     type="password"
+    />
+    <Button onClick={onSubmit} variant="contained">
+     Submit
+    </Button>
    </form>
   </Box>
  );
