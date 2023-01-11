@@ -13,14 +13,16 @@ export const TopBar = () => {
     <Grid item xs={8} marginX={5}>
      <Stack direction="row" alignItems="center" gap={1}>
       {topBarBtns.map(({ icon, name, screen }) => (
-       <IconButton disableRipple key={screen}>
-        {icon}
-        {name ? (
-         <Typography color={"white"} marginLeft={1}>
-          {name}
-         </Typography>
-        ) : null}
-       </IconButton>
+       <Link to={`${screen}`}>
+        <IconButton disableRipple key={screen}>
+         {icon}
+         {name ? (
+          <Typography color={"white"} marginLeft={1}>
+           {name}
+          </Typography>
+         ) : null}
+        </IconButton>
+       </Link>
       ))}
      </Stack>
     </Grid>
