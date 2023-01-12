@@ -6,6 +6,16 @@ const axiosInstance = axios.create({
  withCredentials: true,
 });
 
+export const getBooks = async () => {
+ try {
+  const { data } = await axiosInstance.get("/home");
+  return data;
+ } catch (err) {
+  console.error("Error during getBooks()");
+  throw err;
+ }
+};
+
 export const postLogin = async (reqBody: Login) => {
  try {
   await axiosInstance.post("/account/login", reqBody);
@@ -15,3 +25,13 @@ export const postLogin = async (reqBody: Login) => {
   throw err;
  }
 };
+
+axiosInstance.interceptors.response.use(
+ function (response) {
+  return response;
+ },
+ function (error) {
+  //TODO: if response code is 403, get new tokens from BE
+  return Promise.reject(error);
+ }
+);
