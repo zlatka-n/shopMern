@@ -1,20 +1,11 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import { getBooks } from "../api/axios";
 
 export const Home = () => {
  const [books, setBooks] = useState([]);
 
  useEffect(() => {
-  axios({
-   method: "get",
-   url: "http://localhost:4000/",
-  })
-   .then(function (response) {
-    const { data } = response;
-    console.log(data);
-    setBooks(data);
-   })
-   .catch((err) => console.error(err));
+  getBooks().then((data) => setBooks(data));
  }, []);
 
  return (
