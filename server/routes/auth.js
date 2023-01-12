@@ -3,9 +3,11 @@ const router = express.Router()
 const db = require('../db/conn')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const jwt_decode = require('jwt-decode')
 require('dotenv').config({ path: './config.env' })
 
 const secretToken = process.env.SECRET_TOKEN
+
 
 router.post('/signup', (req, res) => {
   const email = req.body.email
@@ -62,9 +64,9 @@ router.post('/login', (req, res) => {
           if (result) {
             //TODO: add expiration to access token, create refresh token
 
-            const date = new Date();
-            const expiration = date.setTime(date.getTime() + 15 * 60 * 1000); // 15 mins, in milliseconds
-            const accessToken = jwt.sign({ email: user.email }, secretToken, { expiresIn: '15m' })
+            // const expiration = date.setTime(date.getTime() + 15 * 60 * 1000); // 15 mins, in milliseconds
+            const expiration = Date.now() + 15 * 60 * 1000 // 15 mins from now, in milliseconds
+            const accessToken = jwt.sign({ email: user.email }, secretToken, { expiresIn: '15s' })
 
             res.cookie('tokenExpiration', expiration)
 
@@ -83,5 +85,18 @@ router.post('/login', (req, res) => {
     })
 })
 
+router.get('/refresh', (req, res) => {
+  const refreshToken = req.cookies && req.cookies.refreshToken
+
+  if (!refreshToken) return res.status(401).send({ 'status': '401', 'message': 'missing a refresh token' })
+
+  const decodeToken = jwt_decode(refreshToken)
+  const newAccessToken = jwt.sign({ email: decodeToken.email }, secretToken, { expiresIn: '15s' })
+
+  res.cookie('accessToken', newAccessToken, { httpOnly: true })
+
+  return res.send({ 'status': '200', 'message': 'New access token issued', "newAccessToken": newAccessToken })
+
+})
 
 module.exports = router
