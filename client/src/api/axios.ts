@@ -26,12 +26,24 @@ export const postLogin = async (reqBody: Login) => {
  }
 };
 
+export const getNewToken = async () => {
+ try {
+  await axiosInstance.get("/account/refresh");
+ } catch (err) {
+  throw err;
+ }
+};
+
 axiosInstance.interceptors.response.use(
  function (response) {
   return response;
  },
  function (error) {
-  //TODO: if response code is 403, get new tokens from BE
+  if (error.response.status === 403) {
+   return getNewToken()
+    .then(() => console.log("new access token was set"))
+    .catch(() => console.log("error during getNewToken()"));
+  }
   return Promise.reject(error);
  }
 );
