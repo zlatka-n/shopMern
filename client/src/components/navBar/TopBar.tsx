@@ -5,8 +5,12 @@ import Avatar from "@mui/material/Avatar";
 import { Grid, Stack } from "@mui/material";
 import { topBarBtns } from "./utils";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/reducer";
 
 export const TopBar = () => {
+ const isLoggedIn = useSelector((state: RootState) => state.account.isLoggedIn);
+
  return (
   <AppBar position="static">
    <Grid container wrap={"nowrap"} marginY={1} alignItems="center">
@@ -29,14 +33,23 @@ export const TopBar = () => {
 
     <Grid item xs={4} marginX={5}>
      <Grid container justifyContent="flex-end">
-      <Link to={"/account/login"} style={{ textDecoration: "none" }}>
+      {isLoggedIn ? (
        <IconButton sx={{ p: 0 }} disableRipple>
         <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
         <Typography color={"white"} marginLeft={1}>
-         Sign in
+         Log out
         </Typography>
        </IconButton>
-      </Link>
+      ) : (
+       <Link to={"/account/login"} style={{ textDecoration: "none" }}>
+        <IconButton sx={{ p: 0 }} disableRipple>
+         <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+         <Typography color={"white"} marginLeft={1}>
+          Sign in
+         </Typography>
+        </IconButton>
+       </Link>
+      )}
      </Grid>
     </Grid>
    </Grid>
