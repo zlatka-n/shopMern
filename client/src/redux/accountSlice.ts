@@ -4,12 +4,15 @@ const initialState = {
  isLoggedIn: false,
 };
 
-export const accountSlice = createSlice({
+const accountSlice = createSlice({
  name: "account",
  initialState,
  reducers: {
-  loginSuccess: (state, action) => {
+  setLoginSuccess: (state, action) => {
    return { ...state, isLoggedIn: action.payload };
   },
  },
 });
+
+export const { setLoginSuccess } = accountSlice.actions;
+export default accountSlice.reducer;
