@@ -65,13 +65,15 @@ router.post('/login', (req, res) => {
           if (result) {
             //TODO: add expiration to refresh token
 
-            const accessToken = jwt.sign({ email: user.email }, secretToken, { expiresIn: '15s' })
+            const accessToken = jwt.sign({ email: user.email }, secretToken, { expiresIn: '15m' })
 
             //TODO: invalidate token when user logs out
             const refreshToken = jwt.sign({ email: user.email }, secretToken)
 
             res.cookie('accessToken', accessToken, { httpOnly: true })
             res.cookie('refreshToken', refreshToken, { httpOnly: true })
+            res.cookie('isLoggedIn', true)
+
 
             return res.send({ 'status': '200', 'message': 'User was logged in', "accessToken": accessToken })
           }
@@ -87,7 +89,7 @@ router.get('/refresh', (req, res) => {
   if (!refreshToken) return res.status(401).send({ 'status': '401', 'message': 'missing a refresh token' })
 
   const decodeToken = jwt_decode(refreshToken)
-  const newAccessToken = jwt.sign({ email: decodeToken.email }, secretToken, { expiresIn: '15s' })
+  const newAccessToken = jwt.sign({ email: decodeToken.email }, secretToken, { expiresIn: '15m' })
 
   res.cookie('accessToken', newAccessToken, { httpOnly: true })
 

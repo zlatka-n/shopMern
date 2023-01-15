@@ -14,7 +14,6 @@ export const Login = () => {
 
  const onSubmit = handleSubmit(async (data) => {
   postLogin({ email: data.email, password: data.password }).then(() => {
-   localStorage.setItem("isLoggedIn", "true");
    dispatch(setLoginSuccess(true));
 
    navigate("/");

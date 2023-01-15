@@ -8,7 +8,7 @@ import { Login } from "./screens/Login";
 function App() {
  const dispatch = useDispatch();
 
- const isLoggedIn = localStorage.getItem("isLoggedIn");
+ const isLoggedIn = document.cookie;
  if (isLoggedIn) dispatch(setLoginSuccess(true));
 
  return (
