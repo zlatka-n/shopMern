@@ -4,12 +4,27 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import { Grid, Stack } from "@mui/material";
 import { topBarBtns } from "./utils";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducer";
+import { getLogout } from "../../api/axios";
+import { setLoginSuccess } from "../../redux/accountSlice";
 
 export const TopBar = () => {
  const isLoggedIn = useSelector((state: RootState) => state.account.isLoggedIn);
+ const dispatch = useDispatch();
+ const navigate = useNavigate();
+
+ const logOutUser = () => {
+  getLogout().then(() => {
+   console.log("User was logged out");
+
+   dispatch(setLoginSuccess(false));
+   navigate("account/login");
+
+   return;
+  });
+ };
 
  return (
   <AppBar position="static">
@@ -34,7 +49,7 @@ export const TopBar = () => {
     <Grid item xs={4} marginX={5}>
      <Grid container justifyContent="flex-end">
       {isLoggedIn ? (
-       <IconButton sx={{ p: 0 }} disableRipple>
+       <IconButton sx={{ p: 0 }} disableRipple onClick={logOutUser}>
         <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
         <Typography color={"white"} marginLeft={1}>
          Log out
