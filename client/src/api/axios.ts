@@ -34,6 +34,16 @@ export const getNewToken = async () => {
  }
 };
 
+export const getLogout = async () => {
+ try {
+  const { data } = await axiosInstance.get("/account/logout");
+  return data;
+ } catch (err) {
+  console.error("Error during getLogout()");
+  throw err;
+ }
+};
+
 axiosInstance.interceptors.response.use(
  function (response) {
   return response;
