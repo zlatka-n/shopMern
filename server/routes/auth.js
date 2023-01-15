@@ -83,6 +83,23 @@ router.post('/login', (req, res) => {
     })
 })
 
+router.get('/logout', (req, res) => {
+
+  const isUserLoggedIn = req.cookies && req.cookies.accessToken
+
+  if (!isUserLoggedIn) return res.status(403).send({
+    'status': '403', 'message': 'User is not logged in'
+  })
+
+  res.clearCookie('accessToken')
+  res.clearCookie('refreshToken')
+  res.clearCookie('isLoggedIn')
+
+  return res.send({
+    'status': '200', 'message': 'User was logged out'
+  })
+
+})
 router.get('/refresh', (req, res) => {
   const refreshToken = req.cookies && req.cookies.refreshToken
 
