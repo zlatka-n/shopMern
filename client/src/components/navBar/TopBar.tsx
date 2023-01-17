@@ -32,8 +32,8 @@ export const TopBar = () => {
     <Grid item xs={8} marginX={5}>
      <Stack direction="row" alignItems="center" gap={1}>
       {topBarBtns.map(({ icon, name, screen }) => (
-       <Link to={`${screen}`}>
-        <IconButton disableRipple key={screen}>
+       <Link to={`${screen}`} key={screen}>
+        <IconButton disableRipple>
          {icon}
          {name ? (
           <Typography color={"white"} marginLeft={1}>
