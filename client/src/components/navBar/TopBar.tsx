@@ -50,7 +50,7 @@ export const TopBar = () => {
      <Grid container justifyContent="flex-end">
       {isLoggedIn ? (
        <IconButton sx={{ p: 0 }} disableRipple onClick={logOutUser}>
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+        <Avatar alt="avatar" />
         <Typography color={"white"} marginLeft={1}>
          Log out
         </Typography>
@@ -58,7 +58,7 @@ export const TopBar = () => {
       ) : (
        <Link to={"/account/login"} style={{ textDecoration: "none" }}>
         <IconButton sx={{ p: 0 }} disableRipple>
-         <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+         <Avatar alt="avatar" />
          <Typography color={"white"} marginLeft={1}>
           Sign in
          </Typography>
