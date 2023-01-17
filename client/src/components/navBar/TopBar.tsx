@@ -1,15 +1,14 @@
 import AppBar from "@mui/material/AppBar";
-import { IconButton as MuiIconBtn } from "@mui/material";
-import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import { Grid, Stack } from "@mui/material";
 import { topBarBtns } from "./utils";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducer";
 import { getLogout } from "../../api/axios";
 import { setLoginSuccess } from "../../redux/accountSlice";
 import { IconButton } from "../shared/IconButton";
+import { LogInButtons } from "./LogInButtons";
 
 export const TopBar = () => {
  const isLoggedIn = useSelector((state: RootState) => state.account.isLoggedIn);
@@ -41,18 +40,7 @@ export const TopBar = () => {
     <Grid item xs={4} marginX={5}>
      <Grid container justifyContent="flex-end">
       {isLoggedIn ? (
-       <Stack direction="row" alignItems="center" gap={1}>
-        <Link to={"/myaccount"} style={{ textDecoration: "none" }}>
-         <Typography color={"white"} marginLeft={1} textTransform="none">
-          My account
-         </Typography>
-        </Link>
-        <MuiIconBtn sx={{ p: 0 }} disableRipple onClick={logOutUser}>
-         <Typography color={"white"} marginLeft={1}>
-          Log out
-         </Typography>
-        </MuiIconBtn>
-       </Stack>
+       <LogInButtons onClick={logOutUser} />
       ) : (
        <IconButton
         screen="/account/login"
