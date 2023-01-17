@@ -32,7 +32,7 @@ export const TopBar = () => {
     <Grid item xs={8} marginX={5}>
      <Stack direction="row" alignItems="center" gap={1}>
       {topBarBtns.map(({ icon, name, screen }) => (
-       <Link to={`${screen}`} key={screen}>
+       <Link to={`${screen}`} key={screen} style={{ textDecoration: "none" }}>
         <IconButton disableRipple>
          {icon}
          {name ? (
@@ -49,12 +49,18 @@ export const TopBar = () => {
     <Grid item xs={4} marginX={5}>
      <Grid container justifyContent="flex-end">
       {isLoggedIn ? (
-       <IconButton sx={{ p: 0 }} disableRipple onClick={logOutUser}>
-        <Avatar alt="avatar" />
-        <Typography color={"white"} marginLeft={1}>
-         Log out
-        </Typography>
-       </IconButton>
+       <Stack direction="row" alignItems="center" gap={1}>
+        <Link to={"/myaccount"} style={{ textDecoration: "none" }}>
+         <Typography color={"white"} marginLeft={1} textTransform="none">
+          My account
+         </Typography>
+        </Link>
+        <IconButton sx={{ p: 0 }} disableRipple onClick={logOutUser}>
+         <Typography color={"white"} marginLeft={1}>
+          Log out
+         </Typography>
+        </IconButton>
+       </Stack>
       ) : (
        <Link to={"/account/login"} style={{ textDecoration: "none" }}>
         <IconButton sx={{ p: 0 }} disableRipple>
