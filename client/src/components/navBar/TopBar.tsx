@@ -1,5 +1,5 @@
 import AppBar from "@mui/material/AppBar";
-import IconButton from "@mui/material/IconButton";
+import { IconButton as MuiIconBtn } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import { Grid, Stack } from "@mui/material";
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducer";
 import { getLogout } from "../../api/axios";
 import { setLoginSuccess } from "../../redux/accountSlice";
+import { IconButton } from "../shared/IconButton";
 
 export const TopBar = () => {
  const isLoggedIn = useSelector((state: RootState) => state.account.isLoggedIn);
@@ -32,16 +33,7 @@ export const TopBar = () => {
     <Grid item xs={8} marginX={5}>
      <Stack direction="row" alignItems="center" gap={1}>
       {topBarBtns.map(({ icon, name, screen }) => (
-       <Link to={`${screen}`} key={screen} style={{ textDecoration: "none" }}>
-        <IconButton disableRipple>
-         {icon}
-         {name ? (
-          <Typography color={"white"} marginLeft={1}>
-           {name}
-          </Typography>
-         ) : null}
-        </IconButton>
-       </Link>
+       <IconButton screen={screen} icon={icon} name={name} />
       ))}
      </Stack>
     </Grid>
@@ -55,21 +47,18 @@ export const TopBar = () => {
           My account
          </Typography>
         </Link>
-        <IconButton sx={{ p: 0 }} disableRipple onClick={logOutUser}>
+        <MuiIconBtn sx={{ p: 0 }} disableRipple onClick={logOutUser}>
          <Typography color={"white"} marginLeft={1}>
           Log out
          </Typography>
-        </IconButton>
+        </MuiIconBtn>
        </Stack>
       ) : (
-       <Link to={"/account/login"} style={{ textDecoration: "none" }}>
-        <IconButton sx={{ p: 0 }} disableRipple>
-         <Avatar alt="avatar" />
-         <Typography color={"white"} marginLeft={1}>
-          Sign in
-         </Typography>
-        </IconButton>
-       </Link>
+       <IconButton
+        screen="/account/login"
+        name="Sign in"
+        icon={<Avatar alt="avatar" />}
+       />
       )}
      </Grid>
     </Grid>
