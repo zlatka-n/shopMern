@@ -2,7 +2,8 @@ import { useForm } from "react-hook-form";
 import { Box, Button, Typography } from "@mui/material";
 import { Input } from "../components/shared/Input";
 import { styles } from "../components/shared/styles";
-import { SIGN_UP } from "../shared/constants";
+import { SIGN_UP, SIGN_IN } from "../shared/constants";
+import { RegisterOrLogIn } from "../components/register/RegisterOrLogin";
 
 export const Register = () => {
  const {
@@ -41,6 +42,11 @@ export const Register = () => {
      {SIGN_UP}
     </Button>
    </form>
+   <RegisterOrLogIn
+    screenName="/account/login"
+    buttonName={SIGN_IN}
+    title="Already registered?"
+   />
   </Box>
  );
 };

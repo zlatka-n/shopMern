@@ -8,7 +8,8 @@ import { useDispatch } from "react-redux";
 import { setLoginSuccess } from "../redux/accountSlice";
 import { object, string, SchemaOf } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { RegisterNavigation } from "../components/register/RegisterNavigation";
+import { SIGN_IN, SIGN_UP } from "../shared/constants";
+import { RegisterOrLogIn } from "../components/register/RegisterOrLogin";
 
 type LoginValues = {
  email: string;
@@ -59,10 +60,14 @@ export const Login = () => {
      type="password"
     />
     <Button onClick={onSubmit} variant="contained" sx={{ paddingBlock: "1em" }}>
-     Sign in
+     {SIGN_IN}
     </Button>
    </form>
-   <RegisterNavigation />
+   <RegisterOrLogIn
+    screenName="/account/register"
+    buttonName={SIGN_UP}
+    title="Not registered?"
+   />
   </Box>
  );
 };
