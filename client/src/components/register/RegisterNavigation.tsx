@@ -5,13 +5,15 @@ import { styles } from "../shared/styles";
 export const RegisterNavigation = () => {
  const navigate = useNavigate();
 
+ const navigateToRegister = () => navigate("/account/register");
+
  return (
   <Box className={styles.inputContainer} marginTop={10}>
    <Typography fontSize={25}>Not registered?</Typography>
    <Button
     variant="contained"
     sx={{ paddingBlock: "1em" }}
-    onClick={() => navigate("/account/register")}
+    onClick={navigateToRegister}
    >
     Sign up
    </Button>
