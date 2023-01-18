@@ -19,6 +19,7 @@
 - Redux + Redux Toolkit
 - Axios
 - React Hook Form
+- Yup
 
 ##### UI:
 
