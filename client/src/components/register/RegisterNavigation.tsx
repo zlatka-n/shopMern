@@ -1,5 +1,6 @@
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { SIGN_UP } from "../../shared/constants";
 import { styles } from "../shared/styles";
 
 export const RegisterNavigation = () => {
@@ -15,7 +16,7 @@ export const RegisterNavigation = () => {
     sx={{ paddingBlock: "1em" }}
     onClick={navigateToRegister}
    >
-    Sign up
+    {SIGN_UP}
    </Button>
   </Box>
  );
