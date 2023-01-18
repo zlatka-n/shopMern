@@ -6,9 +6,28 @@ import { styles } from "../components/shared/styles";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLoginSuccess } from "../redux/accountSlice";
+import { object, string, SchemaOf } from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+type LoginValues = {
+ email: string;
+ password: string;
+};
+
+const loginSchema: SchemaOf<LoginValues> = object().shape({
+ email: string().email("Wrong email format").required("Required"),
+ password: string().required("Required"),
+});
 
 export const Login = () => {
- const { handleSubmit, control } = useForm();
+ const {
+  handleSubmit,
+  formState: { errors },
+  control,
+ } = useForm<LoginValues>({
+  resolver: yupResolver(loginSchema),
+ });
+
  const navigate = useNavigate();
  const dispatch = useDispatch();
 
@@ -24,6 +43,7 @@ export const Login = () => {
   <Box height={"90vh"} marginX={10} display="flex" marginTop={15}>
    <form onSubmit={onSubmit} className={styles.inputContainer}>
     <Input name="email" control={control} placeholder="Email" />
+    {errors.email && <p>{errors.email.message}</p>}
     <Input
      name="password"
      control={control}
