@@ -22,9 +22,10 @@ export const Input = ({ control, name, placeholder, type }: Props) => {
     variant="outlined"
     onChange={onChange}
     onBlur={onBlur}
+    id="outlined-basic"
+    label={placeholder}
     value={value ?? ""}
     name={name}
-    placeholder={placeholder ?? ""}
     type={type}
    />
   </>
