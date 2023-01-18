@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { postLogin } from "../api/axios";
 import { Input } from "../components/shared/Input";
@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { setLoginSuccess } from "../redux/accountSlice";
 import { object, string, SchemaOf } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { RegisterNavigation } from "../components/register/RegisterNavigation";
 
 type LoginValues = {
  email: string;
@@ -40,8 +41,15 @@ export const Login = () => {
  });
 
  return (
-  <Box height={"90vh"} marginX={10} display="flex" marginTop={15}>
+  <Box
+   height={"90vh"}
+   marginX={10}
+   display="flex"
+   flexDirection={"column"}
+   marginTop={5}
+  >
    <form onSubmit={onSubmit} className={styles.inputContainer}>
+    <Typography fontSize={25}>Welcome back</Typography>
     <Input name="email" control={control} placeholder="Email" />
     {errors.email && <p>{errors.email.message}</p>}
     <Input
@@ -50,10 +58,11 @@ export const Login = () => {
      placeholder="Password"
      type="password"
     />
-    <Button onClick={onSubmit} variant="contained">
-     Submit
+    <Button onClick={onSubmit} variant="contained" sx={{ paddingBlock: "1em" }}>
+     Sign in
     </Button>
    </form>
+   <RegisterNavigation />
   </Box>
  );
 };
