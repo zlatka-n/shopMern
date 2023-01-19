@@ -16,7 +16,8 @@ const signUpSchema: yup.SchemaOf<SignUp> = yup.object().shape({
  password: yup
   .string()
   .min(6, "Password must have at least 6 characters")
-  .minUppercase(1, "Password must have and uppercase")
+  .max(20, "Password must have 20 charactesr at most")
+  .minUppercase(1, "Password must include uppercase")
   .minNumbers(1, "Password must include number")
   .required(REQUIRED),
  firstName: yup.string().required(REQUIRED),
