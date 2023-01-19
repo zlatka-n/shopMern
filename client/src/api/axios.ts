@@ -31,10 +31,8 @@ export const postLogin = async (reqBody: Login) => {
 export const postSignUp = async (reqBody: SignUp) => {
  try {
   const { data } = await axiosInstance.post("/account/signup", reqBody);
-  console.log("New user was created");
   return data;
  } catch (err) {
-  console.error("Error during postSignUp()");
   throw err;
  }
 };

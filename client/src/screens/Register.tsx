@@ -8,6 +8,8 @@ import * as yup from "yup";
 import YupPassword from "yup-password";
 import { SignUp } from "../shared/types";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { postSignUp } from "../api/axios";
+import { useState } from "react";
 
 YupPassword(yup);
 
@@ -25,14 +27,21 @@ const signUpSchema: yup.SchemaOf<SignUp> = yup.object().shape({
 });
 
 export const Register = () => {
+ const [userExists, setUserExists] = useState<boolean>(false);
  const { handleSubmit, control } = useForm<SignUp>({
   mode: "onSubmit",
   resolver: yupResolver(signUpSchema),
  });
 
  const onSubmit = handleSubmit(async (data) => {
-  console.log(data);
-  //TODO: POST: /register
+  // console.log(data);
+
+  postSignUp(data)
+   .then((result) => console.log(result.message))
+   .catch((err) => {
+    console.log(err);
+    if (err.response.status === 409) setUserExists(true);
+   });
  });
 
  return (
@@ -45,6 +54,12 @@ export const Register = () => {
   >
    <form onSubmit={onSubmit} className={styles.inputContainer}>
     <Typography fontSize={25}>Register</Typography>
+    {userExists && (
+     <Typography>
+      The email address you entered already exists in our database - try logging
+      in or enter a different email address.
+     </Typography>
+    )}
     <Input name="firstName" control={control} placeholder="First name" />
     <Input name="lastName" control={control} placeholder="Last name" />
     <Input name="email" control={control} placeholder="Email" />
