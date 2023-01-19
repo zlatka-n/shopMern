@@ -1,4 +1,5 @@
 import axios from "axios";
+import { SignUp } from "../shared/types";
 import { Login } from "./types";
 
 const axiosInstance = axios.create({
@@ -18,14 +19,25 @@ export const getBooks = async () => {
 
 export const postLogin = async (reqBody: Login) => {
  try {
-  await axiosInstance.post("/account/login", reqBody);
+  const { data } = await axiosInstance.post("/account/login", reqBody);
   console.log("User logged in");
+  return data;
  } catch (err) {
   console.error("Error during postLogin()");
   throw err;
  }
 };
 
+export const postSignUp = async (reqBody: SignUp) => {
+ try {
+  const { data } = await axiosInstance.post("/account/signup", reqBody);
+  console.log("New user was created");
+  return data;
+ } catch (err) {
+  console.error("Error during postSignUp()");
+  throw err;
+ }
+};
 export const getNewToken = async () => {
  try {
   await axiosInstance.get("/account/refresh");
