@@ -8,17 +8,13 @@ import { useDispatch } from "react-redux";
 import { setLoginSuccess } from "../redux/accountSlice";
 import { object, string, SchemaOf } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { SIGN_IN, SIGN_UP } from "../shared/constants";
+import { REQUIRED, SIGN_IN, SIGN_UP, WRONG_EMAIL } from "../shared/constants";
 import { RegisterOrLogIn } from "../components/register/RegisterOrLogin";
-
-type LoginValues = {
- email: string;
- password: string;
-};
+import { Login as LoginValues } from "../shared/types";
 
 const loginSchema: SchemaOf<LoginValues> = object().shape({
- email: string().email("Wrong email format").required("Required"),
- password: string().required("Required"),
+ email: string().email(WRONG_EMAIL).required(REQUIRED),
+ password: string().required(REQUIRED),
 });
 
 export const Login = () => {
