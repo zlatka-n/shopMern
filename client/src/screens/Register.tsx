@@ -2,16 +2,34 @@ import { useForm } from "react-hook-form";
 import { Box, Button, Typography } from "@mui/material";
 import { Input } from "../components/shared/Input";
 import { styles } from "../components/shared/styles";
-import { SIGN_UP, SIGN_IN } from "../shared/constants";
+import { SIGN_UP, SIGN_IN, WRONG_EMAIL, REQUIRED } from "../shared/constants";
 import { RegisterOrLogIn } from "../components/register/RegisterOrLogin";
+import * as yup from "yup";
+import YupPassword from "yup-password";
+import { SignUp } from "../shared/types";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+YupPassword(yup);
+
+const signUpSchema: yup.SchemaOf<SignUp> = yup.object().shape({
+ email: yup.string().email(WRONG_EMAIL).required(REQUIRED),
+ password: yup
+  .string()
+  .min(6, "Password must have at least 6 characters")
+  .minUppercase(1, "Password must have and uppercase")
+  .minNumbers(1, "Password must include number")
+  .required(REQUIRED),
+ firstName: yup.string().required(REQUIRED),
+ lastName: yup.string().required(REQUIRED),
+});
 
 export const Register = () => {
  const {
   handleSubmit,
   formState: { errors },
   control,
- } = useForm<any>({
-  // resolver: yupResolver(loginSchema),
+ } = useForm<SignUp>({
+  resolver: yupResolver(signUpSchema),
  });
 
  const onSubmit = handleSubmit(async (data) => {
@@ -38,6 +56,9 @@ export const Register = () => {
      placeholder="Password"
      type="password"
     />
+    {errors.password && <p>{errors.password.message}</p>}
+
+    {errors.email && <p>{errors.email.message}</p>}
     <Button onClick={onSubmit} variant="contained" sx={{ paddingBlock: "1em" }}>
      {SIGN_UP}
     </Button>
