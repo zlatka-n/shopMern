@@ -10,7 +10,7 @@ type Props = {
 export const Input = ({ control, name, placeholder, type }: Props) => {
  const {
   field: { onChange, onBlur, value },
-  // fieldState,
+  formState: { errors },
  } = useController({
   name,
   control,
@@ -19,6 +19,7 @@ export const Input = ({ control, name, placeholder, type }: Props) => {
  return (
   <>
    <TextField
+    error={!!errors[name]?.message}
     variant="outlined"
     onChange={onChange}
     onBlur={onBlur}
@@ -26,6 +27,7 @@ export const Input = ({ control, name, placeholder, type }: Props) => {
     value={value ?? ""}
     name={name}
     type={type}
+    helperText={errors && errors[name]?.message?.toString()}
    />
   </>
  );

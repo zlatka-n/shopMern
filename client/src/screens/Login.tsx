@@ -18,11 +18,7 @@ const loginSchema: SchemaOf<LoginValues> = object().shape({
 });
 
 export const Login = () => {
- const {
-  handleSubmit,
-  formState: { errors },
-  control,
- } = useForm<LoginValues>({
+ const { handleSubmit, control } = useForm<LoginValues>({
   resolver: yupResolver(loginSchema),
  });
 
@@ -48,7 +44,6 @@ export const Login = () => {
    <form onSubmit={onSubmit} className={styles.inputContainer}>
     <Typography fontSize={25}>Welcome back</Typography>
     <Input name="email" control={control} placeholder="Email" />
-    {errors.email && <p>{errors.email.message}</p>}
     <Input
      name="password"
      control={control}

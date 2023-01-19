@@ -24,11 +24,8 @@ const signUpSchema: yup.SchemaOf<SignUp> = yup.object().shape({
 });
 
 export const Register = () => {
- const {
-  handleSubmit,
-  formState: { errors },
-  control,
- } = useForm<SignUp>({
+ const { handleSubmit, control } = useForm<SignUp>({
+  mode: "onSubmit",
   resolver: yupResolver(signUpSchema),
  });
 
@@ -56,9 +53,6 @@ export const Register = () => {
      placeholder="Password"
      type="password"
     />
-    {errors.password && <p>{errors.password.message}</p>}
-
-    {errors.email && <p>{errors.email.message}</p>}
     <Button onClick={onSubmit} variant="contained" sx={{ paddingBlock: "1em" }}>
      {SIGN_UP}
     </Button>
