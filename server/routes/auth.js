@@ -10,9 +10,8 @@ const secretToken = process.env.SECRET_TOKEN
 
 
 router.post('/signup', (req, res) => {
-  const email = req.body.email
-  const password = req.body.password
   const saltRounds = 10;
+  const { email, password, firstName, lastName } = req.body
 
   db
     .getUsersCollection()
@@ -31,7 +30,7 @@ router.post('/signup', (req, res) => {
 
           db
             .getUsersCollection()
-            .insertOne({ email, password: hash }, function (err) {
+            .insertOne({ firstName, lastName, email, password: hash }, function (err) {
 
               if (err) res.send(err)
 
