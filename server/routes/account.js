@@ -21,14 +21,15 @@ router.get('/', authenticateToken, (req, res) => {
   const authenticatedUser = req.user.email
   if (authenticatedUser) {
     db
-      .getDb()
-      .collection('products')
-      .find({})
-      .toArray(function (err, result) {
-        if (err) throw err;
-        res.json(result);
-      });
+      .getUsersCollection()
+      .findOne({ email: authenticatedUser }, (err, user) => {
+        if (err) return res.send(err)
+
+        return res.json({ email: authenticatedUser, firstName: user.firstName })
+      })
   }
+
+
 })
 
 module.exports = router

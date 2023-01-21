@@ -23,6 +23,7 @@ app.use(cookieParser())
 
 app.use('/account', authRoutes)
 app.use('/home', shopRoutes)
+app.use('/myaccount', myAccountRoutes)
 
 app.listen(port, () => {
   db.connectToMongoDb((err) => console.log(err))
