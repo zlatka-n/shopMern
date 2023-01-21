@@ -32,7 +32,9 @@ export const TopBar = () => {
     <Grid item xs={8} marginX={5}>
      <Stack direction="row" alignItems="center" gap={1}>
       {topBarBtns.map(({ icon, name, screen }) => (
-       <IconButton screen={screen} icon={icon} name={name} />
+       <div key={screen}>
+        <IconButton screen={screen} icon={icon} name={name} />
+       </div>
       ))}
      </Stack>
     </Grid>

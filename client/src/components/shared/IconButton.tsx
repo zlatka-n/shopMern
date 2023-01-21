@@ -10,7 +10,7 @@ type Props = {
 
 export const IconButton = ({ screen, icon, name }: Props) => {
  return (
-  <Link to={`${screen}`} key={screen} style={{ textDecoration: "none" }}>
+  <Link to={`${screen}`} style={{ textDecoration: "none" }}>
    <MuiIconBtn disableRipple>
     {icon}
     {name ? (
