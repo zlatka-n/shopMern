@@ -2,7 +2,7 @@ import axios from "axios";
 import { SignUp } from "../shared/types";
 import { Login } from "./types";
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
  baseURL: "http://localhost:4000",
  withCredentials: true,
 });
