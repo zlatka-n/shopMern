@@ -5,9 +5,9 @@ const db = require('./db/conn')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const authRoutes = require('./routes/auth')
-const accountRoutes = require('./routes/account')
+const myAccountRoutes = require('./routes/account')
+const shopRoutes = require('./routes/shop')
 
-// const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 
 require('dotenv').config({ path: './config.env' })
@@ -21,25 +21,8 @@ app.use(cors({
 app.use(bodyParser.json())
 app.use(cookieParser())
 
-
-// app.get('/', authenticateToken, (req, res) => {
-//   console.log('get')
-
-//   const authenticatedUser = req.user.email
-//   if (authenticatedUser) {
-//     db
-//       .getDb()
-//       .collection('products')
-//       .find({})
-//       .toArray(function (err, result) {
-//         if (err) throw err;
-//         res.json(result);
-//       });
-//   }
-// })
-
 app.use('/account', authRoutes)
-app.use('/home', accountRoutes)
+app.use('/home', shopRoutes)
 
 app.listen(port, () => {
   db.connectToMongoDb((err) => console.log(err))
