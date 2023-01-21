@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { Link, Outlet } from "react-router-dom";
 import { getMyAccount } from "../api/myaccount";
+import { Sidebar } from "../components/myAccount/Sidebar";
 
 export const MyAccount = () => {
  const [firstName, setFirstName] = useState<string>("");
@@ -15,6 +17,8 @@ export const MyAccount = () => {
     Welcome to your account. Here you can control orders, returns or edit
     personal information.
    </p>
+   <Sidebar />
+   <Outlet />
   </div>
  );
 };
