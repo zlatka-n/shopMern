@@ -44,7 +44,6 @@ router.get('/', authenticateToken, (req, res) => {
 })
 
 router.get('/adresses', authenticateToken, getUserId, (req, res) => {
-
   db
     .getAddressesCollection()
     .aggregate([
