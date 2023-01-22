@@ -11,10 +11,9 @@ export const Sidebar = () => {
     Your account
    </Typography>
    {sidebarItems.map(({ link, name }) => (
-    <Typography fontSize={fontSizes.small}>
+    <Typography fontSize={fontSizes.small} key={link}>
      <NavLink
       to={link}
-      key={link}
       className={(navData) => (navData.isActive ? styles.active : "")}
       style={{ textDecoration: "none", color: "black" }}
      >
