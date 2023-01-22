@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Box, Button, Typography } from "@mui/material";
+import { Alert, Box, Button, Typography } from "@mui/material";
 import { Input } from "../components/shared/Input";
 import { styles } from "../components/shared/styles";
 import { SIGN_UP, SIGN_IN, WRONG_EMAIL, REQUIRED } from "../shared/constants";
@@ -34,8 +34,6 @@ export const Register = () => {
  });
 
  const onSubmit = handleSubmit(async (data) => {
-  // console.log(data);
-
   postSignUp(data)
    .then((result) => console.log(result.message))
    .catch((err) => {
@@ -55,10 +53,10 @@ export const Register = () => {
    <form onSubmit={onSubmit} className={styles.inputContainer}>
     <Typography fontSize={25}>Register</Typography>
     {userExists && (
-     <Typography>
-      The email address you entered already exists in our database - try logging
-      in or enter a different email address.
-     </Typography>
+     <Alert severity="error">
+      The email address you entered already exists in our database. Please, try
+      logging in or enter a different email address.
+     </Alert>
     )}
     <Input name="firstName" control={control} placeholder="First name" />
     <Input name="lastName" control={control} placeholder="Last name" />
