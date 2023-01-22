@@ -22,5 +22,8 @@ module.exports = {
   },
   getUsersCollection: function () {
     return _db.collection('users')
+  },
+  getAddressesCollection: function () {
+    return _db.collection('addresses')
   }
 }
