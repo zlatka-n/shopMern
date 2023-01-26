@@ -13,7 +13,7 @@ export const Address = () => {
  const [addresses, setAddresses] = useState<AdressType[]>([]);
  const [name, setName] = useState<UserNames | undefined>(undefined);
 
- const { handleSubmit, control } = useForm();
+ const { control } = useForm();
 
  const { fields, replace } = useFieldArray({
   control,
@@ -25,10 +25,11 @@ export const Address = () => {
    setName(result.userInfo);
    setAddresses(result.addresses);
 
-   return result.addresses.forEach((address) => replace(address));
+   replace(result.addresses);
   });
  }, []);
 
+ console.log(fields);
  return (
   <div>
    <OverviewHeader
