@@ -6,19 +6,29 @@ import { fontSizes } from "../shared/styles";
 import { ADDRESSES } from "./utils";
 import EditIcon from "@mui/icons-material/Edit";
 import { Address as AdressType, UserNames } from "../../api/types";
+import { useFieldArray, useForm } from "react-hook-form";
+import { Input } from "../shared/Input";
 
 export const Address = () => {
  const [addresses, setAddresses] = useState<AdressType[]>([]);
  const [name, setName] = useState<UserNames | undefined>(undefined);
 
+ const { handleSubmit, control } = useForm();
+
+ const { fields, replace } = useFieldArray({
+  control,
+  name: "address",
+ });
+
  useEffect(() => {
   getAddresses().then((result) => {
    setName(result.userInfo);
    setAddresses(result.addresses);
+
+   return result.addresses.forEach((address) => replace(address));
   });
  }, []);
 
- //TODO: form with useFieldArray
  return (
   <div>
    <OverviewHeader
@@ -40,6 +50,12 @@ export const Address = () => {
    <Button variant="outlined" startIcon={<EditIcon />}>
     Edit
    </Button>
+   <form>
+    {fields.map((item, index) => {
+     console.log(item);
+     return <Input name={`address.${index}.address`} control={control} />;
+    })}
+   </form>
   </div>
  );
 };
