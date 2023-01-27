@@ -1,4 +1,5 @@
 import { axiosInstance } from "./axios";
+import { UserAddress } from "./types";
 
 export const getMyAccount = async () => {
  try {
@@ -11,7 +12,7 @@ export const getMyAccount = async () => {
 
 export const getAddresses = async () => {
  try {
-  const { data } = await axiosInstance.get("myaccount/adresses");
+  const { data } = await axiosInstance.get<UserAddress>("myaccount/adresses");
   return data;
  } catch (err) {
   throw err;
