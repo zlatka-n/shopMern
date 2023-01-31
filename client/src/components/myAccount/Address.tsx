@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Grid, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getAddresses } from "../../api/myaccount";
 import { OverviewHeader } from "../../screens/OverviewHeader";
@@ -8,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Address as AdressType, UserNames } from "../../api/types";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Input } from "../shared/Input";
+import { AddressCard } from "./AddressCard";
 
 export const Address = () => {
  const [addresses, setAddresses] = useState<AdressType[]>([]);
@@ -29,7 +30,11 @@ export const Address = () => {
   });
  }, []);
 
- console.log(fields);
+ const onEditClick = (index: string) => () => {
+  console.log(index);
+ };
+
+ console.log({ addresses });
  return (
   <div>
    <OverviewHeader
@@ -41,22 +46,33 @@ export const Address = () => {
      <Typography fontSize={fontSizes.medium} fontWeight={600} marginBottom={1}>
       {`${name?.firstName} ${name?.lastName}`}
      </Typography>
-
-     <Typography>{addresses[0].address}</Typography>
-     <Typography>{addresses[0].city}</Typography>
-     <Typography>{addresses[0].zipCode}</Typography>
-     <Typography>{addresses[0].country}</Typography>
     </div>
    ) : null}
-   <Button variant="outlined" startIcon={<EditIcon />}>
-    Edit
-   </Button>
+   <AddressCard addresses={addresses} />
+
    <form>
-    {fields.map((item, index) => {
-     console.log(item);
-     return <Input name={`address.${index}.address`} control={control} />;
-    })}
+    <Grid container justifyContent={"center"}>
+     {fields.map((item, index) => {
+      // console.log({ item });
+      return (
+       <Grid item xs={4} key={item.id}>
+        <Input name={`address.${index}.address`} control={control} />
+        <Input name={`address.${index}.zipCode`} control={control} />
+        <Input key={item.id} name={`address.${index}.city`} control={control} />
+        <Input name={`address.${index}.country`} control={control} />
+        <Button
+         variant="outlined"
+         startIcon={<EditIcon />}
+         onClick={onEditClick(item.id)}
+        >
+         Edit
+        </Button>
+       </Grid>
+      );
+     })}
+    </Grid>
    </form>
+   {/* </Grid> */}
   </div>
  );
 };
