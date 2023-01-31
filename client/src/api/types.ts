@@ -8,6 +8,8 @@ export type Address = {
  city: string;
  zipCode: string;
  country: string;
+ additionalInfo?: string;
+ _id: string;
 };
 
 export type UserNames = {
