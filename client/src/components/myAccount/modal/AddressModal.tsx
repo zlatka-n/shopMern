@@ -1,15 +1,38 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Modal, Typography } from "@mui/material";
+import { Input } from "../../shared/Input";
 import { styles } from "../styles";
 
-export const AddressModal = () => {
+type Props = {
+ control: any;
+ handleClose: () => void;
+ open: boolean;
+};
+
+export const AddressModal = ({ control, handleClose, open }: Props) => {
  return (
-  <Box className={styles.addressModalContent}>
-   <Typography id="modal-modal-title" variant="h6" component="h2">
-    Edit your address
-   </Typography>
-   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-   </Typography>
-  </Box>
+  <Modal
+   sx={{
+    display: "flex",
+    p: 1,
+    alignItems: "center",
+    justifyContent: "center",
+   }}
+   open={open}
+   onClose={handleClose}
+   aria-labelledby="modal-title"
+   aria-describedby="modal-description"
+  >
+   <Box className={styles.addressModalContent}>
+    <Typography variant="h6" component="h2" id="modal-title">
+     Edit your address
+    </Typography>
+    <form id="modal-description">
+     <Input name={`address`} control={control} />
+     <Input name={`zipCode`} control={control} />
+     <Input name={`city`} control={control} />
+     <Input name={`country`} control={control} />
+    </form>
+   </Box>
+  </Modal>
  );
 };

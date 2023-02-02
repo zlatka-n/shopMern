@@ -1,5 +1,6 @@
-import { Button, Grid, Modal, Typography } from "@mui/material";
-import { useState } from "react";
+import { Button, Grid, Typography } from "@mui/material";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Address } from "../../api/types";
 import { AddressModal } from "./modal/AddressModal";
 
@@ -12,17 +13,25 @@ export const AddressCard = ({ addresses }: Props) => {
 
  const handleClose = () => setOpen(false);
 
+ const { control, setValue } = useForm();
+
  const onEditClick = (id: string) => () => {
-  console.log(id);
   setOpen(true);
+
+  const addressForEdit = addresses?.filter((address) => address._id === id);
+
+  for (const [key, value] of Object.entries(addressForEdit[0])) {
+   setValue(`${key}`, value);
+  }
  };
+
  return (
   <Grid container>
    {addresses?.length > 0
     ? addresses.map(
        ({ address, city, zipCode, country, additionalInfo, _id }) => {
         return (
-         <Grid item>
+         <Grid item key={_id}>
           <Typography>{address}</Typography>
           <Typography>{city}</Typography>
           <Typography>{zipCode}</Typography>
@@ -36,20 +45,7 @@ export const AddressCard = ({ addresses }: Props) => {
        }
       )
     : null}
-   <Modal
-    sx={{
-     display: "flex",
-     p: 1,
-     alignItems: "center",
-     justifyContent: "center",
-    }}
-    open={open}
-    onClose={handleClose}
-    aria-labelledby="modal-modal-title"
-    aria-describedby="modal-modal-description"
-   >
-    <AddressModal />
-   </Modal>
+   <AddressModal control={control} handleClose={handleClose} open={open} />
   </Grid>
  );
 };
