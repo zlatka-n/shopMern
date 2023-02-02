@@ -1,8 +1,8 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Address } from "../../api/types";
-import { AddressModal } from "./modal/AddressModal";
+import { Address } from "../../../api/types";
+import { AddressModal } from "../modal/AddressModal";
 
 type Props = {
  addresses: Address[];

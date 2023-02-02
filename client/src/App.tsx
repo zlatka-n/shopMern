@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
-import { Address } from "./components/myAccount/Address";
+import { Address } from "./components/myAccount/address/Address";
 import { Details } from "./components/myAccount/Details";
 import { Orders } from "./components/myAccount/Orders";
 import { NavBar } from "./components/navBar/NavBar";
