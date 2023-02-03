@@ -17,6 +17,7 @@ function authenticateToken(req, res, next) {
   })
 }
 
+//TODO: remove fn getUserId, get userId from request params?
 function getUserId(req, res, next) {
 
   db
@@ -68,8 +69,13 @@ router.get('/adresses', authenticateToken, getUserId, (req, res) => {
 
       return res.json(userAddresses[0])
     })
+})
 
-
+//TODO: get addreses by user id
+router.patch('/adresses', authenticateToken, getUserId, (req, res) => {
+  console.log(req.body)
+  //TODO: get userId from req.params, if it's stored in jwt payload
+  res.json({ "message:": "OK" })
 })
 
 module.exports = router
