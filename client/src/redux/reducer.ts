@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import accountReducer from "./accountSlice";
+import userInfoReducer from "./userInfoSlice";
 
 export const store = configureStore({
  reducer: {
   account: accountReducer,
+  user: userInfoReducer,
  },
  devTools: true,
 });
