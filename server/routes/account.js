@@ -71,11 +71,21 @@ router.get('/adresses', authenticateToken, getUserId, (req, res) => {
     })
 })
 
-//TODO: get addreses by user id
-router.patch('/adresses', authenticateToken, getUserId, (req, res) => {
-  console.log(req.body)
-  //TODO: get userId from req.params, if it's stored in jwt payload
-  res.json({ "message:": "OK" })
+
+router.put('/adresses', authenticateToken, getUserId, (req, res) => {
+
+  const userId = res.locals.userId;
+  const addressId = req.body._id
+
+  db
+    .getAddressesCollection()
+    .updateOne({ _id: userId, "addresses._id": addressId },
+      { $set: { "addresses.$": req.body } }, (err, response) => {
+        if (err) return res.send(err)
+
+        return res.json(response)
+      })
+
 })
 
 module.exports = router

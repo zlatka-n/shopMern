@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from "@mui/material";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Address } from "../../../api/types";
 import { AddressModal } from "../modal/AddressModal";
@@ -13,7 +13,13 @@ export const AddressCard = ({ addresses }: Props) => {
 
  const handleClose = () => setOpen(false);
 
- const { control, setValue } = useForm();
+ const {
+  control,
+  setValue,
+  handleSubmit,
+  formState: { dirtyFields },
+  reset,
+ } = useForm();
 
  const onEditClick = (id: string) => () => {
   setOpen(true);
@@ -45,7 +51,14 @@ export const AddressCard = ({ addresses }: Props) => {
        }
       )
     : null}
-   <AddressModal control={control} handleClose={handleClose} open={open} />
+   <AddressModal
+    control={control}
+    handleClose={handleClose}
+    open={open}
+    handleSubmit={handleSubmit}
+    dirtyFields={dirtyFields}
+    reset={reset}
+   />
   </Grid>
  );
 };
