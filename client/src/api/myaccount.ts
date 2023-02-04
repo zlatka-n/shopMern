@@ -19,14 +19,11 @@ export const getAddresses = async () => {
  }
 };
 
-// export const getMyAccount = async () => {
-//  try {
-//   const response = await fetch("http://localhost:4000/myaccount", {
-//    credentials: "include",
-//   });
-
-//   return response.json();
-//  } catch (err) {
-//   throw err;
-//  }
-// };
+export const putAddress = async (reqBody: any) => {
+ try {
+  const { data } = await axiosInstance.put("myaccount/adresses", reqBody);
+  return data;
+ } catch (err) {
+  throw err;
+ }
+};
