@@ -1,6 +1,8 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { FieldValues, UseFormReset } from "react-hook-form";
-import { putAddress } from "../../../api/myaccount";
+import { useDispatch } from "react-redux";
+import { getAddresses, putAddress } from "../../../api/myaccount";
+import { setAddresses } from "../../../redux/userInfoSlice";
 import { Input } from "../../shared/Input";
 import { styles } from "../styles";
 
@@ -25,10 +27,19 @@ export const AddressModal = ({
  reset,
  dirtyFields,
 }: Props) => {
+ const dispatch = useDispatch();
+
  const onSubmit = handleSubmit(async (data: any) => {
   const areFieldsChanged = Object.keys(dirtyFields).length;
 
-  if (areFieldsChanged > 0) putAddress(data);
+  if (areFieldsChanged === 0) return;
+
+  const updatedAddress = await putAddress(data);
+
+  if (updatedAddress) {
+   const newAddress = await getAddresses();
+   dispatch(setAddresses(newAddress.addresses));
+  }
 
   reset({}, { keepValues: true });
 
