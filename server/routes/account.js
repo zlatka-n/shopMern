@@ -19,7 +19,6 @@ function authenticateToken(req, res, next) {
   })
 }
 
-//TODO: remove fn getUserId, get userId from request params?
 function getUserId(req, res, next) {
 
   const accessToken = req.cookies && req.cookies.accessToken
