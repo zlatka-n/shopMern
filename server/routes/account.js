@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const db = require('../db/conn')
+const jwt_decode = require('jwt-decode')
+const ObjectId = require('mongodb').ObjectId
 
 function authenticateToken(req, res, next) {
 
@@ -20,14 +22,11 @@ function authenticateToken(req, res, next) {
 //TODO: remove fn getUserId, get userId from request params?
 function getUserId(req, res, next) {
 
-  db
-    .getUsersCollection()
-    .findOne({ email: req.user.email }, (err, user) => {
-      if (err) return res.status(403).send(err)
+  const accessToken = req.cookies && req.cookies.accessToken
+  const decodedJwt = jwt_decode(accessToken)
 
-      res.locals.userId = user._id
-      next()
-    })
+  res.locals.userId = new ObjectId(decodedJwt.id)
+  next()
 
 }
 
@@ -45,11 +44,13 @@ router.get('/', authenticateToken, (req, res) => {
 })
 
 router.get('/adresses', authenticateToken, getUserId, (req, res) => {
+  const userId = res.locals.userId;
+
   db
     .getAddressesCollection()
     .aggregate([
       {
-        $match: { _id: res.locals.userId }
+        $match: { _id: userId }
       },
       {
         $lookup: {
