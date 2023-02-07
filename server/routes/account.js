@@ -88,4 +88,20 @@ router.put('/adresses', authenticateToken, getUserId, (req, res) => {
 
 })
 
+router.post('/adresses', authenticateToken, getUserId, (req, res) => {
+  const userId = res.locals.userId;
+
+  db
+    .getAddressesCollection()
+    .updateOne({ _id: userId }, {
+      $push: {
+        "addresses": { ...req.body, _id: ObjectId(), created: new Date(Date.now()) }
+      }
+    }, (err, response) => {
+      if (err) return res.send(err)
+
+      return res.json(response)
+    })
+})
+
 module.exports = router
