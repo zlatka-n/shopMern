@@ -49,7 +49,7 @@ router.get('/adresses', authenticateToken, getUserId, (req, res) => {
     .getAddressesCollection()
     .aggregate([
       {
-        $match: { _id: userId }
+        $match: { _id: ObjectId(userId) }
       },
       {
         $lookup: {
@@ -76,11 +76,12 @@ router.put('/adresses', authenticateToken, getUserId, (req, res) => {
 
   const userId = res.locals.userId;
   const addressId = req.body._id
+  const { address, zipCode, city } = req.body
 
   db
     .getAddressesCollection()
-    .updateOne({ _id: userId, "addresses._id": addressId },
-      { $set: { "addresses.$": req.body } }, (err, response) => {
+    .updateOne({ _id: ObjectId(userId), "addresses._id": ObjectId(addressId) },
+      { $set: { "addresses.$.address": address, "addresses.$.zipCode": zipCode, "addresses.$.city": city, } }, (err, response) => {
         if (err) return res.send(err)
 
         return res.json(response)
