@@ -51,6 +51,7 @@ router.get('/adresses', authenticateToken, getUserId, (req, res) => {
       {
         $match: { _id: ObjectId(userId) }
       },
+      { $project: { "addresses.created": 0 } },
       {
         $lookup: {
           from: "users",
