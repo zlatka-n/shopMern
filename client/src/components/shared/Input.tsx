@@ -6,8 +6,16 @@ type Props = {
  name: string;
  placeholder?: string;
  type?: string;
+ [key: string]: unknown;
 };
-export const Input = ({ control, name, placeholder, type }: Props) => {
+
+export const Input = ({
+ control,
+ name,
+ placeholder,
+ type,
+ ...props
+}: Props) => {
  const {
   field: { onChange, onBlur, value },
   formState: { errors },
@@ -28,6 +36,7 @@ export const Input = ({ control, name, placeholder, type }: Props) => {
     name={name}
     type={type}
     helperText={errors && errors[name]?.message?.toString()}
+    {...props}
    />
   </>
  );
