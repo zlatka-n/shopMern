@@ -59,11 +59,18 @@ axiosInstance.interceptors.response.use(
   return response;
  },
  function (error) {
+  ///access token expired
   if (error.response.status === 403) {
    return getNewToken()
     .then(() => console.log("new access token was set"))
     .catch(() => console.log("error during getNewToken()"));
   }
+
+  //refresh token expired
+  if (error.response.status === 401) {
+   window.location.href = "/account/login";
+  }
+
   return Promise.reject(error);
  }
 );
