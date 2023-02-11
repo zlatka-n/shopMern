@@ -67,7 +67,7 @@ router.post('/login', (req, res) => {
             const accessToken = jwt.sign({ email: user.email, id: user._id.toString() }, secretToken, { expiresIn: '1s' })
 
             //TODO: invalidate token when user logs out
-            const refreshToken = jwt.sign({ email: user.email, id: user._id.toString() }, secretToken)
+            const refreshToken = jwt.sign({ email: user.email, id: user._id.toString() }, secretToken, { expiresIn: '1s' })
 
             res.cookie('accessToken', accessToken, { httpOnly: true })
             res.cookie('refreshToken', refreshToken, { httpOnly: true })
@@ -102,12 +102,22 @@ router.get('/logout', (req, res) => {
 router.get('/refresh', (req, res) => {
   const refreshToken = req.cookies && req.cookies.refreshToken
 
+  jwt.verify(refreshToken, secretToken, function (err) {
+    if (err) {
+
+      res.clearCookie('accessToken')
+      res.clearCookie('refreshToken')
+      res.clearCookie('isLoggedIn')
+
+      return res.status(401).send({ 'status': '401', 'message': err })
+    }
+  })
+
   if (!refreshToken) return res.status(401).send({ 'status': '401', 'message': 'missing a refresh token' })
 
   const decodeToken = jwt_decode(refreshToken)
-  console.log(decodeToken, 'decodeToken')
 
-  const newAccessToken = jwt.sign({ email: decodeToken.email, id: decodeToken._id }, secretToken, { expiresIn: '15m' })
+  const newAccessToken = jwt.sign({ email: decodeToken.email, id: decodeToken._id }, secretToken, { expiresIn: '1s' })
 
   res.cookie('accessToken', newAccessToken, { httpOnly: true })
 
