@@ -14,6 +14,7 @@ function App() {
  const dispatch = useDispatch();
 
  const isLoggedIn = document.cookie;
+
  if (isLoggedIn) dispatch(setLoginSuccess(true));
 
  return (
@@ -24,11 +25,13 @@ function App() {
     <Route path="/account/login" element={<Login />} />
     <Route path="/account/register" element={<Register />} />
 
-    <Route path="myaccount" element={<MyAccount />}>
-     <Route path="address" element={<Address />} />
-     <Route path="details" element={<Details />} />
-     <Route path="orders" element={<Orders />} />
-    </Route>
+    {isLoggedIn ? (
+     <Route path="myaccount" element={<MyAccount />}>
+      <Route path="address" element={<Address />} />
+      <Route path="details" element={<Details />} />
+      <Route path="orders" element={<Orders />} />
+     </Route>
+    ) : null}
    </Routes>
   </div>
  );
