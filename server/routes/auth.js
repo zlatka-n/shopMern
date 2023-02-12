@@ -46,7 +46,6 @@ router.post('/login', (req, res) => {
   const email = req.body.email
   const password = req.body.password
 
-  //1] check if user exists in db
   db
     .getUsersCollection()
     .findOne({ email }, function (err, user) {
@@ -62,12 +61,9 @@ router.post('/login', (req, res) => {
           if (!result) return res.send('wrong password')
 
           if (result) {
-            //TODO: add expiration to refresh token
 
-            const accessToken = jwt.sign({ email: user.email, id: user._id.toString() }, secretToken, { expiresIn: '1s' })
-
-            //TODO: invalidate token when user logs out
-            const refreshToken = jwt.sign({ email: user.email, id: user._id.toString() }, secretToken, { expiresIn: '1s' })
+            const accessToken = jwt.sign({ email: user.email, id: user._id.toString() }, secretToken, { expiresIn: '15m' })
+            const refreshToken = jwt.sign({ email: user.email, id: user._id.toString() }, secretToken, { expiresIn: '1d' })
 
             res.cookie('accessToken', accessToken, { httpOnly: true })
             res.cookie('refreshToken', refreshToken, { httpOnly: true })
@@ -99,8 +95,11 @@ router.get('/logout', (req, res) => {
   })
 
 })
+
 router.get('/refresh', (req, res) => {
   const refreshToken = req.cookies && req.cookies.refreshToken
+
+  if (!refreshToken) return res.status(401).send({ 'status': '401', 'message': 'missing a refresh token' })
 
   jwt.verify(refreshToken, secretToken, function (err) {
     if (err) {
@@ -113,11 +112,9 @@ router.get('/refresh', (req, res) => {
     }
   })
 
-  if (!refreshToken) return res.status(401).send({ 'status': '401', 'message': 'missing a refresh token' })
 
   const decodeToken = jwt_decode(refreshToken)
-
-  const newAccessToken = jwt.sign({ email: decodeToken.email, id: decodeToken._id }, secretToken, { expiresIn: '1s' })
+  const newAccessToken = jwt.sign({ email: decodeToken.email, id: decodeToken._id }, secretToken, { expiresIn: '15m' })
 
   res.cookie('accessToken', newAccessToken, { httpOnly: true })
 
