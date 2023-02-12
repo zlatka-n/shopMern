@@ -1,13 +1,14 @@
-import { Box, Button, Modal, Typography } from "@mui/material";
-import { FieldValues, UseFormReset } from "react-hook-form";
+import { Box, Button, Grid, Modal, Typography } from "@mui/material";
+import { Control, FieldValues, UseFormReset } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { getAddresses, putAddress } from "../../../api/myaccount";
 import { setAddresses } from "../../../redux/userInfoSlice";
 import { Input } from "../../shared/Input";
 import { styles } from "../styles";
+import { editAddressData } from "../utils";
 
 type Props = {
- control: any;
+ control: Control<any>;
  handleClose: () => void;
  handleSubmit: (data: any) => any;
  open: boolean;
@@ -68,15 +69,23 @@ export const AddressModal = ({
      className={styles.flexAlignment}
      onSubmit={onSubmit}
     >
-     <Input
-      name={`address`}
-      control={control}
-      sx={{ backgoundColor: "blue" }}
-      minRows={4}
-     />
-     <Input name={`zipCode`} control={control} />
-     <Input name={`city`} control={control} />
-     <Input name={`country`} control={control} />
+     <Grid
+      container
+      gap={2}
+      flexDirection="column"
+      alignItems="center"
+      marginY={5}
+     >
+      {editAddressData.map((item) => (
+       <Input
+        name={item.value}
+        control={control}
+        id="outlined-required"
+        label={item.name}
+        key={item.value}
+       />
+      ))}
+     </Grid>
      <Button
       onClick={onSubmit}
       variant="contained"

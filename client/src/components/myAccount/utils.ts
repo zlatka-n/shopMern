@@ -16,3 +16,34 @@ export const sidebarItems = [
   name: ORDERS,
  },
 ];
+
+enum EditAddress {
+ Address = "Address",
+ ZipCode = "Zip code",
+ Country = "Country",
+ City = "City",
+ AdditionalInfo = "Additional info",
+}
+
+export const editAddressData = [
+ {
+  name: EditAddress.Address,
+  value: "address",
+ },
+ {
+  name: EditAddress.City,
+  value: "city",
+ },
+ {
+  name: EditAddress.ZipCode,
+  value: "zipCode",
+ },
+ {
+  name: EditAddress.Country,
+  value: "country",
+ },
+ {
+  name: EditAddress.AdditionalInfo,
+  value: "additionalInfo",
+ },
+];
