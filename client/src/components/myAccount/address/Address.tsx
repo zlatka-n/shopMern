@@ -28,7 +28,7 @@ export const Address = () => {
     heading={ADDRESSES}
     text="Here you can add or edit your adresses"
    />
-   {addresses.length > 0 ? (
+   {addresses?.length > 0 ? (
     <div>
      <Typography fontSize={fontSizes.medium} fontWeight={600} marginBottom={1}>
       {`${name?.firstName} ${name?.lastName}`}
