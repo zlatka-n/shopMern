@@ -16,6 +16,7 @@ function App() {
  const isLoggedIn = document.cookie;
 
  if (isLoggedIn) dispatch(setLoginSuccess(true));
+ if (!isLoggedIn) dispatch(setLoginSuccess(false));
 
  return (
   <div>
