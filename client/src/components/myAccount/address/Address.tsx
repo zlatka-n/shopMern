@@ -4,17 +4,21 @@ import { getAddresses } from "../../../api/myaccount";
 import { OverviewHeader } from "../../../screens/OverviewHeader";
 import { fontSizes } from "../../shared/styles";
 import { ADDRESSES } from "../utils";
-import { Address as AdressType, UserNames } from "../../../api/types";
+import { UserNames } from "../../../api/types";
 import { AddressCard } from "./AddressCard";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../redux/reducer";
+import { setAddresses } from "../../../redux/userInfoSlice";
 
 export const Address = () => {
- const [addresses, setAddresses] = useState<AdressType[]>([]);
+ const addresses = useSelector((state: RootState) => state.user.addresses);
  const [name, setName] = useState<UserNames | undefined>(undefined);
+ const dispatch = useDispatch();
 
  useEffect(() => {
   getAddresses().then((result) => {
    setName(result.userInfo);
-   setAddresses(result.addresses);
+   dispatch(setAddresses(result.addresses));
   });
  }, []);
 
