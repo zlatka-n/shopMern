@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Address } from "../api/types";
+import { RootState } from "./reducer";
 
 type SliceState = {
  addresses: Address[];
@@ -18,6 +19,9 @@ const userInfoSlice = createSlice({
   },
  },
 });
+
+
+export const selectAddresses = (state: RootState) => state.user.addresses
 
 export const { setAddresses } = userInfoSlice.actions;
 export default userInfoSlice.reducer;

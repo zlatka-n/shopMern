@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "./reducer";
 
 const initialState = {
  isLoggedIn: false,
@@ -13,6 +14,9 @@ const accountSlice = createSlice({
   },
  },
 });
+
+export const selectIsUserLoggedIn = (state: RootState) =>
+ state.account.isLoggedIn;
 
 export const { setLoginSuccess } = accountSlice.actions;
 export default accountSlice.reducer;

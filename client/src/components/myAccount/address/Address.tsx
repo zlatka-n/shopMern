@@ -7,11 +7,10 @@ import { ADDRESSES } from "../utils";
 import { UserNames } from "../../../api/types";
 import { AddressCard } from "./AddressCard";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../redux/reducer";
-import { setAddresses } from "../../../redux/userInfoSlice";
+import { selectAddresses, setAddresses } from "../../../redux/userInfoSlice";
 
 export const Address = () => {
- const addresses = useSelector((state: RootState) => state.user.addresses);
+ const addresses = useSelector(selectAddresses);
  const [name, setName] = useState<UserNames | undefined>(undefined);
  const dispatch = useDispatch();
 

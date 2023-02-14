@@ -4,14 +4,16 @@ import { Grid, Stack } from "@mui/material";
 import { topBarBtns } from "./utils";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/reducer";
 import { getLogout } from "../../api/axios";
-import { setLoginSuccess } from "../../redux/accountSlice";
+import {
+ selectIsUserLoggedIn,
+ setLoginSuccess,
+} from "../../redux/accountSlice";
 import { IconButton } from "../shared/IconButton";
 import { LogInButtons } from "./LogInButtons";
 
 export const TopBar = () => {
- const isLoggedIn = useSelector((state: RootState) => state.account.isLoggedIn);
+ const isLoggedIn = useSelector(selectIsUserLoggedIn);
  const dispatch = useDispatch();
  const navigate = useNavigate();
 
