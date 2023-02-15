@@ -27,10 +27,11 @@ function App() {
     <Route path="/account/register" element={<Register />} />
 
     <Route path="myaccount" element={<ProtectedRoute />}>
-     <Route path="?" element={<MyAccount />} />
-     <Route path="address" element={<Address />} />
-     <Route path="details" element={<Details />} />
-     <Route path="orders" element={<Orders />} />
+     <Route path="" element={<MyAccount />}>
+      <Route path="address" element={<Address />} />
+      <Route path="details" element={<Details />} />
+      <Route path="orders" element={<Orders />} />
+     </Route>
     </Route>
    </Routes>
   </div>
