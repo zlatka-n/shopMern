@@ -8,7 +8,7 @@ type Props = {
  addresses: Address[];
 };
 
-export const AddressCard = ({ addresses }: Props) => {
+export const AddressCards = ({ addresses }: Props) => {
  const [open, setOpen] = useState(false);
 
  const handleClose = () => setOpen(false);
@@ -26,8 +26,8 @@ export const AddressCard = ({ addresses }: Props) => {
 
   const addressForEdit = addresses?.filter((address) => address._id === id);
 
-  for (const [key, value] of Object.entries(addressForEdit[0])) {
-   setValue(`${key}`, value);
+  for (const property in addressForEdit[0]) {
+   setValue(`${property}`, addressForEdit[0][property as keyof Address]);
   }
  };
 
