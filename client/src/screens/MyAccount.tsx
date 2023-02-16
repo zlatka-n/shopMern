@@ -15,12 +15,12 @@ export const MyAccount = () => {
  }, []);
 
  return (
-  <Grid container marginX={10} marginY={5}>
+  <Grid container marginX={10} marginY={5} maxWidth="90vw">
    <Grid item xs={2} marginTop={1}>
     <Sidebar />
    </Grid>
    <Grid item xs={10}>
-    {pathname === "/myaccount" ? (
+    {pathname === "/myaccount/" ? (
      <OverviewHeader
       heading={`Hello ${firstName},`}
       text={
