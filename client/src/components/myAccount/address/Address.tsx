@@ -5,7 +5,7 @@ import { OverviewHeader } from "../../../screens/OverviewHeader";
 import { fontSizes } from "../../shared/styles";
 import { ADDRESSES } from "../utils";
 import { UserNames } from "../../../api/types";
-import { AddressCard } from "./AddressCard";
+import { AddressCards } from "./AddressCard";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAddresses, setAddresses } from "../../../redux/userInfoSlice";
 
@@ -34,7 +34,7 @@ export const Address = () => {
      </Typography>
     </div>
    ) : null}
-   <AddressCard addresses={addresses} />
+   <AddressCards addresses={addresses} />
 
    <form>
     <Grid container justifyContent={"center"}></Grid>
