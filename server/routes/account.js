@@ -77,12 +77,12 @@ router.put('/adresses', authenticateToken, getUserId, (req, res) => {
 
   const userId = res.locals.userId;
   const addressId = req.body._id
-  const { address, zipCode, city } = req.body
+  const { address, zipCode, city, country } = req.body
 
   db
     .getAddressesCollection()
     .updateOne({ _id: ObjectId(userId), "addresses._id": ObjectId(addressId) },
-      { $set: { "addresses.$.address": address, "addresses.$.zipCode": zipCode, "addresses.$.city": city, } }, (err, response) => {
+      { $set: { "addresses.$.address": address, "addresses.$.zipCode": zipCode, "addresses.$.city": city, "addresses.$.country": country } }, (err, response) => {
         if (err) return res.send(err)
 
         return res.json(response)
