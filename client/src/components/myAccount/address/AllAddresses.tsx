@@ -1,9 +1,11 @@
-import { Button, Grid, IconButton, Typography } from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Address } from "../../../api/types";
 import { AddressModal } from "../modal/AddressModal";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { AddressCard } from "./AddressCard";
+
 type Props = {
  addresses: Address[];
 };
@@ -45,14 +47,14 @@ export const AllAddresses = ({ addresses }: Props) => {
        ({ address, city, zipCode, country, additionalInfo, _id }) => {
         return (
          <Grid item key={_id} xs={4}>
-          <Typography>{address}</Typography>
-          <Typography>{city}</Typography>
-          <Typography>{zipCode}</Typography>
-          <Typography>{country}</Typography>
-          {additionalInfo ? <Typography>{additionalInfo}</Typography> : null}
-          <Button variant="outlined" onClick={onEditClick(_id)}>
-           Edit
-          </Button>
+          <AddressCard
+           address={address}
+           city={city}
+           zipCode={zipCode}
+           country={country}
+           additionalInfo={additionalInfo}
+           onClick={onEditClick(_id)}
+          />
          </Grid>
         );
        }
