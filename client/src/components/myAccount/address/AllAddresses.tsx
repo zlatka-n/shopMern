@@ -1,14 +1,14 @@
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Address } from "../../../api/types";
 import { AddressModal } from "../modal/AddressModal";
-
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 type Props = {
  addresses: Address[];
 };
 
-export const AddressCards = ({ addresses }: Props) => {
+export const AllAddresses = ({ addresses }: Props) => {
  const [open, setOpen] = useState(false);
 
  const handleClose = () => setOpen(false);
@@ -32,12 +32,19 @@ export const AddressCards = ({ addresses }: Props) => {
  };
 
  return (
-  <Grid container>
+  <Grid container alignItems="center" justifyContent={"space-between"}>
+   <Grid item xs={4}>
+    <Grid container justifyContent={"center"}>
+     <IconButton>
+      <AddCircleIcon />
+     </IconButton>
+    </Grid>
+   </Grid>
    {addresses?.length > 0
     ? addresses.map(
        ({ address, city, zipCode, country, additionalInfo, _id }) => {
         return (
-         <Grid item key={_id}>
+         <Grid item key={_id} xs={4}>
           <Typography>{address}</Typography>
           <Typography>{city}</Typography>
           <Typography>{zipCode}</Typography>
