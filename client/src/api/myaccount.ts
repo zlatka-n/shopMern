@@ -27,3 +27,12 @@ export const putAddress = async (reqBody: any) => {
   throw err;
  }
 };
+
+export const postAddress = async (reqBody: any) => {
+ try {
+  const { data } = await axiosInstance.post("myaccount/adresses", reqBody);
+  return data;
+ } catch (err) {
+  throw err;
+ }
+};
