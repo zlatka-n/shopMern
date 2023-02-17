@@ -1,10 +1,10 @@
-import { Grid, IconButton } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Address } from "../../../api/types";
 import { AddressModal } from "../modal/AddressModal";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { AddressCard } from "./AddressCard";
+import { CreateAddress } from "./CreateAddress";
 
 type Props = {
  addresses: Address[];
@@ -36,11 +36,7 @@ export const AllAddresses = ({ addresses }: Props) => {
  return (
   <Grid container alignItems="center" justifyContent={"space-between"}>
    <Grid item xs={4}>
-    <Grid container justifyContent={"center"}>
-     <IconButton>
-      <AddCircleIcon />
-     </IconButton>
-    </Grid>
+    <CreateAddress />
    </Grid>
    {addresses?.length > 0
     ? addresses.map(
