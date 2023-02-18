@@ -1,8 +1,13 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Grid } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { getAddresses, putAddress } from "../../../api/myaccount";
 import { Address } from "../../../api/types";
-import { AddressModal } from "../modal/AddressModal";
+import { setAddresses } from "../../../redux/userInfoSlice";
+import { Modal } from "../modal/Modal";
+import { addressValidationSchema } from "../types";
 import { AddressCard } from "./AddressCard";
 import { CreateAddress } from "./CreateAddress";
 
@@ -12,8 +17,9 @@ type Props = {
 
 export const AllAddresses = ({ addresses }: Props) => {
  const [open, setOpen] = useState(false);
-
  const handleClose = () => setOpen(false);
+
+ const dispatch = useDispatch();
 
  const {
   control,
@@ -21,7 +27,9 @@ export const AllAddresses = ({ addresses }: Props) => {
   handleSubmit,
   formState: { dirtyFields },
   reset,
- } = useForm();
+ } = useForm<Omit<Address, "_id">>({
+  resolver: yupResolver(addressValidationSchema),
+ });
 
  const onEditClick = (id: string) => () => {
   setOpen(true);
@@ -29,9 +37,29 @@ export const AllAddresses = ({ addresses }: Props) => {
   const addressForEdit = addresses?.filter((address) => address._id === id);
 
   for (const property in addressForEdit[0]) {
-   setValue(`${property}`, addressForEdit[0][property as keyof Address]);
+   setValue(
+    `${property as keyof Omit<Address, "_id">}`,
+    addressForEdit[0][property as keyof Omit<Address, "_id">]
+   );
   }
  };
+
+ const onSubmitEditAddress = handleSubmit(async (data: any) => {
+  const areFieldsChanged = Object.keys(dirtyFields).length;
+
+  if (areFieldsChanged === 0) handleClose();
+
+  const updatedAddress = await putAddress(data);
+
+  if (updatedAddress) {
+   const newAddress = await getAddresses();
+   dispatch(setAddresses(newAddress.addresses));
+  }
+
+  reset({}, { keepValues: true });
+
+  handleClose();
+ });
 
  return (
   <Grid container alignItems="center" justifyContent={"space-between"}>
@@ -58,13 +86,12 @@ export const AllAddresses = ({ addresses }: Props) => {
        }
       )
     : null}
-   <AddressModal
-    control={control}
-    handleClose={handleClose}
+   <Modal
     open={open}
-    handleSubmit={handleSubmit}
-    dirtyFields={dirtyFields}
-    reset={reset}
+    control={control}
+    onClose={handleClose}
+    title="Edit your address"
+    onSubmit={onSubmitEditAddress}
    />
   </Grid>
  );
