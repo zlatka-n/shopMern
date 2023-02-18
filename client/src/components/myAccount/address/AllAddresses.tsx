@@ -62,9 +62,9 @@ export const AllAddresses = ({ addresses }: Props) => {
  });
 
  return (
-  <Grid container alignItems="center" justifyContent={"space-between"}>
+  <Grid container alignItems="center" gap={4}>
    {addresses?.length < 3 ? (
-    <Grid item xs={4}>
+    <Grid item xs={4} border={"1px solid"}>
      <CreateAddress />
     </Grid>
    ) : null}
@@ -72,7 +72,7 @@ export const AllAddresses = ({ addresses }: Props) => {
     ? addresses.map(
        ({ address, city, zipCode, country, additionalInfo, _id }) => {
         return (
-         <Grid item key={_id} xs={4}>
+         <Grid item key={_id} xs={3.5}>
           <AddressCard
            address={address}
            city={city}
