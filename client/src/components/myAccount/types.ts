@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { Address } from "../../api/types";
 
-export const createAddressValidation: yup.SchemaOf<Omit<Address, "_id">> = yup
+export const addressValidationSchema: yup.SchemaOf<Omit<Address, "_id">> = yup
  .object()
  .shape({
   address: yup.string().required(),

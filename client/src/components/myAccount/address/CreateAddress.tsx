@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Address } from "../../../api/types";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createAddressValidation } from "../types";
+import { addressValidationSchema } from "../types";
 import { getAddresses, postAddress } from "../../../api/myaccount";
 import { setAddresses } from "../../../redux/userInfoSlice";
 import { useDispatch } from "react-redux";
@@ -18,7 +18,7 @@ export const CreateAddress = () => {
 
  const { control, handleSubmit, reset } = useForm<Omit<Address, "_id">>({
   mode: "onSubmit",
-  resolver: yupResolver(createAddressValidation),
+  resolver: yupResolver(addressValidationSchema),
  });
 
  const onSubmit = handleSubmit(async (formData) => {
