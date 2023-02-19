@@ -21,6 +21,8 @@ export const TopBar = () => {
   getLogout().then(() => {
    console.log("User was logged out");
 
+   window.sessionStorage.removeItem("userId");
+
    dispatch(setLoginSuccess(false));
    navigate("account/login");
 

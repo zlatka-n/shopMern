@@ -20,7 +20,7 @@ export const getBooks = async () => {
 export const postLogin = async (reqBody: Login) => {
  try {
   const { data } = await axiosInstance.post("/account/login", reqBody);
-  console.log("User logged in");
+  window.sessionStorage.setItem("userId", data.userId);
   return data;
  } catch (err) {
   console.error("Error during postLogin()");
