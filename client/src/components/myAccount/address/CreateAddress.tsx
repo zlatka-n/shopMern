@@ -34,7 +34,7 @@ export const CreateAddress = () => {
  });
 
  return (
-  <Grid container justifyContent={"center"}>
+  <Grid container justifyContent={"center"} minHeight={"30rem"}>
    <IconButton onClick={() => setOpen(true)}>
     <AddCircleIcon />
    </IconButton>
