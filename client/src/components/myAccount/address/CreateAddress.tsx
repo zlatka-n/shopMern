@@ -1,4 +1,4 @@
-import { Grid, IconButton } from "@mui/material";
+import { Box, Grid, IconButton } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Modal } from "../modal/Modal";
 import { useState } from "react";
@@ -34,10 +34,18 @@ export const CreateAddress = () => {
  });
 
  return (
-  <Grid container justifyContent={"center"} minHeight={"30rem"}>
-   <IconButton onClick={() => setOpen(true)}>
-    <AddCircleIcon />
-   </IconButton>
+  <Grid
+   container
+   flexDirection="column"
+   justifyContent={"center"}
+   alignItems="center"
+   minHeight={"30rem"}
+  >
+   <Box>
+    <IconButton onClick={() => setOpen(true)}>
+     <AddCircleIcon />
+    </IconButton>
+   </Box>
    <Modal
     onClose={handleClose}
     open={open}
