@@ -79,7 +79,6 @@ router.get('/adresses', authenticateToken, getUserId, (req, res) => {
 
 router.put('/adresses/:id', authenticateToken, (req, res) => {
 
-  console.log(typeof req.params.id, 'req.params.id')
 
   const userId = new ObjectId(req.params.id)
 
@@ -97,8 +96,8 @@ router.put('/adresses/:id', authenticateToken, (req, res) => {
 
 })
 
-router.post('/adresses', authenticateToken, getUserId, (req, res) => {
-  const userId = res.locals.userId;
+router.post('/adresses/:id', authenticateToken, (req, res) => {
+  const userId = new ObjectId(req.params.id)
 
   db
     .getAddressesCollection()
@@ -113,9 +112,9 @@ router.post('/adresses', authenticateToken, getUserId, (req, res) => {
     })
 })
 
-router.delete('/adresses', authenticateToken, getUserId, (req, res) => {
+router.delete('/adresses/:id', authenticateToken, (req, res) => {
   const { _id } = req.body
-  const userId = res.locals.userId;
+  const userId = new ObjectId(req.params.id)
 
   db
     .getAddressesCollection()

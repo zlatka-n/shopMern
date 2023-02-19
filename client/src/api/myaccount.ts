@@ -35,7 +35,10 @@ export const putAddress = async (reqBody: any) => {
 
 export const postAddress = async (reqBody: any) => {
  try {
-  const { data } = await axiosInstance.post("myaccount/adresses", reqBody);
+  const { data } = await axiosInstance.post(
+   `myaccount/adresses/${userId}`,
+   reqBody
+  );
   return data;
  } catch (err) {
   throw err;
