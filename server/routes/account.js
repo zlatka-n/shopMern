@@ -106,4 +106,20 @@ router.post('/adresses', authenticateToken, getUserId, (req, res) => {
     })
 })
 
+router.delete('/adresses', authenticateToken, getUserId, (req, res) => {
+  const { _id } = req.body
+  const userId = res.locals.userId;
+
+  db
+    .getAddressesCollection()
+    .updateOne({ _id: userId }, {
+      $pull: { addresses: { _id: ObjectId(_id) } }
+    }, (err, response) => {
+      if (err) res.send(err)
+
+      return res.json(response)
+    })
+
+})
+
 module.exports = router
