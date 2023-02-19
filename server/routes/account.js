@@ -72,16 +72,17 @@ router.get('/adresses', authenticateToken, getUserId, (req, res) => {
     .toArray(function (err, userAddresses) {
       if (err) return res.status(404).send({ "message": "user addresses not found" })
 
-      //console.log(userAddresses)
-
       return res.json(userAddresses[0])
     })
 })
 
 
-router.put('/adresses', authenticateToken, getUserId, (req, res) => {
+router.put('/adresses/:id', authenticateToken, (req, res) => {
 
-  const userId = res.locals.userId;
+  console.log(typeof req.params.id, 'req.params.id')
+
+  const userId = new ObjectId(req.params.id)
+
   const addressId = req.body._id
   const { address, zipCode, city, country } = req.body
 
