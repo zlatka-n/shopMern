@@ -43,7 +43,6 @@ export const AddressCard = ({
      <Typography paddingX={1}>Edit</Typography>
     </IconButton>
     <IconButton
-     onClick={onClick}
      style={{ border: "2px solid black", color: "black", borderRadius: 0 }}
     >
      <DeleteIcon />
