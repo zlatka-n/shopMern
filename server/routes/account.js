@@ -24,7 +24,10 @@ function getUserId(req, res, next) {
   const accessToken = req.cookies && req.cookies.accessToken
   const decodedJwt = jwt_decode(accessToken)
 
+  if (!decodedJwt.id) return res.status(401).send({ 'status': '401', 'message': 'user id is missing' })
+
   res.locals.userId = new ObjectId(decodedJwt.id)
+
   next()
 
 }
@@ -45,11 +48,12 @@ router.get('/', authenticateToken, (req, res) => {
 router.get('/adresses', authenticateToken, getUserId, (req, res) => {
   const userId = res.locals.userId;
 
+
   db
     .getAddressesCollection()
     .aggregate([
       {
-        $match: { _id: ObjectId(userId) }
+        $match: { _id: userId }
       },
       { $project: { "addresses.created": 0 } },
       {
@@ -67,6 +71,8 @@ router.get('/adresses', authenticateToken, getUserId, (req, res) => {
     ])
     .toArray(function (err, userAddresses) {
       if (err) return res.status(404).send({ "message": "user addresses not found" })
+
+      //console.log(userAddresses)
 
       return res.json(userAddresses[0])
     })
@@ -114,10 +120,10 @@ router.delete('/adresses', authenticateToken, getUserId, (req, res) => {
     .getAddressesCollection()
     .updateOne({ _id: userId }, {
       $pull: { addresses: { _id: ObjectId(_id) } }
-    }, (err, response) => {
+    }, (err, removedAddress) => {
       if (err) res.send(err)
 
-      return res.json(response)
+      return res.json(removedAddress)
     })
 
 })
