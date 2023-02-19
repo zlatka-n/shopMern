@@ -114,7 +114,7 @@ router.get('/refresh', (req, res) => {
 
 
   const decodeToken = jwt_decode(refreshToken)
-  const newAccessToken = jwt.sign({ email: decodeToken.email, id: decodeToken._id }, secretToken, { expiresIn: '15m' })
+  const newAccessToken = jwt.sign({ email: decodeToken.email, id: decodeToken.id }, secretToken, { expiresIn: '15m' })
 
   res.cookie('accessToken', newAccessToken, { httpOnly: true })
 
