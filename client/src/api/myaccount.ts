@@ -1,6 +1,8 @@
 import { axiosInstance } from "./axios";
 import { UserAddress } from "./types";
 
+const userId = window.sessionStorage.getItem("userId");
+
 export const getMyAccount = async () => {
  try {
   const { data } = await axiosInstance.get("/myaccount");
@@ -21,7 +23,10 @@ export const getAddresses = async () => {
 
 export const putAddress = async (reqBody: any) => {
  try {
-  const { data } = await axiosInstance.put("myaccount/adresses", reqBody);
+  const { data } = await axiosInstance.put(
+   `myaccount/adresses/${userId}`,
+   reqBody
+  );
   return data;
  } catch (err) {
   throw err;
