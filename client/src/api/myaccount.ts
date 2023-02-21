@@ -44,3 +44,14 @@ export const postAddress = async (reqBody: any) => {
   throw err;
  }
 };
+
+export const deleteAddress = async (reqBody: any) => {
+ try {
+  const { data } = await axiosInstance.delete(`myaccount/adresses/${userId}`, {
+   data: { _id: reqBody },
+  });
+  return data;
+ } catch (err) {
+  throw err;
+ }
+};
