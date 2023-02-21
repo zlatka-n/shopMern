@@ -1,9 +1,10 @@
-import { Box, Grid, IconButton, Typography } from "@mui/material";
+import { Grid, IconButton, Typography } from "@mui/material";
 import { Address } from "../../../api/types";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-
-type Props = Omit<Address, "_id">;
+import { deleteAddress, getAddresses } from "../../../api/myaccount";
+import { useDispatch } from "react-redux";
+import { setAddresses } from "../../../redux/userInfoSlice";
 
 export const AddressCard = ({
  address,
@@ -12,7 +13,19 @@ export const AddressCard = ({
  country,
  additionalInfo,
  onClick,
-}: Props & { onClick: () => void }) => {
+ _id,
+}: Address & { onClick: () => void }) => {
+ const dispatch = useDispatch();
+
+ const onClickDeleteAddress = async () => {
+  const updatedAddress = await deleteAddress(_id);
+
+  if (updatedAddress) {
+   const newAddress = await getAddresses();
+   dispatch(setAddresses(newAddress.addresses));
+  }
+ };
+
  return (
   <Grid
    container
@@ -44,6 +57,7 @@ export const AddressCard = ({
     </IconButton>
     <IconButton
      style={{ border: "2px solid black", color: "black", borderRadius: 0 }}
+     onClick={onClickDeleteAddress}
     >
      <DeleteIcon />
     </IconButton>

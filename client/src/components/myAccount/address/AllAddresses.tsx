@@ -80,6 +80,7 @@ export const AllAddresses = ({ addresses }: Props) => {
            country={country}
            additionalInfo={additionalInfo}
            onClick={onEditClick(_id)}
+           _id={_id}
           />
          </Grid>
         );
