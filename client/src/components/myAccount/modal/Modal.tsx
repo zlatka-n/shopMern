@@ -62,7 +62,7 @@ export const Modal = ({ open, onClose, title, onSubmit, control }: Props) => {
      <Button
       onClick={onSubmit}
       variant="contained"
-      sx={{ paddingBlock: "1em" }}
+      sx={{ paddingBlock: "1rem" }}
      >
       Submit
      </Button>

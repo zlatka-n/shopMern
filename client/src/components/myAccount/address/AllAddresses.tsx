@@ -64,7 +64,7 @@ export const AllAddresses = ({ addresses }: Props) => {
  return (
   <Grid container alignItems="center" gap={4}>
    {addresses?.length < 3 ? (
-    <Grid item md={4} xs={11} border={"1px solid"}>
+    <Grid item md={3.5} xs={11} border={"1px solid"}>
      <CreateAddress />
     </Grid>
    ) : null}

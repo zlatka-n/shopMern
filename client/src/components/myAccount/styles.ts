@@ -12,7 +12,8 @@ export const styles = {
   height: 30rem;
   border-radius: 0.5rem;
   background-color: white;
-  padding: 2rem;
+  padding-inline: 2rem;
+  padding-block: 5rem;
   width: 30rem;
  `,
  input: `css
