@@ -10,6 +10,14 @@ import { getAddresses, postAddress } from "../../../api/myaccount";
 import { setAddresses } from "../../../redux/userInfoSlice";
 import { useDispatch } from "react-redux";
 
+const defaultValues = {
+ address: "",
+ city: "",
+ zipCode: "",
+ country: "",
+ additionalInfo: "",
+};
+
 export const CreateAddress = () => {
  const [open, setOpen] = useState(false);
  const handleClose = () => setOpen(false);
@@ -19,6 +27,7 @@ export const CreateAddress = () => {
  const { control, handleSubmit, reset } = useForm<Omit<Address, "_id">>({
   mode: "onSubmit",
   resolver: yupResolver(addressValidationSchema),
+  defaultValues,
  });
 
  const onSubmit = handleSubmit(async (formData) => {
@@ -30,7 +39,7 @@ export const CreateAddress = () => {
   }
 
   handleClose();
-  reset();
+  reset(defaultValues);
  });
 
  return (
