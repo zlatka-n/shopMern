@@ -9,10 +9,10 @@ function authenticateToken(req, res, next) {
 
   const tokenFromCookie = req.cookies && req.cookies.accessToken
 
-  if (!tokenFromCookie) return res.status(401).send({ 'status': '401', 'message': 'no token sent' })
+  if (!tokenFromCookie) return res.status(401).json({ message: 'No access token was received.' })
 
   jwt.verify(tokenFromCookie, process.env.SECRET_TOKEN, (err, user) => {
-    if (err) return res.status(403).send(err)
+    if (err) return res.status(403).json({ message: err, detail: 'Token could not be verified.' })
     req.user = user
 
     next()
@@ -24,7 +24,7 @@ function getUserId(req, res, next) {
   const accessToken = req.cookies && req.cookies.accessToken
   const decodedJwt = jwt_decode(accessToken)
 
-  if (!decodedJwt.id) return res.status(401).send({ 'status': '401', 'message': 'user id is missing' })
+  if (!decodedJwt.id) return res.status(401).json({ message: 'User id is missing.' })
 
   res.locals.userId = new ObjectId(decodedJwt.id)
 
@@ -38,7 +38,7 @@ router.get('/', authenticateToken, (req, res) => {
     db
       .getUsersCollection()
       .findOne({ email: authenticatedUser }, (err, user) => {
-        if (err) return res.send(err)
+        if (err) return res.status(404).json({ message: err, detail: "User was not found." })
 
         return res.json({ email: authenticatedUser, firstName: user.firstName })
       })
@@ -70,7 +70,7 @@ router.get('/adresses', authenticateToken, getUserId, (req, res) => {
       }
     ])
     .toArray(function (err, userAddresses) {
-      if (err) return res.status(404).send({ "message": "user addresses not found" })
+      if (err) return res.status(404).json({ message: "User addresses not found" })
 
       return res.json(userAddresses[0])
     })
@@ -89,7 +89,7 @@ router.put('/adresses/:id', authenticateToken, (req, res) => {
     .getAddressesCollection()
     .updateOne({ _id: ObjectId(userId), "addresses._id": ObjectId(addressId) },
       { $set: { "addresses.$.address": address, "addresses.$.zipCode": zipCode, "addresses.$.city": city, "addresses.$.country": country } }, (err, response) => {
-        if (err) return res.send(err)
+        if (err) return res.json(err)
 
         return res.json(response)
       })
@@ -106,7 +106,7 @@ router.post('/adresses/:id', authenticateToken, (req, res) => {
         "addresses": { ...req.body, _id: ObjectId(), created: new Date(Date.now()) }
       }
     }, (err, response) => {
-      if (err) return res.send(err)
+      if (err) return res.status(422).json({ message: err, detail: 'New address could not be created.' })
 
       return res.status(201).json(response)
     })
@@ -121,7 +121,7 @@ router.delete('/adresses/:id', authenticateToken, (req, res) => {
     .updateOne({ _id: userId }, {
       $pull: { addresses: { _id: ObjectId(_id) } }
     }, (err, removedAddress) => {
-      if (err) res.send(err)
+      if (err) res.status(404).json({ message: err, detail: 'Address could not be deleted' })
 
       return res.json(removedAddress)
     })
