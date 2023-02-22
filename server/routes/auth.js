@@ -17,24 +17,24 @@ router.post('/signup', (req, res) => {
     .getUsersCollection()
     .findOne({ email }, function (err, user) {
 
-      if (err) return res.send(err)
+      if (err) return res.json(err)
 
       if (user) {
-        res.status(409).send({ "status": "409", "message": "User already exists in db", "detail": "Ensure that email is not already registered" })
+        res.status(409).json({ "message": "User already exists in db. Ensure that email is not already registered." })
         return
       }
 
       if (!user)
         bcrypt.hash(password, saltRounds, function (err, hash) {
-          if (err) return res.send(err)
+          if (err) return res.json(err)
 
           db
             .getUsersCollection()
             .insertOne({ firstName, lastName, email, password: hash }, function (err) {
 
-              if (err) res.send(err)
+              if (err) res.json(err)
 
-              res.send({ 'status': '200', 'message': 'New user was created' })
+              res.status(201).json({ message: 'New user was created.' })
             })
         })
 
@@ -49,28 +49,29 @@ router.post('/login', (req, res) => {
   db
     .getUsersCollection()
     .findOne({ email }, function (err, user) {
-      if (err) return res.send(err)
+      if (err) return res.json(err)
 
-      if (!user) return res.status(404).send({ "status": "404", "message": "User does not exist in db", "detail": "Ensure that email is registered" })
+      if (!user) return res.status(404).json({ "message": "User does not exist in db. Ensure that email is registered." })
 
       if (user) {
         bcrypt.compare(password, user.password, function (err, result) {
 
-          if (err) return res.send(err)
+          if (err) return res.json(err)
 
-          if (!result) return res.send('wrong password')
+          if (!result) return res.status(401).json({ "message": 'Wrong password.' })
 
           if (result) {
+            const userId = user._id.toString()
 
-            const accessToken = jwt.sign({ email: user.email, id: user._id.toString() }, secretToken, { expiresIn: '15m' })
-            const refreshToken = jwt.sign({ email: user.email, id: user._id.toString() }, secretToken, { expiresIn: '1d' })
+            const accessToken = jwt.sign({ email: user.email, id: userId }, secretToken, { expiresIn: '15m' })
+            const refreshToken = jwt.sign({ email: user.email, id: userId }, secretToken, { expiresIn: '1d' })
 
             res.cookie('accessToken', accessToken, { httpOnly: true })
             res.cookie('refreshToken', refreshToken, { httpOnly: true })
             res.cookie('isLoggedIn', true)
 
 
-            return res.send({ 'status': '200', 'message': 'User was logged in', "accessToken": accessToken })
+            return res.json({ message: 'User was logged in.' })
           }
 
         })
@@ -82,24 +83,22 @@ router.get('/logout', (req, res) => {
 
   const isUserLoggedIn = req.cookies && req.cookies.accessToken
 
-  if (!isUserLoggedIn) return res.status(403).send({
-    'status': '403', 'message': 'User is not logged in'
+  if (!isUserLoggedIn) return res.status(403).json({
+    message: 'User is not logged in.'
   })
 
   res.clearCookie('accessToken')
   res.clearCookie('refreshToken')
   res.clearCookie('isLoggedIn')
 
-  return res.send({
-    'status': '200', 'message': 'User was logged out'
-  })
+  return res.json({ message: 'User was logged out.' })
 
 })
 
 router.get('/refresh', (req, res) => {
   const refreshToken = req.cookies && req.cookies.refreshToken
 
-  if (!refreshToken) return res.status(401).send({ 'status': '401', 'message': 'missing a refresh token' })
+  if (!refreshToken) return res.status(401).json({ message: 'Refresh token is missing.' })
 
   jwt.verify(refreshToken, secretToken, function (err) {
     if (err) {
@@ -108,8 +107,10 @@ router.get('/refresh', (req, res) => {
       res.clearCookie('refreshToken')
       res.clearCookie('isLoggedIn')
 
-      return res.status(401).send({ 'status': '401', 'message': err })
+      return res.status(401).json({ 'status': '401', message: err })
     }
+
+    return res.status(200).json({ message: 'Refresh token was verified' })
   })
 
 
@@ -118,7 +119,7 @@ router.get('/refresh', (req, res) => {
 
   res.cookie('accessToken', newAccessToken, { httpOnly: true })
 
-  return res.send({ 'status': '200', 'message': 'New access token issued', "newAccessToken": newAccessToken })
+  return res.json({ 'status': '200', message: 'New access token issued.' })
 
 })
 
