@@ -66,7 +66,7 @@ axiosInstance.interceptors.response.use(
     .catch(() => console.log("error during getNewToken()"));
   }
 
-  //refresh token expired
+  //access token + refresh token expired => logout user
   if (error.response.status === 401) {
    window.location.href = "/account/login";
   }
