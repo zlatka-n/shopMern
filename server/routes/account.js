@@ -108,7 +108,7 @@ router.post('/adresses/:id', authenticateToken, (req, res) => {
     }, (err, response) => {
       if (err) return res.send(err)
 
-      return res.json(response)
+      return res.status(201).json(response)
     })
 })
 
