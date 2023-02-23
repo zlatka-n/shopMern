@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { User } from "./types";
 const express = require("express");
 const router = express.Router();
 const db = require("../db/conn");
@@ -13,7 +14,7 @@ router.post("/signup", (req: Request, res: Response) => {
  const saltRounds = 10;
  const { email, password, firstName, lastName } = req.body;
 
- db.getUsersCollection().findOne({ email }, function (err, user) {
+ db.getUsersCollection().findOne({ email }, function (err: Error, user: User) {
   if (err) return res.json(err);
 
   if (user) {
@@ -25,16 +26,19 @@ router.post("/signup", (req: Request, res: Response) => {
   }
 
   if (!user)
-   bcrypt.hash(password, saltRounds, function (err, hash) {
+   bcrypt.hash(password, saltRounds, function (err: Error, hash: boolean) {
     if (err) return res.json(err);
 
     db
      .getUsersCollection()
-     .insertOne({ firstName, lastName, email, password: hash }, function (err) {
-      if (err) res.json(err);
+     .insertOne(
+      { firstName, lastName, email, password: hash },
+      function (err: Error) {
+       if (err) res.json(err);
 
-      res.status(201).json({ message: "New user was created." });
-     });
+       res.status(201).json({ message: "New user was created." });
+      }
+     );
    });
  });
 });
@@ -43,7 +47,7 @@ router.post("/login", (req: Request, res: Response) => {
  const email = req.body.email;
  const password = req.body.password;
 
- db.getUsersCollection().findOne({ email }, function (err, user) {
+ db.getUsersCollection().findOne({ email }, function (err: Error, user: User) {
   if (err) return res.json(err);
 
   if (!user)
@@ -52,32 +56,36 @@ router.post("/login", (req: Request, res: Response) => {
    });
 
   if (user) {
-   bcrypt.compare(password, user.password, function (err, result) {
-    if (err) return res.json(err);
+   bcrypt.compare(
+    password,
+    user.password,
+    function (err: Error, result: boolean) {
+     if (err) return res.json(err);
 
-    if (!result) return res.status(401).json({ message: "Wrong password." });
+     if (!result) return res.status(401).json({ message: "Wrong password." });
 
-    if (result) {
-     const userId = user._id.toString();
+     if (result) {
+      const userId = user._id.toString();
 
-     const accessToken = jwt.sign(
-      { email: user.email, id: userId },
-      secretToken,
-      { expiresIn: "15m" }
-     );
-     const refreshToken = jwt.sign(
-      { email: user.email, id: userId },
-      secretToken,
-      { expiresIn: "1d" }
-     );
+      const accessToken = jwt.sign(
+       { email: user.email, id: userId },
+       secretToken,
+       { expiresIn: "15m" }
+      );
+      const refreshToken = jwt.sign(
+       { email: user.email, id: userId },
+       secretToken,
+       { expiresIn: "1d" }
+      );
 
-     res.cookie("accessToken", accessToken, { httpOnly: true });
-     res.cookie("refreshToken", refreshToken, { httpOnly: true });
-     res.cookie("isLoggedIn", true);
+      res.cookie("accessToken", accessToken, { httpOnly: true });
+      res.cookie("refreshToken", refreshToken, { httpOnly: true });
+      res.cookie("isLoggedIn", true);
 
-     return res.json({ message: "User was logged in.", userId });
+      return res.json({ message: "User was logged in.", userId });
+     }
     }
-   });
+   );
   }
  });
 });
@@ -103,7 +111,7 @@ router.get("/refresh", (req: Request, res: Response) => {
  if (!refreshToken)
   return res.status(401).json({ message: "Refresh token is missing." });
 
- jwt.verify(refreshToken, secretToken, function (err) {
+ jwt.verify(refreshToken, secretToken, function (err: Error) {
   if (err) {
    res.clearCookie("accessToken");
    res.clearCookie("refreshToken");
