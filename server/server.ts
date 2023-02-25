@@ -27,7 +27,7 @@ app.use("/home", shopRoutes);
 app.use("/myaccount", myAccountRoutes);
 
 app.listen(port, () => {
- db.connectToMongoDb((err: any) => console.log(err));
+ db.connectToMongoDb((err: Error) => console.log(err));
 
  console.log(`Listening on port ${process.env.PORT}`);
 });
