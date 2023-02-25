@@ -22,7 +22,7 @@ function authenticateToken(req: Request, res: Response, next: NextFunction) {
     return res
      .status(403)
      .json({ message: err, detail: "Token could not be verified." });
-   req.user = user;
+   res.locals.user = user;
 
    next();
   }
@@ -42,7 +42,7 @@ function getUserId(req: Request, res: Response, next: NextFunction) {
 }
 
 router.get("/", authenticateToken, (req: Request, res: Response) => {
- const authenticatedUser = req.user?.email;
+ const authenticatedUser = res.locals.user?.email;
  if (authenticatedUser) {
   db
    .getUsersCollection()
