@@ -22,7 +22,7 @@ export const Address = () => {
     heading={ADDRESSES}
     text="Here you can add or edit your adresses"
    />
-   <AllAddresses addresses={userData?.addresses ?? []} />
+   <AllAddresses addresses={userData?.addresses} />
   </Box>
  );
 };
