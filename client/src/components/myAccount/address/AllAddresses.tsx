@@ -2,10 +2,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Grid } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { getAddresses, putAddress } from "../../../api/myaccount";
+import { useMutation, useQueryClient } from "react-query";
+import { putAddress } from "../../../api/myaccount";
 import { Address } from "../../../api/types";
-import { setAddresses } from "../../../redux/userInfoSlice";
 import { Modal } from "../modal/Modal";
 import { addressValidationSchema } from "../types";
 import { AddressCard } from "./AddressCard";
@@ -19,7 +18,11 @@ export const AllAddresses = ({ addresses }: Props) => {
  const [open, setOpen] = useState(false);
  const handleClose = () => setOpen(false);
 
- const dispatch = useDispatch();
+ const queryClient = useQueryClient();
+
+ const { mutate } = useMutation((address) => putAddress(address), {
+  onSuccess: () => queryClient.invalidateQueries("addresses"),
+ });
 
  const {
   control,
@@ -49,12 +52,7 @@ export const AllAddresses = ({ addresses }: Props) => {
 
   if (areFieldsChanged === 0) handleClose();
 
-  const updatedAddress = await putAddress(data);
-
-  if (updatedAddress) {
-   const newAddress = await getAddresses();
-   dispatch(setAddresses(newAddress.addresses));
-  }
+  mutate(data);
 
   reset({}, { keepValues: true });
 
