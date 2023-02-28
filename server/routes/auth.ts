@@ -112,6 +112,8 @@ router.get("/refresh", (req: Request, res: Response) => {
   return res.status(401).json({ message: "Refresh token is missing." });
 
  jwt.verify(refreshToken, secretToken, function (err: Error) {
+  res.clearCookie("accessToken");
+
   if (err) {
    res.clearCookie("accessToken");
    res.clearCookie("refreshToken");
@@ -120,19 +122,17 @@ router.get("/refresh", (req: Request, res: Response) => {
    return res.status(401).json({ status: "401", message: err });
   }
 
-  return res.status(200).json({ message: "Refresh token was verified" });
+  const decodeToken = jwt_decode(refreshToken);
+  const newAccessToken = jwt.sign(
+   { email: decodeToken.email, id: decodeToken.id },
+   secretToken,
+   { expiresIn: "15m" }
+  );
+
+  res.cookie("accessToken", newAccessToken, { httpOnly: true });
+
+  return res.json({ message: "New access token issued." });
  });
-
- const decodeToken = jwt_decode(refreshToken);
- const newAccessToken = jwt.sign(
-  { email: decodeToken.email, id: decodeToken.id },
-  secretToken,
-  { expiresIn: "15m" }
- );
-
- res.cookie("accessToken", newAccessToken, { httpOnly: true });
-
- return res.json({ status: "200", message: "New access token issued." });
 });
 
 module.exports = router;
