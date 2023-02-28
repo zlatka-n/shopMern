@@ -17,3 +17,12 @@ export type Address = {
  _id: ObjectId;
  created: Timestamp;
 };
+
+export type Product = {
+ _id: ObjectId;
+ title: string;
+ author: string;
+ price: number;
+ image: string;
+ description: string;
+};
