@@ -7,6 +7,7 @@
 
 - Express.js
 - MongoDB
+- Typescript
 - Bcrypt
 - cookie-parser
 - jsonwebtoken
@@ -16,6 +17,7 @@
 
 - React.js
 - Typescript
+- React Query
 - Redux + Redux Toolkit
 - Axios
 - React Hook Form
