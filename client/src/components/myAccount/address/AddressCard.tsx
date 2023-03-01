@@ -2,9 +2,8 @@ import { Grid, IconButton, Typography } from "@mui/material";
 import { Address } from "../../../api/types";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { deleteAddress, getAddresses } from "../../../api/myaccount";
-import { useDispatch } from "react-redux";
-import { setAddresses } from "../../../redux/userInfoSlice";
+import { deleteAddress } from "../../../api/myaccount";
+import { useMutation, useQueryClient } from "react-query";
 
 export const AddressCard = ({
  address,
@@ -15,15 +14,17 @@ export const AddressCard = ({
  onClick,
  _id,
 }: Address & { onClick: () => void }) => {
- const dispatch = useDispatch();
+ const queryClient = useQueryClient();
+
+ const { mutate } = useMutation(
+  (addressId: string) => deleteAddress(addressId),
+  {
+   onSuccess: () => queryClient.invalidateQueries("addresses"),
+  }
+ );
 
  const onClickDeleteAddress = async () => {
-  const updatedAddress = await deleteAddress(_id);
-
-  if (updatedAddress) {
-   const newAddress = await getAddresses();
-   dispatch(setAddresses(newAddress.addresses));
-  }
+  mutate(_id);
  };
 
  return (
