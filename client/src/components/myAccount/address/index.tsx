@@ -6,15 +6,7 @@ import { AllAddresses } from "./AllAddresses";
 import { useQuery } from "react-query";
 
 export const Address = () => {
- const {
-  isLoading,
-  isError,
-  data: userData,
- } = useQuery("addresses", getAddresses);
-
- if (isLoading) return "Loading";
-
- if (isError) return "Error";
+ const { data: userData } = useQuery("addresses", getAddresses);
 
  return (
   <Box maxWidth={"75vw"}>
