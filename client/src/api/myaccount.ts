@@ -22,6 +22,8 @@ export const getAddresses = async () => {
 };
 
 export const putAddress = async (reqBody: any) => {
+ const userId = window.sessionStorage.getItem("userId");
+
  try {
   const { data } = await axiosInstance.put(
    `myaccount/adresses/${userId}`,
@@ -34,6 +36,8 @@ export const putAddress = async (reqBody: any) => {
 };
 
 export const postAddress = async (reqBody: any) => {
+ const userId = window.sessionStorage.getItem("userId");
+
  try {
   const { data } = await axiosInstance.post(
    `myaccount/adresses/${userId}`,
