@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { getBooks } from "../api/axios";
 
 export const Home = () => {
- const [books, setBooks] = useState([]);
-
- useEffect(() => {
-  getBooks().then((data) => setBooks(data));
- }, []);
+ const { data: books } = useQuery("books", getBooks);
 
  return (
   <div>
-   {books.map(({ title, author, description, _id }) => (
+   {books?.map(({ title, author, description, _id }) => (
     <div key={_id}>
      <p>{title}</p>
      <p>{author}</p>
