@@ -21,3 +21,12 @@ export type UserAddress = {
  userInfo: UserNames;
  addresses: Address[];
 };
+
+export type Book = {
+ author: string;
+ description: string;
+ image: string;
+ price: string;
+ title: string;
+ _id: string;
+};

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { SignUp } from "../shared/types";
-import { Login } from "./types";
+import { Book, Login } from "./types";
 
 export const axiosInstance = axios.create({
  baseURL: "http://localhost:4000",
@@ -9,7 +9,7 @@ export const axiosInstance = axios.create({
 
 export const getBooks = async () => {
  try {
-  const { data } = await axiosInstance.get("/home");
+  const { data } = await axiosInstance.get<Book[]>("/home");
   return data;
  } catch (err) {
   console.error("Error during getBooks()");
