@@ -1,6 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { postLogin } from "../api/axios";
 import { Input } from "../components/shared/Input";
 import { styles } from "../components/shared/styles";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { REQUIRED, SIGN_IN, SIGN_UP, WRONG_EMAIL } from "../shared/constants";
 import { RegisterOrLogIn } from "../components/register/RegisterOrLogin";
 import { Login as LoginValues } from "../shared/types";
+import { postLogin } from "../api/auth";
 
 const loginSchema: SchemaOf<LoginValues> = object().shape({
  email: string().email(WRONG_EMAIL).required(REQUIRED),

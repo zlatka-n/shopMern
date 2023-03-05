@@ -4,13 +4,13 @@ import { Grid, Stack } from "@mui/material";
 import { topBarBtns } from "./utils";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getLogout } from "../../api/axios";
 import {
  selectIsUserLoggedIn,
  setLoginSuccess,
 } from "../../redux/accountSlice";
 import { IconButton } from "../shared/IconButton";
 import { LogInButtons } from "./LogInButtons";
+import { getLogout } from "../../api/auth";
 
 export const TopBar = () => {
  const isLoggedIn = useSelector(selectIsUserLoggedIn);

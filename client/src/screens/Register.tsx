@@ -8,8 +8,8 @@ import * as yup from "yup";
 import YupPassword from "yup-password";
 import { SignUp } from "../shared/types";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { postSignUp } from "../api/axios";
 import { useState } from "react";
+import { postSignUp } from "../api/auth";
 
 YupPassword(yup);
 
