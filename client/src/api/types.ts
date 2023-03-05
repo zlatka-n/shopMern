@@ -29,3 +29,18 @@ export type Book = {
  title: string;
  _id: string;
 };
+type Details = {
+ format: string;
+ dimensions: string;
+ language: string;
+ publicationDate: string;
+ ISBN10: string;
+ ISBN13: string;
+};
+
+export type ProductDetails = {
+ _id: string;
+ description: string;
+ details: Details;
+ basicInfo: Book;
+};
