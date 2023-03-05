@@ -1,6 +1,6 @@
 import { ObjectId } from "bson";
 import { Request, Response } from "express";
-import { Product } from "./types";
+import { Product, ProductDetails } from "./types";
 
 const express = require("express");
 const router = express.Router();
@@ -42,13 +42,13 @@ router.get("/:id", (req: Request, res: Response) => {
     $unwind: "$basicInfo",
    },
   ])
-  .toArray(function (err: Error, productDetail: any) {
+  .toArray(function (err: Error, productDetails: ProductDetails[]) {
    if (err)
     return res
      .status(404)
      .json({ message: `Product with id ${productId} could not be found.` });
 
-   return res.json(productDetail[0]);
+   return res.json(productDetails[0]);
   });
 });
 
