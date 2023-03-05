@@ -25,5 +25,8 @@ module.exports = {
   },
   getAddressesCollection: function () {
     return _db.collection('addresses')
+  },
+  getProductsCollection: function () {
+    return _db.collection('products')
   }
 }

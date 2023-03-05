@@ -7,8 +7,7 @@ const db = require("../db/conn");
 
 router.get("/", (req: Request, res: Response) => {
  db
-  .getDb()
-  .collection("products")
+  .getProductsCollection()
   .find()
   .toArray((err: Error, product: Product) => {
    if (err)
