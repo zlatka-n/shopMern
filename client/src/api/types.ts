@@ -24,7 +24,6 @@ export type UserAddress = {
 
 export type Book = {
  author: string;
- description: string;
  image: string;
  price: string;
  title: string;

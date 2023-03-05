@@ -6,11 +6,11 @@ export const Home = () => {
 
  return (
   <div>
-   {books?.map(({ title, author, description, _id }) => (
+   {books?.map(({ title, author, _id, price }) => (
     <div key={_id}>
      <p>{title}</p>
      <p>{author}</p>
-     <p>{description}</p>
+     <p>{price}</p>
     </div>
    ))}
   </div>
