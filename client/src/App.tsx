@@ -4,6 +4,7 @@ import { Address } from "./components/myAccount/address";
 import { Details } from "./components/myAccount/Details";
 import { Orders } from "./components/myAccount/Orders";
 import { NavBar } from "./components/navBar/NavBar";
+import { Product } from "./components/products/Product";
 import { setLoginSuccess } from "./redux/accountSlice";
 import { Home } from "./screens/Home";
 import { Login } from "./screens/Login";
@@ -23,6 +24,7 @@ function App() {
    <NavBar />
    <Routes>
     <Route path="/" element={<Home />} />
+    <Route path="/:id" element={<Product />} />
     <Route path="/account/login" element={<Login />} />
     <Route path="/account/register" element={<Register />} />
 

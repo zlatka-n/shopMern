@@ -1,5 +1,8 @@
+import { Typography } from "@mui/material";
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 import { getBooks } from "../api/axios";
+import { fontSizes } from "../components/shared/styles";
 
 export const Home = () => {
  const { data: books } = useQuery("books", getBooks);
@@ -7,11 +10,13 @@ export const Home = () => {
  return (
   <div>
    {books?.map(({ title, author, _id, price }) => (
-    <div key={_id}>
-     <p>{title}</p>
-     <p>{author}</p>
-     <p>{price}</p>
-    </div>
+    <Link key={_id} to={`/${_id}`} style={{ textDecoration: "none" }}>
+     <Typography fontSize={fontSizes.medium} color={"primary"}>
+      {title}
+     </Typography>
+     <Typography fontSize={fontSizes.medium}>{author}</Typography>
+     <Typography fontSize={fontSizes.medium}>{price}</Typography>
+    </Link>
    ))}
   </div>
  );
