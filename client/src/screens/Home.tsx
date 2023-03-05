@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { getBooks } from "../api/axios";
+import { getBooks } from "../api/shop";
 import { fontSizes } from "../components/shared/styles";
 
 export const Home = () => {
