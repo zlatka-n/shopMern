@@ -9,7 +9,7 @@ export const axiosInstance = axios.create({
 
 export const getBooks = async () => {
  try {
-  const { data } = await axiosInstance.get<Book[]>("/home");
+  const { data } = await axiosInstance.get<Book[]>("/books");
   return data;
  } catch (err) {
   console.error("Error during getBooks()");

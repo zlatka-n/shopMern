@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use("/account", authRoutes);
-app.use("/home", shopRoutes);
+app.use("/books", shopRoutes);
 app.use("/myaccount", myAccountRoutes);
 
 app.listen(port, () => {
