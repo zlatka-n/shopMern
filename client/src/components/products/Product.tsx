@@ -40,7 +40,7 @@ export const Product = () => {
     >
      <img src={product?.basicInfo.image} alt={title} />
     </Grid>
-    <Grid item md={5} xs={12}>
+    <Grid item md={5} xs={12} paddingRight={7}>
      <Typography fontSize={fontSizes.large}>{title}</Typography>
      <Typography
       fontSize={fontSizes.medium}
