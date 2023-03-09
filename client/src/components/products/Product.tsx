@@ -2,6 +2,7 @@ import { Typography } from "@mui/material";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getBooksDetails } from "../../api/shop";
+import { Details } from "../../api/types";
 
 export const Product = () => {
  const { id } = useParams();
@@ -15,8 +16,6 @@ export const Product = () => {
  );
 
  const { author, price, title } = product?.basicInfo || {};
- const { ISBN10, ISBN13, dimensions, format, language, publicationDate } =
-  product?.details || {};
 
  return (
   <div>
@@ -25,15 +24,13 @@ export const Product = () => {
     <Typography>{author}</Typography>
     <Typography>{price}</Typography>
    </div>
-
-   <div>
-    <Typography>{ISBN10}</Typography>
-    <Typography>{ISBN13}</Typography>
-    <Typography>{dimensions}</Typography>
-    <Typography>{format}</Typography>
-    <Typography>{language}</Typography>
-    <Typography>{publicationDate}</Typography>
-   </div>
+   {product?.details
+    ? Object.keys(product?.details).map((key) => (
+       <Typography key={product?.details[key]}>
+        {product?.details[key]}
+       </Typography>
+      ))
+    : null}
   </div>
  );
 };
