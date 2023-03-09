@@ -29,13 +29,9 @@ export type Book = {
  title: string;
  _id: string;
 };
-type Details = {
- format: string;
- dimensions: string;
- language: string;
- publicationDate: string;
- ISBN10: string;
- ISBN13: string;
+
+export type Details = {
+ [key: string]: string;
 };
 
 export type ProductDetails = {
