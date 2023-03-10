@@ -1,8 +1,12 @@
-import { Button, Grid, Paper, Typography } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { useMemo } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getBooksDetails } from "../../api/shop";
+import {
+ formatCamelCaseWord,
+ setFirsLetterUpperCase,
+} from "../../shared/utils";
 import { fontSizes } from "../shared/styles";
 
 export const Product = () => {
@@ -17,15 +21,20 @@ export const Product = () => {
  );
 
  const { author, price, title } = product?.basicInfo || {};
+
  const showDetails = useMemo(() => {
   return product?.details
-   ? Object.keys(product?.details).map((key) => (
-      <Grid item xs={6}>
-       <Typography key={product?.details[key]}>
-        {[key]}: {product?.details[key]}
-       </Typography>
-      </Grid>
-     ))
+   ? Object.keys(product?.details).map((key) => {
+      const title =
+       key === "publicationDate"
+        ? formatCamelCaseWord(key)
+        : setFirsLetterUpperCase(key);
+      return (
+       <Grid item xs={6} key={product?.details[key]}>
+        <Typography>{`${title}: ${product?.details[key]}`}</Typography>
+       </Grid>
+      );
+     })
    : null;
  }, [product?.details]);
 
@@ -35,7 +44,6 @@ export const Product = () => {
    marginX={{ md: 20, xs: 2 }}
    marginY={5}
    flexDirection="row"
-   //  justifyContent={flex-start}
    gap={5}
   >
    <Grid item xs={12} md={3}>
