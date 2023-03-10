@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Button, Grid, Paper, Typography } from "@mui/material";
 import { useMemo } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
@@ -47,12 +47,20 @@ export const Product = () => {
      >{`By (author) ${author}`}</Typography>
      <Typography>{product?.description}</Typography>
     </Grid>
-    <Grid item md={4} xs={12}>
-     <Typography fontSize={fontSizes.large}>{price}</Typography>
-     <Typography>Price includes VAT/import taxes for EU delivery</Typography>
-     <Typography>
+    <Grid item md={4} xs={12} paddingX={4}>
+     <Typography fontSize={fontSizes.large} lineHeight={2}>
+      {price}
+     </Typography>
+     <Typography lineHeight={2}>Free Delivery</Typography>
+     <Typography lineHeight={2}>
+      Price includes VAT/import taxes for EU delivery
+     </Typography>
+     <Typography lineHeight={2}>
       Available. Expected delivery to the Czech Republic in 12-17 business days.
      </Typography>
+     <Button variant="contained" fullWidth={true} sx={{ marginTop: 2 }}>
+      Add to basket
+     </Button>
     </Grid>
    </Grid>
 
