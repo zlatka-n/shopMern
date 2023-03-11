@@ -10,3 +10,6 @@ export const formatCamelCaseWord = (word: string) => {
 
  return setFirsLetterUpperCase(splitWord);
 };
+
+export const trimText = (text: string, length: number) =>
+ text.substring(0, length);
