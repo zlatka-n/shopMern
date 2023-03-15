@@ -6,9 +6,18 @@ const db = require("../db/conn");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jwt_decode = require("jwt-decode");
-require("dotenv").config({ path: "./config.env" });
+const nodemailer = require("nodemailer");
+const nodemailerSendgrid = require("nodemailer-sendgrid");
 
+require("dotenv").config({ path: "./config.env" });
 const secretToken = process.env.SECRET_TOKEN;
+const sendGridApiKey = process.env.SENDGRID_API_KEY;
+
+const transport = nodemailer.createTransport(
+ nodemailerSendgrid({
+  apiKey: sendGridApiKey,
+ })
+);
 
 router.post("/signup", (req: Request, res: Response) => {
  const saltRounds = 10;
@@ -103,6 +112,47 @@ router.get("/logout", (req: Request, res: Response) => {
  res.clearCookie("isLoggedIn");
 
  return res.json({ message: "User was logged out." });
+});
+
+router.post("/resetPassword", (req: Request, response: Response) => {
+ const email = req.body.email;
+
+ db.getUsersCollection().findOne({ email }, (err: Error, user: User) => {
+  if (!user) {
+   return response.status(404).json({
+    message: "User does not exist in db. Ensure that email is registered.",
+   });
+  }
+
+  //TODO: save resetToken and resetTokenExpiration in db
+  transport
+   .sendMail({
+    from: "prihlaskyaodbery@gmail.com",
+    to: email,
+    subject: "Reset your password",
+    html: "<p>Please, reset your password with this link, blaaaa</p>",
+   })
+   .then(([res]: any) => {
+    console.log(
+     "Message delivered with code %s %s",
+     res.statusCode,
+     res.statusMessage
+    );
+
+    response.status(202).json({ message: "Reset email was sent" });
+   })
+   .catch((err: any) => {
+    console.log("Errors occurred, failed to deliver message");
+
+    if (err.response && err.response.body && err.response.body.errors) {
+     err.response.body.errors.forEach((error: any) =>
+      console.log("%s: %s", error.field, error.message)
+     );
+    } else {
+     console.log(err);
+    }
+   });
+ });
 });
 
 router.get("/refresh", (req: Request, res: Response) => {
