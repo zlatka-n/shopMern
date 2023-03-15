@@ -12,6 +12,7 @@ const nodemailerSendgrid = require("nodemailer-sendgrid");
 require("dotenv").config({ path: "./config.env" });
 const secretToken = process.env.SECRET_TOKEN;
 const sendGridApiKey = process.env.SENDGRID_API_KEY;
+const senderEmail = process.env.SENDER_EMAIL;
 
 const transport = nodemailer.createTransport(
  nodemailerSendgrid({
@@ -124,33 +125,24 @@ router.post("/resetPassword", (req: Request, response: Response) => {
    });
   }
 
-  //TODO: save resetToken and resetTokenExpiration in db
   transport
    .sendMail({
-    from: "prihlaskyaodbery@gmail.com",
+    from: senderEmail,
     to: email,
     subject: "Reset your password",
     html: "<p>Please, reset your password with this link, blaaaa</p>",
    })
    .then(([res]: any) => {
-    console.log(
-     "Message delivered with code %s %s",
-     res.statusCode,
-     res.statusMessage
-    );
+    console.log("Message delivered with code %s %s", res.statusCode);
+
+    //TODO: save resetToken and resetTokenExpiration in db
 
     response.status(202).json({ message: "Reset email was sent" });
    })
-   .catch((err: any) => {
-    console.log("Errors occurred, failed to deliver message");
-
-    if (err.response && err.response.body && err.response.body.errors) {
-     err.response.body.errors.forEach((error: any) =>
-      console.log("%s: %s", error.field, error.message)
-     );
-    } else {
-     console.log(err);
-    }
+   .catch((error: any) => {
+    response
+     .status(500)
+     .json({ message: "Errors occurred, failed to deliver reset email." });
    });
  });
 });
