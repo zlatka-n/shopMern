@@ -1,6 +1,6 @@
 import { axiosInstance } from "./axios";
 import { Login } from "./types";
-import { SignUp } from "../shared/types";
+import { Email, SignUp } from "../shared/types";
 
 export const postLogin = async (reqBody: Login) => {
  try {
@@ -16,6 +16,17 @@ export const postLogin = async (reqBody: Login) => {
 export const postSignUp = async (reqBody: SignUp) => {
  try {
   const { data } = await axiosInstance.post("/account/signup", reqBody);
+  return data;
+ } catch (err) {
+  throw err;
+ }
+};
+
+export const postForgotPassword = async (email: string) => {
+ try {
+  const { data } = await axiosInstance.post("/account/forgotPassword", {
+   email,
+  });
   return data;
  } catch (err) {
   throw err;
