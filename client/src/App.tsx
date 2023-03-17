@@ -11,6 +11,7 @@ import { Home } from "./screens/Home";
 import { Login } from "./screens/Login";
 import { MyAccount } from "./screens/MyAccount";
 import { Register } from "./screens/Register";
+import { ResetPasswordInstruction } from "./screens/ResetPasswordInstruction";
 import { ProtectedRoute } from "./shared/ProtectedRoute";
 
 function App() {
@@ -37,7 +38,11 @@ function App() {
      </Route>
     </Route>
 
-    <Route path="forgotpassword" element={<ForgotPassword />} />
+    <Route path="/forgotpassword" element={<ForgotPassword />} />
+    <Route
+     path="/forgotpassword/instructions"
+     element={<ResetPasswordInstruction />}
+    />
    </Routes>
   </div>
  );

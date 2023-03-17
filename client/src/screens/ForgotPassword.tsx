@@ -7,7 +7,7 @@ import { object, SchemaOf, string } from "yup";
 import { postForgotPassword } from "../api/auth";
 import { Input } from "../components/shared/Input";
 import { fontSizes, styles } from "../components/shared/styles";
-import { REQUIRED, WRONG_EMAIL } from "../shared/constants";
+import { FORGOT_PASSWORD, REQUIRED, WRONG_EMAIL } from "../shared/constants";
 import { Email } from "../shared/types";
 
 const emailSchema: SchemaOf<Email> = object().shape({
@@ -25,7 +25,10 @@ export const ForgotPassword = () => {
 
  const onClickContinue = handleSubmit(async (data) => {
   mutate(data.email);
-  navigate("/account/login");
+
+  navigate(`/${FORGOT_PASSWORD}/instructions`, {
+   state: { route: FORGOT_PASSWORD },
+  });
 
   return;
  });
