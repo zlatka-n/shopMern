@@ -117,7 +117,7 @@ router.get("/logout", (req: Request, res: Response) => {
  return res.json({ message: "User was logged out." });
 });
 
-router.post("/resetPassword", (req: Request, response: Response) => {
+router.post("/forgotPassword", (req: Request, response: Response) => {
  const email = req.body.email;
  const resetToken = crypto.randomBytes(32).toString("hex");
  const resetTokenExpiration = new Date();
