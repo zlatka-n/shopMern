@@ -31,7 +31,7 @@ export const Product = () => {
     <img src={product?.basicInfo.image} alt={title} />
    </Grid>
    <Grid item md={5.5} xs={11}>
-    <Typography fontSize={fontSizes.large}>{title}</Typography>
+    <Typography fontSize={fontSizes.xLarge}>{title}</Typography>
     <Typography lineHeight={3}>{`By (author) ${author}`}</Typography>
     <Typography lineHeight={2}>
      Price <span style={{ fontSize: fontSizes.medium }}>{price}</span>

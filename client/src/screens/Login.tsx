@@ -43,7 +43,7 @@ export const Login = () => {
    marginTop={5}
   >
    <form onSubmit={onSubmit} className={styles.inputContainer}>
-    <Typography fontSize={25}>Welcome back</Typography>
+    <Typography fontSize={fontSizes.large}>Welcome back</Typography>
     <Input name="email" control={control} placeholder="Email" />
     <Input
      name="password"

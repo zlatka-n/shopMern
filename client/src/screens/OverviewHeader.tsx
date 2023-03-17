@@ -9,7 +9,7 @@ type Props = {
 export const OverviewHeader = ({ heading, text }: Props) => {
  return (
   <>
-   <Typography fontSize={fontSizes.large}>{heading}</Typography>
+   <Typography fontSize={fontSizes.xLarge}>{heading}</Typography>
    <Typography paddingY={2}>{text} </Typography>
   </>
  );
