@@ -7,3 +7,7 @@ export type SignUp = Login & {
  firstName: string;
  lastName: string;
 };
+
+export type Email = {
+ email: string;
+};
