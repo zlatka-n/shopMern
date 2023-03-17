@@ -14,6 +14,7 @@ require("dotenv").config({ path: "./config.env" });
 const secretToken = process.env.SECRET_TOKEN;
 const sendGridApiKey = process.env.SENDGRID_API_KEY;
 const senderEmail = process.env.SENDER_EMAIL;
+const frontEndUrl = process.env.FRONTEND_URL;
 
 const transport = nodemailer.createTransport(
  nodemailerSendgrid({
@@ -121,6 +122,8 @@ router.post("/resetPassword", (req: Request, response: Response) => {
  const resetToken = crypto.randomBytes(32).toString("hex");
  const resetTokenExpiration = new Date();
 
+ const link = `${frontEndUrl}/token=${resetToken}`;
+
  db.getUsersCollection().updateOne(
   {
    email,
@@ -139,7 +142,9 @@ router.post("/resetPassword", (req: Request, response: Response) => {
      from: senderEmail,
      to: email,
      subject: "Reset your password",
-     html: `<p>Please, reset your password with this link ${resetToken}, blaaaa</p>`,
+     html: `<p>You've asked us to reset your password. Please click on the link below to enter a new password:
+     ${link}. Please note that the link will expire in 24 hours. 
+     </p>`,
     })
     .then(([res]: any) => {
      console.log("Message delivered with code %s %s", res.statusCode);
