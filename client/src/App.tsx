@@ -6,6 +6,7 @@ import { Orders } from "./components/myAccount/Orders";
 import { NavBar } from "./components/navBar/NavBar";
 import { Product } from "./components/products/Product";
 import { setLoginSuccess } from "./redux/accountSlice";
+import { ForgotPassword } from "./screens/ForgotPassword";
 import { Home } from "./screens/Home";
 import { Login } from "./screens/Login";
 import { MyAccount } from "./screens/MyAccount";
@@ -35,6 +36,8 @@ function App() {
       <Route path="orders" element={<Orders />} />
      </Route>
     </Route>
+
+    <Route path="forgotpassword" element={<ForgotPassword />} />
    </Routes>
   </div>
  );

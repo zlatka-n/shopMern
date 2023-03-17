@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { Input } from "../components/shared/Input";
 import { styles } from "../components/shared/styles";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLoginSuccess } from "../redux/accountSlice";
 import { object, string, SchemaOf } from "yup";
@@ -11,6 +11,7 @@ import { REQUIRED, SIGN_IN, SIGN_UP, WRONG_EMAIL } from "../shared/constants";
 import { RegisterOrLogIn } from "../components/register/RegisterOrLogin";
 import { Login as LoginValues } from "../shared/types";
 import { postLogin } from "../api/auth";
+import { fontSizes } from "../components/shared/styles";
 
 const loginSchema: SchemaOf<LoginValues> = object().shape({
  email: string().email(WRONG_EMAIL).required(REQUIRED),
@@ -54,6 +55,13 @@ export const Login = () => {
      {SIGN_IN}
     </Button>
    </form>
+   <Link
+    to="/forgotpassword"
+    className={styles.inputContainer}
+    style={{ textDecoration: "none", color: "black", marginBlock: "1rem" }}
+   >
+    <Typography fontSize={fontSizes.medium}> Forgot password?</Typography>
+   </Link>
    <RegisterOrLogIn
     screenName="/account/register"
     buttonName={SIGN_UP}
