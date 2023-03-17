@@ -1,7 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { object, SchemaOf, string } from "yup";
+import { postForgotPassword } from "../api/auth";
 import { Input } from "../components/shared/Input";
 import { fontSizes, styles } from "../components/shared/styles";
 import { REQUIRED, WRONG_EMAIL } from "../shared/constants";
@@ -12,13 +15,19 @@ const emailSchema: SchemaOf<Email> = object().shape({
 });
 
 export const ForgotPassword = () => {
+ const { mutate } = useMutation((email: string) => postForgotPassword(email));
+
  const { handleSubmit, control } = useForm<Email>({
   resolver: yupResolver(emailSchema),
  });
 
+ const navigate = useNavigate();
+
  const onClickContinue = handleSubmit(async (data) => {
-  console.log({ data });
-  alert("TODO: POST: /resetPassword");
+  mutate(data.email);
+  navigate("/account/login");
+
+  return;
  });
 
  return (
