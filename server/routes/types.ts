@@ -41,3 +41,11 @@ export type ProductDetails = {
  details: Details;
  basicInfo: Product;
 };
+
+export type UpdateOneResult = {
+ acknowledged: boolean;
+ modifiedCount: number;
+ upsertedId: null | ObjectId;
+ upsertedCount: number;
+ matchedCount: number;
+};

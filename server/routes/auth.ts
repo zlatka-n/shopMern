@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User } from "./types";
+import { UpdateOneResult, User } from "./types";
 const express = require("express");
 const router = express.Router();
 const db = require("../db/conn");
@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const jwt_decode = require("jwt-decode");
 const nodemailer = require("nodemailer");
 const nodemailerSendgrid = require("nodemailer-sendgrid");
+const crypto = require("crypto");
 
 require("dotenv").config({ path: "./config.env" });
 const secretToken = process.env.SECRET_TOKEN;
@@ -117,34 +118,41 @@ router.get("/logout", (req: Request, res: Response) => {
 
 router.post("/resetPassword", (req: Request, response: Response) => {
  const email = req.body.email;
+ const resetToken = crypto.randomBytes(32).toString("hex");
+ const resetTokenExpiration = new Date();
 
- db.getUsersCollection().findOne({ email }, (err: Error, user: User) => {
-  if (!user) {
-   return response.status(404).json({
-    message: "User does not exist in db. Ensure that email is registered.",
-   });
+ db.getUsersCollection().updateOne(
+  {
+   email,
+  },
+  { $set: { resetToken, resetTokenExpiration } },
+  (err: Error, user: UpdateOneResult) => {
+   console.log(user);
+   if (user.matchedCount === 0) {
+    return response.status(404).json({
+     message: "User does not exist in db. Ensure that email is registered.",
+    });
+   }
+
+   transport
+    .sendMail({
+     from: senderEmail,
+     to: email,
+     subject: "Reset your password",
+     html: `<p>Please, reset your password with this link ${resetToken}, blaaaa</p>`,
+    })
+    .then(([res]: any) => {
+     console.log("Message delivered with code %s %s", res.statusCode);
+
+     response.status(202).json({ message: "Reset email was sent" });
+    })
+    .catch((error: any) => {
+     response
+      .status(500)
+      .json({ message: "Errors occurred, failed to deliver reset email." });
+    });
   }
-
-  transport
-   .sendMail({
-    from: senderEmail,
-    to: email,
-    subject: "Reset your password",
-    html: "<p>Please, reset your password with this link, blaaaa</p>",
-   })
-   .then(([res]: any) => {
-    console.log("Message delivered with code %s %s", res.statusCode);
-
-    //TODO: save resetToken and resetTokenExpiration in db
-
-    response.status(202).json({ message: "Reset email was sent" });
-   })
-   .catch((error: any) => {
-    response
-     .status(500)
-     .json({ message: "Errors occurred, failed to deliver reset email." });
-   });
- });
+ );
 });
 
 router.get("/refresh", (req: Request, res: Response) => {
