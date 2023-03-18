@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { ResetInstructions } from "../components/register/ResetInstructions";
+import { NotFound } from "../components/shared/NotFound";
 import { styles } from "../components/shared/styles";
 
 export const ResetPasswordInstruction = () => {
@@ -15,7 +16,7 @@ export const ResetPasswordInstruction = () => {
    marginTop={5}
   >
    <div className={styles.inputContainer}>
-    {email ? <ResetInstructions email={email} /> : "This page is not available"}
+    {email ? <ResetInstructions email={email} /> : <NotFound />}
    </div>
   </Box>
  );
