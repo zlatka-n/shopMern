@@ -27,7 +27,7 @@ export const ForgotPassword = () => {
   mutate(data.email);
 
   navigate(`/${FORGOT_PASSWORD}/instructions`, {
-   state: { route: FORGOT_PASSWORD },
+   state: { email: data.email },
   });
 
   return;

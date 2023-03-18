@@ -1,16 +1,22 @@
+import { Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { FORGOT_PASSWORD } from "../shared/constants";
+import { ResetInstructions } from "../components/register/ResetInstructions";
+import { styles } from "../components/shared/styles";
 
 export const ResetPasswordInstruction = () => {
  const { state } = useLocation();
- const { route } = state ?? {};
+ const { email } = state ?? {};
  return (
-  <div>
-   <div>
-    {route === FORGOT_PASSWORD
-     ? "Here you have instructions"
-     : "This page is not available"}
+  <Box
+   height={"90vh"}
+   marginX={10}
+   display="flex"
+   flexDirection={"column"}
+   marginTop={5}
+  >
+   <div className={styles.inputContainer}>
+    {email ? <ResetInstructions email={email} /> : "This page is not available"}
    </div>
-  </div>
+  </Box>
  );
 };
