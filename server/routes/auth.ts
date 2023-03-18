@@ -120,7 +120,8 @@ router.get("/logout", (req: Request, res: Response) => {
 router.post("/forgotPassword", (req: Request, response: Response) => {
  const email = req.body.email;
  const resetToken = crypto.randomBytes(32).toString("hex");
- const resetTokenExpiration = new Date();
+
+ const resetTokenExpiration = new Date().getTime() + 10_800_000; // 3 hours expiration
 
  const link = `${frontEndUrl}/token=${resetToken}`;
 
@@ -130,7 +131,6 @@ router.post("/forgotPassword", (req: Request, response: Response) => {
   },
   { $set: { resetToken, resetTokenExpiration } },
   (err: Error, user: UpdateOneResult) => {
-   console.log(user);
    if (user.matchedCount === 0) {
     return response.status(404).json({
      message: "User does not exist in db. Ensure that email is registered.",
