@@ -125,39 +125,64 @@ router.post("/forgotPassword", (req: Request, response: Response) => {
 
  const link = `${frontEndUrl}/token=${resetToken}`;
 
- db.getUsersCollection().updateOne(
-  {
-   email,
-  },
-  { $set: { resetToken, resetTokenExpiration } },
-  (err: Error, user: UpdateOneResult) => {
-   if (user.matchedCount === 0) {
-    return response.status(404).json({
-     message: "User does not exist in db. Ensure that email is registered.",
-    });
-   }
+ db
+  .getUsersCollection()
+  .updateOne(
+   { email },
+   { $set: { resetToken, resetTokenExpiration } },
+   (err: Error, user: UpdateOneResult) => {
+    if (user.matchedCount === 0) {
+     return response.status(404).json({
+      message: "User does not exist in db. Ensure that email is registered.",
+     });
+    }
 
-   transport
-    .sendMail({
-     from: senderEmail,
-     to: email,
-     subject: "Reset your password",
-     html: `<p>You've asked us to reset your password. Please click on the link below to enter a new password:
+    transport
+     .sendMail({
+      from: senderEmail,
+      to: email,
+      subject: "Reset your password",
+      html: `<p>You've asked us to reset your password. Please click on the link below to enter a new password:
      ${link}. Please note that the link will expire in 24 hours. 
      </p>`,
-    })
-    .then(([res]: any) => {
-     console.log("Message delivered with code %s %s", res.statusCode);
+     })
+     .then(([res]: any) => {
+      console.log("Message delivered with code %s %s", res.statusCode);
 
-     response.status(202).json({ message: "Reset email was sent" });
-    })
-    .catch((error: any) => {
-     response
-      .status(500)
-      .json({ message: "Errors occurred, failed to deliver reset email." });
-    });
-  }
- );
+      response.status(202).json({ message: "Reset email was sent" });
+     })
+     .catch((error: any) => {
+      response
+       .status(500)
+       .json({ message: "Errors occurred, failed to deliver reset email." });
+     });
+   }
+  );
+});
+
+router.post("/resetPassword", (req: Request, res: Response) => {
+ const resetToken = req.body.resetToken;
+ const resetTime = new Date().getTime();
+
+ // TODO: update new password
+
+ // find user and compare reset token expiration
+ db
+  .getUsersCollection()
+  .findOneAndUpdate(
+   { resetToken, resetTokenExpiration: { $gt: resetTime } },
+   { $set: { "resetToken": null, "resetTokenExpiration": null } },
+   (err: Error, user: any) => {
+    // console.log(user);
+
+    if (err || !user.value)
+     return res
+      .status(404)
+      .json({ "message": "user not found or token expired" });
+
+    return res.status(202).json({ message: "New password was updated" });
+   }
+  );
 });
 
 router.get("/refresh", (req: Request, res: Response) => {
