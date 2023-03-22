@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UpdateOneResult, User } from "./types";
+import { UpdateOneResult, User, UserValue } from "./types";
 const express = require("express");
 const router = express.Router();
 const db = require("../db/conn");
@@ -124,16 +124,17 @@ router.post("/forgotPassword", (req: Request, response: Response) => {
 
  const resetTokenExpiration = new Date().getTime() + 10_800_000; // 3 hours expiration
 
- const link = `${frontEndUrl}/token=${resetToken}`;
-
  // TODO: use findOneAndUpdate() and add userId in link in email
  db
   .getUsersCollection()
-  .updateOne(
+  .findOneAndUpdate(
    { email },
    { $set: { resetToken, resetTokenExpiration } },
-   (err: Error, user: UpdateOneResult) => {
-    if (user.matchedCount === 0) {
+   (err: Error, user: UserValue) => {
+    const { _id } = user.value;
+    const link = `${frontEndUrl}/passwordReset?token=${resetToken}&userId=${_id.toString()}`;
+
+    if (!user) {
      return response.status(404).json({
       message: "User does not exist in db. Ensure that email is registered.",
      });
