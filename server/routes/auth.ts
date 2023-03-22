@@ -22,8 +22,9 @@ const transport = nodemailer.createTransport(
  })
 );
 
+const saltRounds = 10;
+
 router.post("/signup", (req: Request, res: Response) => {
- const saltRounds = 10;
  const { email, password, firstName, lastName } = req.body;
 
  db.getUsersCollection().findOne({ email }, function (err: Error, user: User) {
@@ -38,7 +39,7 @@ router.post("/signup", (req: Request, res: Response) => {
   }
 
   if (!user)
-   bcrypt.hash(password, saltRounds, function (err: Error, hash: boolean) {
+   bcrypt.hash(password, saltRounds, function (err: Error, hash: string) {
     if (err) return res.json(err);
 
     db
@@ -125,6 +126,7 @@ router.post("/forgotPassword", (req: Request, response: Response) => {
 
  const link = `${frontEndUrl}/token=${resetToken}`;
 
+ // TODO: use findOneAndUpdate() and add userId in link in email
  db
   .getUsersCollection()
   .updateOne(
@@ -163,26 +165,32 @@ router.post("/forgotPassword", (req: Request, response: Response) => {
 router.post("/resetPassword", (req: Request, res: Response) => {
  const resetToken = req.body.resetToken;
  const resetTime = new Date().getTime();
+ const password = req.body.password;
 
- // TODO: update new password
+ bcrypt.hash(password, saltRounds, function (hashErr: Error, hash: string) {
+  if (hashErr)
+   return res.status(500).json({ message: "Password could not be hashed" });
 
- // find user and compare reset token expiration
- db
-  .getUsersCollection()
-  .findOneAndUpdate(
+  // find user and compare reset token expiration
+  db.getUsersCollection().findOneAndUpdate(
    { resetToken, resetTokenExpiration: { $gt: resetTime } },
-   { $set: { "resetToken": null, "resetTokenExpiration": null } },
+   {
+    $set: {
+     "resetToken": null,
+     "resetTokenExpiration": null,
+     "password": hash,
+    },
+   },
    (err: Error, user: any) => {
-    // console.log(user);
-
     if (err || !user.value)
      return res
       .status(404)
-      .json({ "message": "user not found or token expired" });
+      .json({ "message": "User not found or token expired." });
 
-    return res.status(202).json({ message: "New password was updated" });
+    return res.status(202).json({ message: "New password was saved." });
    }
   );
+ });
 });
 
 router.get("/refresh", (req: Request, res: Response) => {
