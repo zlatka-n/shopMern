@@ -6,6 +6,12 @@ export type User = {
  lastName: string;
  email: string;
  password: string;
+ resetToken: string | null;
+ resetTokenExpiration: string | null;
+};
+
+export type UserValue = {
+ value: User;
 };
 
 export type Address = {
