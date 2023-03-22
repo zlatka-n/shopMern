@@ -124,7 +124,6 @@ router.post("/forgotPassword", (req: Request, response: Response) => {
 
  const resetTokenExpiration = new Date().getTime() + 10_800_000; // 3 hours expiration
 
- // TODO: use findOneAndUpdate() and add userId in link in email
  db
   .getUsersCollection()
   .findOneAndUpdate(
