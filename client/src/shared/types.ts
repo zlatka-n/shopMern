@@ -14,5 +14,5 @@ export type Email = {
 
 export type ResetPassword = {
  password: string;
- passwordConfirmation: any;
+ passwordConfirmation: string;
 };
