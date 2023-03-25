@@ -11,3 +11,8 @@ export type SignUp = Login & {
 export type Email = {
  email: string;
 };
+
+export type ResetPassword = {
+ password: string;
+ passwordConfirmation: any;
+};

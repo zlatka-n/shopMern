@@ -5,23 +5,15 @@ import { styles } from "../components/shared/styles";
 import { SIGN_UP, SIGN_IN, WRONG_EMAIL, REQUIRED } from "../shared/constants";
 import { RegisterOrLogIn } from "../components/register/RegisterOrLogin";
 import * as yup from "yup";
-import YupPassword from "yup-password";
 import { SignUp } from "../shared/types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { postSignUp } from "../api/auth";
-
-YupPassword(yup);
+import { passwordSchema } from "../shared/schemas";
 
 const signUpSchema: yup.SchemaOf<SignUp> = yup.object().shape({
  email: yup.string().email(WRONG_EMAIL).required(REQUIRED),
- password: yup
-  .string()
-  .min(6, "Password must have at least 6 characters")
-  .max(20, "Password must have 20 charactesr at most")
-  .minUppercase(1, "Password must include uppercase")
-  .minNumbers(1, "Password must include number")
-  .required(REQUIRED),
+ password: passwordSchema,
  firstName: yup.string().required(REQUIRED),
  lastName: yup.string().required(REQUIRED),
 });
