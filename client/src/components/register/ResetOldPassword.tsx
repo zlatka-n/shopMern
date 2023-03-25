@@ -1,8 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { Input } from "../shared/Input";
 import { fontSizes, styles } from "../shared/styles";
-import { RegisterOrLogIn } from "./RegisterOrLogin";
 
 export const ResetOldPassword = () => {
  const { handleSubmit, control } = useForm<any>({
@@ -36,7 +35,13 @@ export const ResetOldPassword = () => {
      type="password"
     />
    </form>
-   <RegisterOrLogIn screenName="/account/login" buttonName={"Reset"} />
+   <Button
+    variant="contained"
+    sx={{ paddingBlock: "1rem", marginTop: "2rem" }}
+    onClick={() => alert("send request")}
+   >
+    Reset password
+   </Button>
   </Box>
  );
 };
