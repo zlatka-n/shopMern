@@ -7,6 +7,10 @@ import { passwordSchema } from "../../shared/schemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ResetPassword } from "../../shared/types";
 import { REQUIRED } from "../../shared/constants";
+import { useMutation } from "react-query";
+import { postResetPassword } from "../../api/auth";
+import { ResetPassword as ResetPasswordAxios } from "../../api/types";
+import { useNavigate } from "react-router-dom";
 
 const resetPasswordSchema: yup.SchemaOf<ResetPassword> = yup.object().shape({
  password: passwordSchema,
@@ -16,14 +20,27 @@ const resetPasswordSchema: yup.SchemaOf<ResetPassword> = yup.object().shape({
   .required(REQUIRED),
 });
 
-export const ResetOldPassword = () => {
+type Props = {
+ resetToken: string;
+ userId: string;
+};
+export const ResetOldPassword = ({ resetToken, userId }: Props) => {
+ const navigate = useNavigate();
  const { handleSubmit, control } = useForm<ResetPassword>({
   mode: "onSubmit",
   resolver: yupResolver(resetPasswordSchema),
  });
 
+ const { mutate } = useMutation(
+  (reqBody: ResetPasswordAxios) => postResetPassword(reqBody),
+  {
+   onSuccess: () => navigate("/account/login"),
+  }
+ );
+
  const onSubmit = handleSubmit(async (data) => {
-  console.log(data);
+  const requestBody = { password: data.password, resetToken, userId };
+  mutate(requestBody);
  });
 
  return (
