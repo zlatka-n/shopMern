@@ -18,7 +18,11 @@ export const ResetPassword = () => {
    marginTop={5}
   >
    <div className={styles.inputContainer}>
-    {resetToken && userId ? <ResetOldPassword /> : <NotFound />}
+    {resetToken && userId ? (
+     <ResetOldPassword resetToken={resetToken} userId={userId} />
+    ) : (
+     <NotFound />
+    )}
    </div>
   </Box>
  );
