@@ -12,6 +12,7 @@
 - cookie-parser
 - jsonwebtoken
 - jwt-decode
+- nodemailer + nodemailer-sendgrid
 
 #### Front-end tech-stack:
 
