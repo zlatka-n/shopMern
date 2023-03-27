@@ -9,6 +9,7 @@ const jwt_decode = require("jwt-decode");
 const nodemailer = require("nodemailer");
 const nodemailerSendgrid = require("nodemailer-sendgrid");
 const crypto = require("crypto");
+const ObjectId = require("mongodb").ObjectId;
 
 require("dotenv").config({ path: "./config.env" });
 const secretToken = process.env.SECRET_TOKEN;
@@ -164,6 +165,7 @@ router.post("/forgotPassword", (req: Request, response: Response) => {
 
 router.post("/resetPassword", (req: Request, res: Response) => {
  const resetToken = req.body.resetToken;
+ const userId = new ObjectId(req.body.userId);
  const resetTime = new Date().getTime();
  const password = req.body.password;
 
@@ -173,7 +175,7 @@ router.post("/resetPassword", (req: Request, res: Response) => {
 
   // find user and compare reset token expiration
   db.getUsersCollection().findOneAndUpdate(
-   { resetToken, resetTokenExpiration: { $gt: resetTime } },
+   { resetToken, _id: userId, resetTokenExpiration: { $gt: resetTime } },
    {
     $set: {
      "resetToken": null,
