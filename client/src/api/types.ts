@@ -3,6 +3,12 @@ export type Login = {
  password: string;
 };
 
+export type ResetPassword = {
+ password: string;
+ resetToken: string;
+ userId: string;
+};
+
 export type Address = {
  address: string;
  city: string;
