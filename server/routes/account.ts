@@ -134,6 +134,7 @@ router.post(
      addresses: { ...req.body, _id: ObjectId(), created: new Date(Date.now()) },
     },
    },
+   { upsert: true },
    (err: Error, response: Response) => {
     if (err)
      return res
