@@ -24,6 +24,7 @@ export type UserNames = {
 };
 
 export type UserAddress = {
+ _id?: string;
  userInfo: UserNames;
  addresses: Address[];
 };

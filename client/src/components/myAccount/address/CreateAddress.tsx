@@ -3,11 +3,12 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Modal } from "../modal/Modal";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Address } from "../../../api/types";
+import { Address, UserAddress } from "../../../api/types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { addressValidationSchema } from "../types";
 import { postAddress } from "../../../api/myaccount";
 import { useMutation, useQueryClient } from "react-query";
+import { v4 as uuidv4 } from "uuid";
 
 const defaultValues = {
  address: "",
@@ -22,10 +23,34 @@ export const CreateAddress = () => {
  const handleClose = () => setOpen(false);
 
  const queryClient = useQueryClient();
+
  const { mutate } = useMutation(
   (address: Omit<Address, "_id">) => postAddress(address),
   {
-   onSuccess: () => queryClient.invalidateQueries("addresses"),
+   onMutate: async (newAddress) => {
+    await queryClient.cancelQueries({ queryKey: ["addresses"] });
+
+    const previousData: Partial<UserAddress> =
+     queryClient.getQueryData("addresses") ?? {};
+
+    const newData = {
+     _id: previousData._id,
+     userInfo: previousData.userInfo,
+     addresses: [
+      ...(previousData.addresses ?? []),
+      { ...newAddress, _id: uuidv4() },
+     ],
+    };
+
+    queryClient.setQueryData("addresses", newData);
+
+    return { previousData, newAddress };
+   },
+   onError: (err, newAddress, context) => {
+    console.warn(`Error: ${err} during post ${JSON.stringify(newAddress)}`);
+    queryClient.setQueryData("addreses", context?.previousData);
+   },
+   onSettled: () => queryClient.invalidateQueries("addresses"),
   }
  );
 
