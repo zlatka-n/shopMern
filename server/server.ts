@@ -8,14 +8,38 @@ const authRoutes = require("./routes/auth");
 const myAccountRoutes = require("./routes/account");
 const shopRoutes = require("./routes/shop");
 
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
 
 require("dotenv").config({ path: "./config.env" });
+
+const sessionKey = process.env.SESSION_SECRET;
+const mongoDbUri = process.env.ATLAS_URI;
+
+const store = new MongoDBStore({
+ uri: mongoDbUri,
+ databaseName: "shopMern",
+ collection: "sessions",
+});
+
+store.on("error", function (error: Error) {
+ console.log(error);
+});
 
 app.use(
  cors({
   origin: "http://localhost:5173",
   credentials: true,
+ })
+);
+
+app.use(
+ session({
+  secret: sessionKey,
+  resave: false,
+  saveUninitialized: false,
+  store: store,
  })
 );
 
