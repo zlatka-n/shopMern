@@ -57,8 +57,10 @@ export type UpdateOneResult = {
 };
 
 export type CartItem = {
- productId: ObjectId;
  qty: number;
  price: number;
  _id: ObjectId;
+ title: string;
+ author: string;
+ image: string;
 };
