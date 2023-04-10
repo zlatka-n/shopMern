@@ -25,6 +25,13 @@ router.post("/", (req: any, res: Response) => {
  db
   .getProductsCollection()
   .findOne({ _id: addItemId }, (err: Error, product: Product) => {
+   if (err) return res.json(err);
+
+   if (!product)
+    return res.status(404).json({
+     message: "Product does not exist in db.",
+    });
+
    const isInCart =
     itemsInCart.length > 0
      ? itemsInCart.some((item: CartItem) => {
