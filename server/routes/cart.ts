@@ -66,7 +66,7 @@ router.post("/", (req: any, res: Response) => {
     totalQty = calculateTotalQty(updateItems);
 
     req.session.cart = {
-     items: [...previousItems, updateItemQty],
+     items: updateItems,
      totalQty,
      totalPrice,
     };
