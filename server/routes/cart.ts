@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import { CartItem } from "./types";
+import { CartItem, Product } from "./types";
 
 const express = require("express");
 const router = express.Router();
 const db = require("../db/conn");
+const ObjectId = require("mongodb").ObjectId;
 
 router.get("/", (req: any, res: Response) => {
  const defaultCart = {
@@ -18,39 +19,75 @@ router.get("/", (req: any, res: Response) => {
 });
 
 router.post("/", (req: any, res: Response) => {
- //cart model:
- //  const cart = {
- //   items: [{productId: string, qty: number, price: number}],
- //   totalQty: number,
- //   totalPrice: number
- //  }
-
- const addItemId = req.body.itemId;
+ const addItemId = new ObjectId(req.body.itemId);
  const itemsInCart = req.session.cart.items;
 
- const isInCart =
-  itemsInCart.length > 0
-   ? itemsInCart.some((item: CartItem) => item.productId === addItemId)
-   : false;
+ db
+  .getProductsCollection()
+  .findOne({ _id: addItemId }, (err: Error, product: Product) => {
+   const isInCart =
+    itemsInCart.length > 0
+     ? itemsInCart.some((item: CartItem) => {
+        return item._id.equals(addItemId);
+       })
+     : false;
 
- /// 1. item is not in the cart => add item + update totalQty, totalPrice
+   let totalPrice: number;
+   let totalQty: number;
 
- if (!isInCart) {
-  req.session.cart = {
-   items: [...itemsInCart, { productId: addItemId, qty: 1, price: 12 }],
-   totalQty: 1,
-   totalPrice: 12,
-  };
- }
+   /// 1. item is not in the cart => add item + update totalQty, totalPrice
+   if (!isInCart) {
+    const addProduct = { ...product, qty: 1 };
+    const updateItems = [...itemsInCart, addProduct];
 
- /// 2. item is already in cart => update only qty, totalQty, totalPrice
- //  req.session.cart = {
- //   items: [{ productId: "Book title", qty: 1, price: 12 }],
- //   totalQty: 1,
- //   totalPrice: 12,
- //  };
+    totalPrice = updateItems.reduce(
+     (accumulator, { price, qty }) => accumulator + price * qty,
+     0
+    );
 
- res.status(201).json({ cart: req.session.cart });
+    totalQty = updateItems.reduce(
+     (accumulator, { qty }) => accumulator + qty,
+     0
+    );
+
+    req.session.cart = {
+     items: updateItems,
+     totalQty,
+     totalPrice,
+    };
+   }
+
+   /// 2. item is already in cart => update only item qty, totalQty, totalPrice
+   if (isInCart) {
+    const changedItem = itemsInCart.find((item: CartItem) =>
+     item._id.equals(addItemId)
+    );
+
+    const updateItemQty = { ...changedItem, qty: changedItem.qty + 1 };
+    const previousItems = itemsInCart.filter(
+     (item: CartItem) => !item._id.equals(addItemId)
+    );
+    const updateItems = [...previousItems, updateItemQty];
+
+    totalPrice = updateItems.reduce(
+     (accumulator, { price, qty }) => accumulator + price * qty,
+     0
+    );
+
+    totalQty = updateItems.reduce(
+     (accumulator, { qty }) => accumulator + qty,
+     0
+    );
+
+    req.session.cart = {
+     items: [...previousItems, updateItemQty],
+     totalQty,
+     totalPrice,
+    };
+   }
+
+   res.status(201).json({ cart: req.session.cart });
+  });
 });
 
 module.exports = router;

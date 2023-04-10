@@ -60,4 +60,5 @@ export type CartItem = {
  productId: ObjectId;
  qty: number;
  price: number;
+ _id: ObjectId;
 };
