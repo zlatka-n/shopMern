@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db/conn");
 const ObjectId = require("mongodb").ObjectId;
-const { calculateTotalPrice } = require("../shared/utils");
+const { calculateTotalPrice, calculateTotalQty } = require("../shared/utils");
 
 router.get("/", (req: any, res: Response) => {
  const defaultCart = {
@@ -40,17 +40,8 @@ router.post("/", (req: any, res: Response) => {
     const addProduct = { ...product, qty: 1 };
     const updateItems = [...itemsInCart, addProduct];
 
-    // totalPrice = updateItems.reduce(
-    //  (accumulator, { price, qty }) => accumulator + price * qty,
-    //  0
-    // );
-
     totalPrice = calculateTotalPrice(updateItems);
-
-    totalQty = updateItems.reduce(
-     (accumulator, { qty }) => accumulator + qty,
-     0
-    );
+    totalQty = calculateTotalQty(updateItems);
 
     req.session.cart = {
      items: updateItems,
@@ -72,11 +63,7 @@ router.post("/", (req: any, res: Response) => {
     const updateItems = [...previousItems, updateItemQty];
 
     totalPrice = calculateTotalPrice(updateItems);
-
-    totalQty = updateItems.reduce(
-     (accumulator, { qty }) => accumulator + qty,
-     0
-    );
+    totalQty = calculateTotalQty(updateItems);
 
     req.session.cart = {
      items: [...previousItems, updateItemQty],
