@@ -13,6 +13,7 @@
 - jsonwebtoken
 - jwt-decode
 - nodemailer + nodemailer-sendgrid
+- express-session + connect-mongodb-session
 
 #### Front-end tech-stack:
 
