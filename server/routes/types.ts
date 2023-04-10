@@ -55,3 +55,9 @@ export type UpdateOneResult = {
  upsertedCount: number;
  matchedCount: number;
 };
+
+export type CartItem = {
+ productId: ObjectId;
+ qty: number;
+ price: number;
+};
