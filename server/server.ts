@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/auth");
 const myAccountRoutes = require("./routes/account");
 const shopRoutes = require("./routes/shop");
+const cartRoutes = require("./routes/cart");
 
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
@@ -49,6 +50,7 @@ app.use(cookieParser());
 app.use("/account", authRoutes);
 app.use("/products", shopRoutes);
 app.use("/myaccount", myAccountRoutes);
+app.use("/cart", cartRoutes);
 
 app.listen(port, () => {
  db.connectToMongoDb((err: Error) => console.log(err));
