@@ -13,11 +13,21 @@ import { LogInButtons } from "./LogInButtons";
 import { getLogout } from "../../api/auth";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { IconButton as MuiIconBtn } from "@mui/material";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getCart, postAddToCart } from "../../api/cart";
+import { ItemId } from "../../api/types";
 
 export const TopBar = () => {
  const isLoggedIn = useSelector(selectIsUserLoggedIn);
  const dispatch = useDispatch();
  const navigate = useNavigate();
+
+ const queryClient = useQueryClient();
+
+ const { data } = useQuery("cart", getCart);
+ const { mutate } = useMutation((item: ItemId) => postAddToCart(item), {
+  onSuccess: () => queryClient.invalidateQueries("cart"),
+ });
 
  const logOutUser = () => {
   getLogout().then(() => {
@@ -30,6 +40,14 @@ export const TopBar = () => {
 
    return;
   });
+ };
+
+ const addToCart = () => {
+  const reqBody = {
+   itemId: "63b1eddbd7a3ddb61b7f1a6d",
+  };
+
+  mutate(reqBody);
  };
 
  return (
@@ -56,12 +74,8 @@ export const TopBar = () => {
         icon={<Avatar alt="avatar" />}
        />
       )}
-      <MuiIconBtn
-       aria-label="cart"
-       onClick={() => alert("TODO: navigate to cart")}
-       disableRipple
-      >
-       <Badge badgeContent={4} color="warning">
+      <MuiIconBtn aria-label="cart" onClick={addToCart} disableRipple>
+       <Badge badgeContent={data ? data.cart.totalQty : 0} color="warning">
         <ShoppingCartIcon sx={{ color: "white" }} />
        </Badge>
       </MuiIconBtn>
