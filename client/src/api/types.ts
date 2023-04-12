@@ -18,6 +18,21 @@ export type Address = {
  _id: string;
 };
 
+export type Cart = {
+ cart: {
+  items: Array<{
+   _id: string;
+   title: string;
+   author: string;
+   price: number;
+   image: string;
+   qty: number;
+  }>;
+  totalQty: number;
+  totalPrice: number;
+ };
+};
+
 export type UserNames = {
  firstName: string;
  lastName: string;
@@ -27,6 +42,10 @@ export type UserAddress = {
  _id?: string;
  userInfo: UserNames;
  addresses: Address[];
+};
+
+export type ItemId = {
+ itemId: string;
 };
 
 export type Book = {
