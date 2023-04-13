@@ -1,12 +1,22 @@
 import { Grid, Typography } from "@mui/material";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
+import { postAddToCart } from "../api/cart";
 import { getBooks } from "../api/shop";
+import { ItemId } from "../api/types";
 import { AddToBasketBtn } from "../components/shared/AddToBasketBtn";
 import { colors, fontSizes } from "../components/shared/styles";
 
 export const Home = () => {
+ const queryClient = useQueryClient();
+
  const { data: books } = useQuery("books", getBooks);
+ const { mutate } = useMutation((item: ItemId) => postAddToCart(item), {
+  onSuccess: () => queryClient.invalidateQueries("cart"),
+ });
+ const onClickAddToBasket = (itemId: string) => () => {
+  mutate({ itemId });
+ };
 
  return (
   <Grid container margin={5}>
@@ -16,7 +26,7 @@ export const Home = () => {
    <Grid item xs={9}>
     <Grid container gap={4}>
      {books?.map(({ title, author, _id, price, image }) => (
-      <div>
+      <div key={_id}>
        <Link key={_id} to={`/${_id}`} style={{ textDecoration: "none" }}>
         <img src={image} width={150} height={200} alt={title} />
         <Typography
@@ -38,7 +48,7 @@ export const Home = () => {
          {price}
         </Typography>
        </Link>
-       <AddToBasketBtn onClick={() => alert("POST: add to basket")} />
+       <AddToBasketBtn onClick={onClickAddToBasket(_id)} />
       </div>
      ))}
     </Grid>
