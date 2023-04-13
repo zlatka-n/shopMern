@@ -20,4 +20,6 @@ export const fontSizes = {
 export const colors = {
  black: "black",
  orange: "#ed6c02",
+ grey: "#f3f3f3",
+ white: "white",
 };
