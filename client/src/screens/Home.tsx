@@ -10,9 +10,15 @@ import { colors, fontSizes } from "../components/shared/styles";
 export const Home = () => {
  const queryClient = useQueryClient();
 
- const { data: books } = useQuery("books", getBooks);
+ const { data: books } = useQuery("books", getBooks, {
+  staleTime: 180000, //3 mins
+  refetchOnMount: false,
+ });
+
  const { mutate } = useMutation((item: ItemId) => postAddToCart(item), {
-  onSuccess: () => queryClient.invalidateQueries("cart"),
+  onSuccess: () => {
+   queryClient.invalidateQueries("cart");
+  },
  });
  const onClickAddToBasket = (itemId: string) => () => {
   mutate({ itemId });

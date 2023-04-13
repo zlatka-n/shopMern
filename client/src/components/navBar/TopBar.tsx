@@ -21,7 +21,10 @@ export const TopBar = () => {
  const dispatch = useDispatch();
  const navigate = useNavigate();
 
- const { data } = useQuery("cart", getCart);
+ const { data } = useQuery("cart", getCart, {
+  staleTime: 180000, //3 mins
+  refetchOnMount: false,
+ });
 
  const logOutUser = () => {
   getLogout().then(() => {
