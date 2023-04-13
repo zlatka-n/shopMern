@@ -2,6 +2,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getBooksDetails } from "../../api/shop";
+import { AddToBasketBtn } from "../shared/AddToBasketBtn";
 import { fontSizes } from "../shared/styles";
 import { Description } from "./Description";
 import { Details } from "./Details";
@@ -37,9 +38,7 @@ export const Product = () => {
      Price <span style={{ fontSize: fontSizes.medium }}>{price}</span>
     </Typography>
     <Description description={product?.description ?? ""} />
-    <Button variant="contained" sx={{ marginY: 4 }}>
-     Add to basket
-    </Button>
+    <AddToBasketBtn onClick={() => alert("POST: add to basket")} />
     <Details details={product?.details} />
    </Grid>
   </Grid>
