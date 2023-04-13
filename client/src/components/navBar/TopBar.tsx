@@ -39,6 +39,10 @@ export const TopBar = () => {
   });
  };
 
+ const onClickCart = () => {
+  navigate("/cart");
+ };
+
  return (
   <AppBar position="static">
    <Grid container wrap={"nowrap"} marginY={1} alignItems="center">
@@ -63,11 +67,7 @@ export const TopBar = () => {
         icon={<Avatar alt="avatar" />}
        />
       )}
-      <MuiIconBtn
-       aria-label="cart"
-       onClick={() => alert("TODO: navigate to cart")}
-       disableRipple
-      >
+      <MuiIconBtn aria-label="cart" onClick={onClickCart} disableRipple>
        <Badge badgeContent={data ? data.cart.totalQty : 0} color="warning">
         <ShoppingCartIcon sx={{ color: "white" }} />
        </Badge>

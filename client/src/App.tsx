@@ -6,6 +6,7 @@ import { Orders } from "./components/myAccount/Orders";
 import { NavBar } from "./components/navBar/NavBar";
 import { Product } from "./components/products/Product";
 import { setLoginSuccess } from "./redux/accountSlice";
+import { Cart } from "./screens/Cart";
 import { ForgotPassword } from "./screens/ForgotPassword";
 import { Home } from "./screens/Home";
 import { Login } from "./screens/Login";
@@ -45,6 +46,8 @@ function App() {
      element={<ResetPasswordInstruction />}
     />
     <Route path="/passwordReset" element={<ResetPassword />} />
+
+    <Route path="/cart" element={<Cart />} />
    </Routes>
   </div>
  );
