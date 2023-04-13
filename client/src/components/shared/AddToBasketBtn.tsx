@@ -8,7 +8,7 @@ export const AddToBasketBtn = ({ onClick }: Props) => {
  return (
   <Button
    variant="contained"
-   sx={{ marginY: 4, textTransform: "none" }}
+   sx={{ marginY: 2, textTransform: "none" }}
    onClick={onClick}
   >
    Add to basket
