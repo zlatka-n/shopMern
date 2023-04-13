@@ -16,3 +16,8 @@ export const fontSizes = {
  large: "1.6rem",
  xLarge: "2rem",
 };
+
+export const colors = {
+ black: "black",
+ orange: "#ed6c02",
+};
