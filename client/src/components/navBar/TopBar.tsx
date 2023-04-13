@@ -44,7 +44,7 @@ export const TopBar = () => {
  };
 
  return (
-  <AppBar position="static">
+  <AppBar position="static" elevation={0}>
    <Grid container wrap={"nowrap"} marginY={1} alignItems="center">
     <Grid item xs={8} marginX={5}>
      <Stack direction="row" alignItems="center" gap={1}>
