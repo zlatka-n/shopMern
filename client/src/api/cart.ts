@@ -18,3 +18,12 @@ export const postAddToCart = async (reqBody: ItemId) => {
   throw err;
  }
 };
+
+export const deleteItemFromCart = async (id: string) => {
+ try {
+  const { data } = await axiosInstance.delete(`/cart/${id}`);
+  return data;
+ } catch (err) {
+  throw err;
+ }
+};
