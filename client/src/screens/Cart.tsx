@@ -1,9 +1,9 @@
-import { Grid, Stack, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useQuery } from "react-query";
 import { getCart } from "../api/cart";
 import { colors, fontSizes } from "../components/shared/styles";
-import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { ItemCard } from "../components/cart/ItemCard";
+import { CartSummary } from "../components/cart/CartSummary";
 
 export const Cart = () => {
  const { data } = useQuery("cart", getCart);
@@ -24,45 +24,14 @@ export const Cart = () => {
       sx={{ backgroundColor: colors.white }}
       marginBottom={4}
      >
-      {data.cart.items.map((product) => {
-       return (
-        <ItemCard
-         product={product}
-         onClickRemove={() => alert(`DELETE: ${product._id}`)}
-        />
-       );
-      })}
+      {data.cart.items.map((product) => (
+       <ItemCard
+        product={product}
+        onClickRemove={() => alert(`DELETE: ${product._id}`)}
+       />
+      ))}
      </Grid>
-     <Grid
-      item
-      xs={4}
-      sx={{ backgroundColor: colors.white }}
-      display="flex"
-      flexDirection="column"
-      paddingY={2}
-      paddingX={4}
-      marginBottom={4}
-      maxHeight={350}
-     >
-      <Grid display={"flex"} marginBottom={2}>
-       <ShoppingBasketIcon />
-       <Typography paddingLeft={1}>
-        You have {data.cart.totalQty} items for a total of{" "}
-        {data.cart.totalPrice} EUR in your basket.
-       </Typography>
-      </Grid>
-
-      <Stack direction="row" marginY={2}>
-       <Typography width={200}>Delivery </Typography>
-       <Typography> FREE</Typography>
-      </Stack>
-      <Stack direction="row">
-       <Typography width={200} fontWeight={600}>
-        Total
-       </Typography>
-       <Typography fontWeight={600}>{data.cart.totalPrice}</Typography>
-      </Stack>
-     </Grid>
+     <CartSummary data={data} />
     </Grid>
    ) : (
     <Grid marginX={5}>You shopping cart is empty</Grid>
