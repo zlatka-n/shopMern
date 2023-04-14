@@ -6,6 +6,7 @@ import { ItemCard } from "../components/cart/ItemCard";
 import { CartSummary } from "../components/cart/CartSummary";
 import { CartWarning } from "../components/cart/CartWarning";
 import { MAX_ITEM_CART_QTY } from "../shared/constants";
+import { CartItem, Cart as CartType } from "../api/types";
 
 export const Cart = () => {
  const queryClient = useQueryClient();
@@ -14,8 +15,45 @@ export const Cart = () => {
   staleTime: 180000, //3 mins
   refetchOnMount: false,
  });
+
  const { mutate } = useMutation((id: string) => deleteItemFromCart(id), {
-  onSuccess: () => queryClient.invalidateQueries("cart"),
+  onMutate: async (itemId) => {
+   await queryClient.cancelQueries({ queryKey: "cart" });
+   const previousCart = queryClient.getQueryData(["cart"]) as CartType;
+
+   const deleteItem = previousCart?.cart?.items?.find((product: CartItem) => {
+    return product._id === itemId;
+   });
+
+   const updateItems = previousCart?.cart.items.filter(
+    (product: CartItem) => product._id !== itemId
+   );
+
+   const totalQty = deleteItem
+    ? previousCart?.cart?.totalQty - deleteItem?.qty
+    : undefined;
+
+   const totalPrice = deleteItem
+    ? previousCart?.cart?.totalPrice - deleteItem.qty * deleteItem.price
+    : undefined;
+
+   const newCart = {
+    cart: {
+     items: updateItems,
+     totalQty,
+     totalPrice,
+    },
+   };
+
+   queryClient.setQueryData("cart", newCart);
+
+   return { previousCart };
+  },
+  onError: (err, itemId, context) => {
+   console.error(`${err} during deleting ${itemId}`);
+   queryClient.setQueryData(["cart"], context?.previousCart);
+  },
+  onSettled: () => queryClient.invalidateQueries("cart"),
  });
 
  const doesQtyExceed = data
