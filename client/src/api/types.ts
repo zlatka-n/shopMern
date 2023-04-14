@@ -18,16 +18,18 @@ export type Address = {
  _id: string;
 };
 
+export type CartItem = {
+ _id: string;
+ title: string;
+ author: string;
+ price: number;
+ image: string;
+ qty: number;
+};
+
 export type Cart = {
  cart: {
-  items: Array<{
-   _id: string;
-   title: string;
-   author: string;
-   price: number;
-   image: string;
-   qty: number;
-  }>;
+  items: CartItem[];
   totalQty: number;
   totalPrice: number;
  };
