@@ -20,7 +20,7 @@ router.get("/", (req: any, res: Response) => {
 
 router.post("/", (req: any, res: Response) => {
  const addItemId = new ObjectId(req.body.itemId);
- const itemsInCart = req.session.cart.items;
+ const cart = req.session.cart.items;
 
  db
   .getProductsCollection()
@@ -33,8 +33,8 @@ router.post("/", (req: any, res: Response) => {
     });
 
    const isInCart =
-    itemsInCart.length > 0
-     ? itemsInCart.some((item: CartItem) => {
+    cart.length > 0
+     ? cart.some((item: CartItem) => {
         return item._id.equals(addItemId);
        })
      : false;
@@ -45,7 +45,7 @@ router.post("/", (req: any, res: Response) => {
    /// 1. item is not in the cart => add item + update totalQty, totalPrice
    if (!isInCart) {
     const addProduct = { ...product, qty: 1 };
-    const updateItems = [...itemsInCart, addProduct];
+    const updateItems = [...cart, addProduct];
 
     totalPrice = calculateTotalPrice(updateItems);
     totalQty = calculateTotalQty(updateItems);
@@ -59,12 +59,12 @@ router.post("/", (req: any, res: Response) => {
 
    /// 2. item is already in cart => update only item qty, totalQty, totalPrice
    if (isInCart) {
-    const changedItem = itemsInCart.find((item: CartItem) =>
+    const changedItem = cart.find((item: CartItem) =>
      item._id.equals(addItemId)
     );
 
     const updateItemQty = { ...changedItem, qty: changedItem.qty + 1 };
-    const previousItems = itemsInCart.filter(
+    const previousItems = cart.filter(
      (item: CartItem) => !item._id.equals(addItemId)
     );
     const updateItems = [...previousItems, updateItemQty];
@@ -81,6 +81,27 @@ router.post("/", (req: any, res: Response) => {
 
    res.status(201).json({ message: "Item added to the cart" });
   });
+});
+
+router.delete("/:id", (req: any, res: Response) => {
+ const id = new ObjectId(req.params.id);
+ const cart = req.session.cart;
+
+ const deleteItem = cart.items.find((product: CartItem) => {
+  return product._id.equals(id);
+ });
+
+ const updateItems = cart.items.filter(
+  (product: CartItem) => !product._id.equals(id)
+ );
+
+ req.session.cart = {
+  items: updateItems,
+  totalQty: cart.totalQty - deleteItem.qty,
+  totalPrice: cart.totalPrice - deleteItem.price * deleteItem.qty,
+ };
+
+ res.status(200).json({ message: "Item deleted from the cart" });
 });
 
 module.exports = router;
