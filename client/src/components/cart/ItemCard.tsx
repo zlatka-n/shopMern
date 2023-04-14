@@ -1,6 +1,6 @@
-import { colors, Grid, IconButton, Typography } from "@mui/material";
+import { Grid, IconButton, Typography } from "@mui/material";
 import { CartItem } from "../../api/types";
-import { fontSizes } from "../shared/styles";
+import { colors, fontSizes } from "../shared/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 type Props = {
