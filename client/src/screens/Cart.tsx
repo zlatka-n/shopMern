@@ -4,15 +4,27 @@ import { getCart } from "../api/cart";
 import { colors, fontSizes } from "../components/shared/styles";
 import { ItemCard } from "../components/cart/ItemCard";
 import { CartSummary } from "../components/cart/CartSummary";
+import { CartWarning } from "../components/cart/CartWarning";
+import { MAX_ITEM_CART_QTY } from "../shared/constants";
 
 export const Cart = () => {
  const { data } = useQuery("cart", getCart);
 
+ const doesQtyExceed = data
+  ? data?.cart.items.some((product) => product.qty > MAX_ITEM_CART_QTY)
+  : false;
+
  return (
   <Grid sx={{ backgroundColor: colors.grey }} minHeight={"100vh"}>
-   <Typography fontSize={fontSizes.medium} fontWeight={500} padding={5}>
+   <Typography
+    fontSize={fontSizes.medium}
+    fontWeight={500}
+    paddingX={5}
+    paddingTop={5}
+   >
     Your shopping cart (Items: {data?.cart.totalQty})
    </Typography>
+   {doesQtyExceed ? <CartWarning /> : null}
    {data ? (
     <Grid container marginX={5} gap={2}>
      <Grid
