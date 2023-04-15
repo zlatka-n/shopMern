@@ -6,7 +6,8 @@ import { ItemCard } from "../components/cart/ItemCard";
 import { CartSummary } from "../components/cart/CartSummary";
 import { CartWarning } from "../components/cart/CartWarning";
 import { MAX_ITEM_CART_QTY } from "../shared/constants";
-import { CartItem, Cart as CartType } from "../api/types";
+import { Cart as CartType } from "../api/types";
+import { setCartAfterItemRemoved } from "../components/cart/utils";
 
 export const Cart = () => {
  const queryClient = useQueryClient();
@@ -20,30 +21,7 @@ export const Cart = () => {
   onMutate: async (itemId) => {
    await queryClient.cancelQueries({ queryKey: "cart" });
    const previousCart = queryClient.getQueryData(["cart"]) as CartType;
-
-   const deleteItem = previousCart?.cart?.items?.find((product: CartItem) => {
-    return product._id === itemId;
-   });
-
-   const updateItems = previousCart?.cart.items.filter(
-    (product: CartItem) => product._id !== itemId
-   );
-
-   const totalQty = deleteItem
-    ? previousCart?.cart?.totalQty - deleteItem?.qty
-    : undefined;
-
-   const totalPrice = deleteItem
-    ? previousCart?.cart?.totalPrice - deleteItem.qty * deleteItem.price
-    : undefined;
-
-   const newCart = {
-    cart: {
-     items: updateItems,
-     totalQty,
-     totalPrice,
-    },
-   };
+   const newCart = setCartAfterItemRemoved(previousCart, itemId);
 
    queryClient.setQueryData("cart", newCart);
 
@@ -61,6 +39,7 @@ export const Cart = () => {
   : false;
 
  const onClickRemove = (id: string) => () => mutate(id);
+
  return (
   <Grid sx={{ backgroundColor: colors.grey }} minHeight={"100vh"}>
    <Typography
