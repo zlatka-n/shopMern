@@ -10,13 +10,20 @@ type Props = {
 
 export const Select = ({ control, name, defaultValue, data }: Props) => {
  return (
-  <FormControl>
+  <FormControl size="small" variant="standard">
    <Controller
     control={control}
     name={name}
     defaultValue={defaultValue}
-    render={({ field: { value } }) => (
-     <SelectMui onChange={(e) => alert(e.target.value)} value={value}>
+    render={({ field: { onChange, value } }) => (
+     <SelectMui
+      onChange={(e) => {
+       onChange(e);
+       //TODO: POST on change as props
+       console.log(e);
+      }}
+      value={value}
+     >
       {data.map(({ value, label }) => (
        <MenuItem value={value} key={value}>
         {label}
