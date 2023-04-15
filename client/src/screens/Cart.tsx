@@ -63,7 +63,11 @@ export const Cart = () => {
       marginBottom={4}
      >
       {data.cart.items.map((product) => (
-       <ItemCard product={product} onClickRemove={onClickRemove(product._id)} />
+       <ItemCard
+        product={product}
+        onClickRemove={onClickRemove(product._id)}
+        key={product._id}
+       />
       ))}
      </Grid>
      <CartSummary data={data} />
