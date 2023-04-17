@@ -101,7 +101,33 @@ router.delete("/:id", (req: any, res: Response) => {
   totalPrice: cart.totalPrice - deleteItem.price * deleteItem.qty,
  };
 
- res.status(200).json({ message: "Item deleted from the cart" });
+ res.status(204).json({ message: "Item deleted from the cart" });
+});
+
+router.put("/:id", (req: any, res: Response) => {
+ const id = new ObjectId(req.params.id);
+ const newQuantity = req.body.qty;
+ const cart = req.session.cart;
+
+ const itemToUpdate: CartItem = cart.items.find((product: CartItem) => {
+  return product._id.equals(id);
+ });
+
+ const previousItems = cart.items.filter(
+  (product: CartItem) => !product._id.equals(id)
+ );
+
+ const newCart = [...previousItems, { ...itemToUpdate, qty: newQuantity }];
+ const totalQty = calculateTotalQty(newCart);
+ const totalPrice = calculateTotalPrice(newCart);
+
+ req.session.cart = {
+  items: newCart,
+  totalQty,
+  totalPrice,
+ };
+
+ res.status(202).json({ message: "Quatity for item was updated" });
 });
 
 module.exports = router;
