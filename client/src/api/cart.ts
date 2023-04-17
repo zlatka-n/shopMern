@@ -27,3 +27,13 @@ export const deleteItemFromCart = async (id: string) => {
   throw err;
  }
 };
+
+export const putItemQuantity = async (reqBody: any) => {
+ const { id, qty } = reqBody;
+ try {
+  const { data } = await axiosInstance.put<any>(`/cart/${id}`, { qty });
+  return data;
+ } catch (err) {
+  throw err;
+ }
+};

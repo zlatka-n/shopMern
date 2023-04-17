@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { Select } from "../shared/Select";
 import { useEffect } from "react";
 import { itemQtySelection } from "../../shared/constants";
+import { useMutation, useQueryClient } from "react-query";
+import { putItemQuantity } from "../../api/cart";
 
 type Props = {
  product: CartItem;
@@ -13,12 +15,27 @@ type Props = {
 };
 
 export const ItemCard = ({ product, onClickRemove }: Props) => {
+ const queryClient = useQueryClient();
+
+ const { mutate } = useMutation((reqBody: any) => putItemQuantity(reqBody), {
+  onSuccess: () => queryClient.invalidateQueries("cart"),
+ });
+
  const totalProductPrice = product.qty * product.price;
  const { control, setValue } = useForm<any>();
 
  useEffect(() => {
   setValue(product._id, product.qty);
  }, []);
+
+ const onChangeSelect = (qty: number) => {
+  const reqBody = {
+   id: product._id,
+   qty,
+  };
+
+  mutate(reqBody);
+ };
 
  return (
   <Grid
@@ -54,6 +71,7 @@ export const ItemCard = ({ product, onClickRemove }: Props) => {
       name={product._id}
       defaultValue={product.qty}
       data={itemQtySelection}
+      onChangeSelect={onChangeSelect}
      />
     </Stack>
     <Typography
