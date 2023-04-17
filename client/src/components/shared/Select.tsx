@@ -1,3 +1,4 @@
+import React from "react";
 import { FormControl, MenuItem, Select as SelectMui } from "@mui/material";
 import { Control, Controller } from "react-hook-form";
 
@@ -6,9 +7,16 @@ type Props = {
  name: string;
  defaultValue?: string | number;
  data: Record<string, string | number>[];
+ onChangeSelect?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
-export const Select = ({ control, name, defaultValue, data }: Props) => {
+export const Select = ({
+ control,
+ name,
+ defaultValue,
+ data,
+ onChangeSelect,
+}: Props) => {
  return (
   <FormControl size="small" variant="standard">
    <Controller
@@ -19,8 +27,7 @@ export const Select = ({ control, name, defaultValue, data }: Props) => {
      <SelectMui
       onChange={(e) => {
        onChange(e);
-       //TODO: POST on change as props
-       console.log(e);
+       onChangeSelect && onChangeSelect(e.target.value);
       }}
       value={value}
      >
