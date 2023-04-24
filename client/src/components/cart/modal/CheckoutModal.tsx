@@ -1,6 +1,5 @@
 import { Button, Modal as MuiModal, Stack, Typography } from "@mui/material";
 import { styles } from "../../myAccount/styles";
-import { AddToBasketBtn } from "../../shared/AddToBasketBtn";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
@@ -38,7 +37,7 @@ export const CheckoutModal = ({
     </Typography>
     <Stack gap={2} direction={"row"}>
      <Button
-      onClick={() => alert("navigate")}
+      onClick={() => navigate("/cart")}
       variant="contained"
       sx={{ marginY: 2, textTransform: "none" }}
      >
