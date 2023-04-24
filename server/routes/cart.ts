@@ -79,7 +79,7 @@ router.post("/", (req: any, res: Response) => {
     };
    }
 
-   res.status(201).json({ message: "Item added to the cart" });
+   res.status(201).json({ cart: req.session.cart });
   });
 });
 
