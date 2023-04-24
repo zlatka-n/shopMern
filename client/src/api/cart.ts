@@ -12,7 +12,7 @@ export const getCart = async () => {
 
 export const postAddToCart = async (reqBody: ItemId) => {
  try {
-  const { data } = await axiosInstance.post<any>("/cart", reqBody);
+  const { data } = await axiosInstance.post<Cart>("/cart", reqBody);
   return data;
  } catch (err) {
   throw err;
