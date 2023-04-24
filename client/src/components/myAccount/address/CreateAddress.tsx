@@ -1,7 +1,6 @@
 import { Box, Grid, IconButton } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Modal } from "../modal/Modal";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Address, UserAddress } from "../../../api/types";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,6 +8,7 @@ import { addressValidationSchema } from "../types";
 import { postAddress } from "../../../api/myaccount";
 import { useMutation, useQueryClient } from "react-query";
 import { v4 as uuidv4 } from "uuid";
+import { useHandleModal } from "../../../shared/utils";
 
 const defaultValues = {
  address: "",
@@ -19,8 +19,7 @@ const defaultValues = {
 };
 
 export const CreateAddress = () => {
- const [open, setOpen] = useState(false);
- const handleClose = () => setOpen(false);
+ const { open, handleClose, handleOpen } = useHandleModal();
 
  const queryClient = useQueryClient();
 
@@ -76,7 +75,7 @@ export const CreateAddress = () => {
    minHeight={"30rem"}
   >
    <Box>
-    <IconButton onClick={() => setOpen(true)}>
+    <IconButton onClick={handleOpen}>
      <AddCircleIcon />
     </IconButton>
    </Box>

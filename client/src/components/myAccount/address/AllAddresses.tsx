@@ -1,6 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Grid } from "@mui/material";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import { putAddress } from "../../../api/myaccount";
@@ -9,15 +8,14 @@ import { Modal } from "../modal/Modal";
 import { addressValidationSchema } from "../types";
 import { AddressCard } from "./AddressCard";
 import { CreateAddress } from "./CreateAddress";
+import { useHandleModal } from "../../../shared/utils";
 
 type Props = {
  addresses: Address[];
 };
 
 export const AllAddresses = ({ addresses }: Props) => {
- const [open, setOpen] = useState(false);
- const handleClose = () => setOpen(false);
-
+ const { open, handleClose, handleOpen } = useHandleModal();
  const queryClient = useQueryClient();
 
  const { mutate } = useMutation((address) => putAddress(address), {
@@ -35,8 +33,7 @@ export const AllAddresses = ({ addresses }: Props) => {
  });
 
  const onEditClick = (id: string) => () => {
-  setOpen(true);
-
+  handleOpen();
   const addressForEdit = addresses?.filter((address) => address._id === id);
 
   for (const property in addressForEdit[0]) {

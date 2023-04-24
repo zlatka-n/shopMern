@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export const setFirsLetterUpperCase = (word: string) => {
  return word.charAt(0).toUpperCase() + word.slice(1);
 };
@@ -13,3 +15,12 @@ export const formatCamelCaseWord = (word: string) => {
 
 export const trimText = (text: string, length: number) =>
  text.substring(0, length);
+
+export const useHandleModal = () => {
+ const [open, setOpen] = useState(false);
+
+ const handleClose = () => setOpen(false);
+ const handleOpen = () => setOpen(true);
+
+ return { open, handleClose, handleOpen };
+};
