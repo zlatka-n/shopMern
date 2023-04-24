@@ -6,8 +6,12 @@ import { getBooks } from "../api/shop";
 import { ItemId } from "../api/types";
 import { AddToBasketBtn } from "../components/shared/AddToBasketBtn";
 import { colors, fontSizes } from "../components/shared/styles";
+import { CheckoutModal } from "../components/cart/modal/CheckoutModal";
+import { useHandleModal } from "../shared/utils";
 
 export const Home = () => {
+ const { open, handleClose, handleOpen } = useHandleModal();
+
  const queryClient = useQueryClient();
 
  const { data: books } = useQuery("books", getBooks, {
@@ -15,11 +19,16 @@ export const Home = () => {
   refetchOnMount: false,
  });
 
- const { mutate } = useMutation((item: ItemId) => postAddToCart(item), {
-  onSuccess: () => {
-   queryClient.invalidateQueries("cart");
-  },
- });
+ const { data: newCartItems, mutate } = useMutation(
+  (item: ItemId) => postAddToCart(item),
+  {
+   onSuccess: () => {
+    queryClient.invalidateQueries("cart");
+    handleOpen();
+   },
+  }
+ );
+
  const onClickAddToBasket = (itemId: string) => () => {
   mutate({ itemId });
  };
@@ -55,6 +64,12 @@ export const Home = () => {
         </Typography>
        </Link>
        <AddToBasketBtn onClick={onClickAddToBasket(_id)} />
+       <CheckoutModal
+        open={open}
+        onClose={handleClose}
+        totalPrice={newCartItems?.cart.totalPrice}
+        totalQty={newCartItems?.cart.totalQty}
+       />
       </div>
      ))}
     </Grid>
