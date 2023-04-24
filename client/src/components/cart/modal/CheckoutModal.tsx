@@ -21,7 +21,7 @@ export const CheckoutModal = ({
     p: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "transparent",
+    opacity: "0.5",
    }}
    open={open}
    onClose={onClose}
