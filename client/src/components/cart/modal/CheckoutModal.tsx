@@ -1,5 +1,7 @@
-import { Modal as MuiModal, Typography } from "@mui/material";
+import { Button, Modal as MuiModal, Stack, Typography } from "@mui/material";
 import { styles } from "../../myAccount/styles";
+import { AddToBasketBtn } from "../../shared/AddToBasketBtn";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
  open: boolean;
@@ -14,6 +16,8 @@ export const CheckoutModal = ({
  totalQty,
  totalPrice,
 }: Props) => {
+ const navigate = useNavigate();
+
  return (
   <MuiModal
    sx={{
@@ -32,6 +36,22 @@ export const CheckoutModal = ({
     <Typography>
      You have {totalQty} items in your basket for {totalPrice}.
     </Typography>
+    <Stack gap={2} direction={"row"}>
+     <Button
+      onClick={() => alert("navigate")}
+      variant="contained"
+      sx={{ marginY: 2, textTransform: "none" }}
+     >
+      Checkout
+     </Button>
+     <Button
+      onClick={onClose}
+      variant="contained"
+      sx={{ marginY: 2, textTransform: "none" }}
+     >
+      Continue shopping
+     </Button>
+    </Stack>
    </div>
   </MuiModal>
  );
