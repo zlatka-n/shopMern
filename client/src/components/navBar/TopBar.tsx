@@ -13,30 +13,33 @@ import { LogInButtons } from "./LogInButtons";
 import { getLogout } from "../../api/auth";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { IconButton as MuiIconBtn } from "@mui/material";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { getCart } from "../../api/cart";
 
 export const TopBar = () => {
  const isLoggedIn = useSelector(selectIsUserLoggedIn);
  const dispatch = useDispatch();
  const navigate = useNavigate();
+ const queryClient = useQueryClient();
 
  const { data } = useQuery("cart", getCart, {
   staleTime: 180000, //3 mins
   refetchOnMount: false,
  });
 
- const logOutUser = () => {
-  getLogout().then(() => {
-   console.log("User was logged out");
-
+ const { refetch } = useQuery("logout", getLogout, {
+  enabled: false,
+  onSuccess: () => {
+   queryClient.invalidateQueries("cart");
    window.sessionStorage.removeItem("userId");
-
    dispatch(setLoginSuccess(false));
    navigate("account/login");
 
    return;
-  });
+  },
+ });
+ const logOutUser = () => {
+  refetch();
  };
 
  const onClickCart = () => {
