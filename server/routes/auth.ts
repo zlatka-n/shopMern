@@ -104,13 +104,16 @@ router.post("/login", (req: Request, res: Response) => {
  });
 });
 
-router.get("/logout", (req: Request, res: Response) => {
+router.get("/logout", (req: any, res: Response) => {
  const isUserLoggedIn = req.cookies && req.cookies.accessToken;
 
  if (!isUserLoggedIn)
   return res.status(403).json({
    message: "User is not logged in.",
   });
+
+ req.session.cart = null;
+ req.session.destroy();
 
  res.clearCookie("accessToken");
  res.clearCookie("refreshToken");
