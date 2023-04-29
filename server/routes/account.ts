@@ -8,6 +8,8 @@ const db = require("../db/conn");
 const jwt_decode = require("jwt-decode");
 const ObjectId = require("mongodb").ObjectId;
 
+const accountControllers = require("../controllers/account");
+
 function authenticateToken(req: Request, res: Response, next: NextFunction) {
  const tokenFromCookie = req.cookies && req.cookies.accessToken;
 
@@ -41,21 +43,7 @@ function getUserId(req: Request, res: Response, next: NextFunction) {
  next();
 }
 
-router.get("/", authenticateToken, (req: Request, res: Response) => {
- const authenticatedUser = res.locals.user?.email;
- if (authenticatedUser) {
-  db
-   .getUsersCollection()
-   .findOne({ email: authenticatedUser }, (err: Error, user: User) => {
-    if (err)
-     return res
-      .status(404)
-      .json({ message: err, detail: "User was not found." });
-
-    return res.json({ email: authenticatedUser, firstName: user.firstName });
-   });
- }
-});
+router.get("/", authenticateToken, accountControllers.getAccount);
 
 router.get(
  "/adresses",
