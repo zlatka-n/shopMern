@@ -76,7 +76,7 @@ const postLogin = (req: Request, res: Response) => {
    });
 
   if (!isVerified) {
-   return res.status(404).json({
+   return res.status(401).json({
     message: "Account is not verified",
    });
   }
