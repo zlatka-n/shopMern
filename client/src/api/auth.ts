@@ -1,5 +1,5 @@
 import { axiosInstance } from "./axios";
-import { Login, ResetPassword } from "./types";
+import { Login, ResetPassword, VerifyAccount } from "./types";
 import { SignUp } from "../shared/types";
 
 export const postLogin = async (reqBody: Login) => {
@@ -37,7 +37,18 @@ export const postResetPassword = async (reqBody: ResetPassword) => {
  try {
   const { data } = await axiosInstance.post("/account/resetPassword", reqBody);
   return data;
- } catch (err) {}
+ } catch (err) {
+  throw err;
+ }
+};
+
+export const postVerifyAccount = async (reqBody: VerifyAccount) => {
+ try {
+  const { data } = await axiosInstance.post("/account/verifyAccount", reqBody);
+  return data;
+ } catch (err) {
+  throw err;
+ }
 };
 
 export const getNewToken = async () => {

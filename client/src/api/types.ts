@@ -9,6 +9,11 @@ export type ResetPassword = {
  userId: string;
 };
 
+export type VerifyAccount = {
+ token: string;
+ email: string;
+};
+
 export type Address = {
  address: string;
  city: string;
