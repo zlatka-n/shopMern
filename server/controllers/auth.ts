@@ -35,7 +35,7 @@ const postSignUp = (req: Request, res: Response) => {
    return;
   }
 
-  if (!user)
+  if (!user) {
    bcrypt.hash(password, saltRounds, function (err: Error, hash: string) {
     if (err) return res.json(err);
     const signUpToken = crypto.randomBytes(32).toString("hex");
@@ -51,7 +51,7 @@ const postSignUp = (req: Request, res: Response) => {
       signUpToken,
       signUpTokenExpiration,
      },
-     function (err: Error) {
+     function (err: Error, newUserResponse: any) {
       if (err) res.json(err);
 
       const link = `${frontEndUrl}/verifyAccount?token=${signUpToken}&email=${email}`;
@@ -61,26 +61,24 @@ const postSignUp = (req: Request, res: Response) => {
         from: senderEmail,
         to: email,
         subject: "Verify your account",
-        html: `<p>Please, click on the link below to verify your password:
-       ${link}. Please note that the link will expire in 24 hours. 
-       </p>`,
+        html: `<p>Please click on the link below to verify your account:
+      ${link}. Please note that the link will expire in 24 hours. 
+      </p>`,
        })
-       .then(([res]: any) => {
-        console.log("Message delivered with code %s %s", res.statusCode);
-
-        res
-         .status(202)
-         .json({ message: "Account verification email was sent" });
+       .then(([emailResponse]: any) => {
+        res.status(202).json({ message: "Reset email was sent" });
        })
        .catch((error: any) => {
-        res.status(500).json({
-         message:
-          "Errors occurred, failed to deliver account verification email.",
-        });
+        console.log("Failed to deliver email");
+
+        res
+         .status(500)
+         .json({ message: "Errors occurred, failed to deliver reset email." });
        });
      }
     );
    });
+  }
  });
 };
 
@@ -91,7 +89,7 @@ const postLogin = (req: Request, res: Response) => {
  db.getUsersCollection().findOne({ email }, function (err: Error, user: User) {
   if (err) return res.json(err);
 
-  const { isVerified } = user;
+  const isVerified = user && user.isVerified;
 
   if (!user)
    return res.status(404).json({
