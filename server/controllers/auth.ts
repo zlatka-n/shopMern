@@ -68,12 +68,20 @@ const postLogin = (req: Request, res: Response) => {
  db.getUsersCollection().findOne({ email }, function (err: Error, user: User) {
   if (err) return res.json(err);
 
+  const { isVerified } = user;
+
   if (!user)
    return res.status(404).json({
     message: "User does not exist in db. Ensure that email is registered.",
    });
 
-  if (user) {
+  if (!isVerified) {
+   return res.status(404).json({
+    message: "Account is not verified",
+   });
+  }
+
+  if (user && isVerified) {
    bcrypt.compare(
     password,
     user.password,
