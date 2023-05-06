@@ -15,6 +15,7 @@ import { Register } from "./screens/Register";
 import { ResetPassword } from "./screens/ResetPassword";
 import { ResetPasswordInstruction } from "./screens/ResetPasswordInstruction";
 import { ProtectedRoute } from "./shared/ProtectedRoute";
+import { VerifyAccount } from "./screens/VerifyAccount";
 
 function App() {
  const dispatch = useDispatch();
@@ -46,6 +47,7 @@ function App() {
      element={<ResetPasswordInstruction />}
     />
     <Route path="/passwordReset" element={<ResetPassword />} />
+    <Route path="/verifyAccount" element={<VerifyAccount />} />
 
     <Route path="/cart" element={<Cart />} />
    </Routes>
