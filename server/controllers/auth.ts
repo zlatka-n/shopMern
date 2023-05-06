@@ -38,17 +38,25 @@ const postSignUp = (req: Request, res: Response) => {
   if (!user)
    bcrypt.hash(password, saltRounds, function (err: Error, hash: string) {
     if (err) return res.json(err);
+    const signUpToken = crypto.randomBytes(32).toString("hex");
+    const signUpTokenExpiration = new Date().getTime() + 86_400_000; // 24 hours expiration
 
-    db
-     .getUsersCollection()
-     .insertOne(
-      { firstName, lastName, email, password: hash },
-      function (err: Error) {
-       if (err) res.json(err);
+    db.getUsersCollection().insertOne(
+     {
+      firstName,
+      lastName,
+      email,
+      password: hash,
+      isVerified: false,
+      signUpToken,
+      signUpTokenExpiration,
+     },
+     function (err: Error) {
+      if (err) res.json(err);
 
-       res.status(201).json({ message: "New user was created." });
-      }
-     );
+      res.status(201).json({ message: "New user was created." });
+     }
+    );
    });
  });
 };
