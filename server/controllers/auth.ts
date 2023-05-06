@@ -54,7 +54,30 @@ const postSignUp = (req: Request, res: Response) => {
      function (err: Error) {
       if (err) res.json(err);
 
-      res.status(201).json({ message: "New user was created." });
+      const link = `${frontEndUrl}/verifyAccount?token=${signUpToken}&email=${email}`;
+
+      transport
+       .sendMail({
+        from: senderEmail,
+        to: email,
+        subject: "Verify your account",
+        html: `<p>Please, click on the link below to verify your password:
+       ${link}. Please note that the link will expire in 24 hours. 
+       </p>`,
+       })
+       .then(([res]: any) => {
+        console.log("Message delivered with code %s %s", res.statusCode);
+
+        res
+         .status(202)
+         .json({ message: "Account verification email was sent" });
+       })
+       .catch((error: any) => {
+        res.status(500).json({
+         message:
+          "Errors occurred, failed to deliver account verification email.",
+        });
+       });
      }
     );
    });
