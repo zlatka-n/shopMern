@@ -8,6 +8,9 @@ export type User = {
  password: string;
  resetToken: string | null;
  resetTokenExpiration: string | null;
+ isVerified: boolean | null;
+ signUpToken: string | null;
+ signUpTokenExpiration: string | null;
 };
 
 export type UserValue = {
