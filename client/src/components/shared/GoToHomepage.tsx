@@ -4,18 +4,19 @@ import { fontSizes } from "./styles";
 
 type Props = {
  title?: string;
+ text?: string;
 };
 
-export const GoToHomepage = ({ title }: Props) => {
+export const GoToHomepage = ({ text, title }: Props) => {
  const navigate = useNavigate();
 
  const navigateToHomePage = () => navigate("/");
  return (
   <>
-   <Typography fontSize={fontSizes.xLarge}>Oops</Typography>
+   <Typography fontSize={fontSizes.xLarge}>{title ? title : "Oops"}</Typography>
    <Typography>
-    {title
-     ? title
+    {text
+     ? text
      : "Sorry but the page you are looking for can't be found. Please visit our homepage."}
    </Typography>
    <Button
