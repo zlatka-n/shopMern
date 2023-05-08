@@ -10,8 +10,8 @@ export type ResetPassword = {
 };
 
 export type VerifyAccount = {
- token: string;
- email: string;
+ token: string | null;
+ email: string | null;
 };
 
 export type Address = {
