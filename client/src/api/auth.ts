@@ -42,6 +42,18 @@ export const postResetPassword = async (reqBody: ResetPassword) => {
  }
 };
 
+export const getVerifyAccount = async (tokenEmail: any) => {
+ const { email, token } = tokenEmail;
+ try {
+  const { data } = await axiosInstance.get(
+   `/account/verifyAccount?token=${token}&email=${email}`
+  );
+  return data;
+ } catch (err) {
+  throw err;
+ }
+};
+
 export const postVerifyAccount = async (reqBody: VerifyAccount) => {
  try {
   const { data } = await axiosInstance.post("/account/verifyAccount", reqBody);
