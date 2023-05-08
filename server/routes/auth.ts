@@ -16,4 +16,6 @@ router.get("/refresh", authControllers.getRefreshToken);
 
 router.post("/verifyAccount", authControllers.postVerifyAccount);
 
+router.get("/verifyAccount", authControllers.getVerifyAccount);
+
 module.exports = router;

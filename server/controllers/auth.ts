@@ -261,6 +261,36 @@ const postVerifyAccount = (req: Request, res: Response) => {
  );
 };
 
+const getVerifyAccount = (req: Request, res: Response) => {
+ const signUpToken = req.query.token;
+ const email = req.query.email;
+ const timeOfRequest = new Date().getTime();
+
+ db.getUsersCollection().findOneAndUpdate(
+  {
+   signUpToken,
+   email,
+   signUpTokenExpiration: { $gt: timeOfRequest },
+  },
+  {
+   $set: {
+    "isVerified": true,
+    "signUpToken": null,
+    "signUpTokenExpiration": null,
+   },
+  },
+  (err: Error, user: any) => {
+   if (err || !user.value) {
+    return res
+     .status(404)
+     .json({ "message": "Account could not be verified." });
+   }
+
+   return res.status(200).json({ message: "Account was verified." });
+  }
+ );
+};
+
 const getRefreshToken = (req: Request, res: Response) => {
  const refreshToken = req.cookies && req.cookies.refreshToken;
 
@@ -298,5 +328,6 @@ module.exports = {
  postForgotPassword,
  postResetPassword,
  getRefreshToken,
+ getVerifyAccount,
  postVerifyAccount,
 };
