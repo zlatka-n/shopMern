@@ -22,12 +22,11 @@ export const VerifyAccount = () => {
  );
 
  const displayVerificationStatus = () => {
-  if (!email) {
-   return (
-    <div className={styles.inputContainer}>
-     <GoToHomepage />
-    </div>
-   );
+  let title, text;
+
+  if (isSuccess) {
+   title = "Success";
+   text = "Your account has been verified.";
   }
 
   if (isLoading) {
@@ -38,17 +37,9 @@ export const VerifyAccount = () => {
    );
   }
 
-  if (isSuccess) {
-   return (
-    <div className={styles.inputContainer}>
-     <GoToHomepage title="Success" text="Your account has been verified." />
-    </div>
-   );
-  }
-
   return (
    <div className={styles.inputContainer}>
-    <GoToHomepage text="Your account could not be verified. Please, retry again." />
+    <GoToHomepage title={title} text={text} />
    </div>
   );
  };
