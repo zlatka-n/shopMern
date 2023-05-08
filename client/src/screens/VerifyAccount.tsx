@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { getVerifyAccount } from "../api/auth";
 import { Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import { NotFound } from "../components/shared/NotFound";
+import { GoToHomepage } from "../components/shared/GoToHomepage";
 import { styles } from "../components/shared/styles";
 
 export const VerifyAccount = () => {
@@ -25,7 +25,7 @@ export const VerifyAccount = () => {
   if (!email) {
    return (
     <div className={styles.inputContainer}>
-     <NotFound />
+     <GoToHomepage />
     </div>
    );
   }

@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { ResetOldPassword } from "../components/register/ResetOldPassword";
-import { NotFound } from "../components/shared/NotFound";
+import { GoToHomepage } from "../components/shared/GoToHomepage";
 import { styles } from "../components/shared/styles";
 
 export const ResetPassword = () => {
@@ -21,7 +21,7 @@ export const ResetPassword = () => {
     {resetToken && userId ? (
      <ResetOldPassword resetToken={resetToken} userId={userId} />
     ) : (
-     <NotFound />
+     <GoToHomepage />
     )}
    </div>
   </Box>
