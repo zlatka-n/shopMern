@@ -18,7 +18,11 @@ export const VerifyAccount = () => {
 
  const { isLoading, isSuccess } = useQuery(
   ["getVerifyAccountId", urlParams],
-  () => getVerifyAccount(urlParams)
+  () => getVerifyAccount(urlParams),
+  {
+   refetchOnMount: false,
+   retry: 1,
+  }
  );
 
  const displayVerificationStatus = () => {
