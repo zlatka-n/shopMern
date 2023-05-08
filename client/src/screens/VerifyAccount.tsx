@@ -40,13 +40,15 @@ export const VerifyAccount = () => {
 
   if (isSuccess) {
    return (
-    <div className={styles.inputContainer}>Your account was verified</div>
+    <div className={styles.inputContainer}>
+     <GoToHomepage title="Success" text="Your account has been verified." />
+    </div>
    );
   }
 
   return (
    <div className={styles.inputContainer}>
-    Your account could not be verified
+    <GoToHomepage text="Your account could not be verified. Please, retry again." />
    </div>
   );
  };
