@@ -8,6 +8,8 @@ import { AddToBasketBtn } from "../components/shared/AddToBasketBtn";
 import { colors, fontSizes } from "../components/shared/styles";
 import { CheckoutModal } from "../components/cart/modal/CheckoutModal";
 import { useHandleBtnId, useHandleModal } from "../shared/utils";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 export const Home = () => {
  const { open, handleClose, handleOpen } = useHandleModal();
@@ -38,16 +40,22 @@ export const Home = () => {
 
  return (
   <Grid container margin={5}>
-   <Grid item xs={2}>
+   <Grid item xs={12} sm={12} md={2}>
     TODO: BAR
    </Grid>
    <Grid item xs={9}>
     <Grid container gap={4}>
      {books?.map(({ title, author, _id, price, image }) => {
       return (
-       <div key={_id}>
+       <Grid item xs={6} sm={4} md={2} key={_id}>
         <Link key={_id} to={`/${_id}`} style={{ textDecoration: "none" }}>
-         <img src={image} width={150} height={200} alt={title} />
+         <LazyLoadImage
+          src={image}
+          width={150}
+          height={200}
+          alt={title}
+          effect="blur"
+         />
          <Typography
           title={title}
           maxWidth={150}
@@ -77,7 +85,7 @@ export const Home = () => {
          totalPrice={newCartItems?.cart.totalPrice}
          totalQty={newCartItems?.cart.totalQty}
         />
-       </div>
+       </Grid>
       );
      })}
     </Grid>
