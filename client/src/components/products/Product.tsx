@@ -1,14 +1,23 @@
 import { Grid, Typography } from "@mui/material";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { getBooksDetails } from "../../api/shop";
 import { AddToBasketBtn } from "../shared/AddToBasketBtn";
 import { fontSizes } from "../shared/styles";
 import { Description } from "./Description";
 import { Details } from "./Details";
+import { postAddToCart } from "../../api/cart";
+import { ItemId } from "../../api/types";
+import { useHandleBtnId, useHandleModal } from "../../shared/utils";
+import { CheckoutModal } from "../cart/modal/CheckoutModal";
 
 export const Product = () => {
  const { id } = useParams();
+
+ const { selectedBtnId, handleSelectedBtnId } = useHandleBtnId();
+ const { open, handleClose, handleOpen } = useHandleModal();
+
+ const queryClient = useQueryClient();
 
  const { data: product } = useQuery(
   "productDetails",
@@ -18,7 +27,23 @@ export const Product = () => {
   }
  );
 
+ const {
+  data: newCartItems,
+  mutate,
+  isLoading,
+ } = useMutation((item: ItemId) => postAddToCart(item), {
+  onSuccess: () => {
+   queryClient.invalidateQueries("cart");
+   handleOpen();
+  },
+ });
+
  const { author, price, title } = product?.basicInfo || {};
+
+ const onClickAddToBasket = (itemId: string) => () => {
+  mutate({ itemId });
+  handleSelectedBtnId(itemId);
+ };
 
  return (
   <Grid
@@ -38,9 +63,19 @@ export const Product = () => {
      Price <span style={{ fontSize: fontSizes.medium }}>{price}</span>
     </Typography>
     <Description description={product?.description ?? ""} />
-    <AddToBasketBtn onClick={() => alert("POST: add to basket")} />
+    <AddToBasketBtn
+     onClick={onClickAddToBasket(id as string)}
+     isLoading={selectedBtnId === id ? isLoading : false}
+    />
     <Details details={product?.details} />
    </Grid>
+   <CheckoutModal
+    open={open}
+    onClose={handleClose}
+    totalPrice={newCartItems?.cart.totalPrice}
+    totalQty={newCartItems?.cart.totalQty}
+    opacity="1"
+   />
   </Grid>
  );
 };
