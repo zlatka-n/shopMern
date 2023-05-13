@@ -7,6 +7,7 @@ type Props = {
  onClose: () => void;
  totalQty?: number;
  totalPrice?: number;
+ opacity?: string;
 };
 
 export const CheckoutModal = ({
@@ -14,6 +15,7 @@ export const CheckoutModal = ({
  onClose,
  totalQty,
  totalPrice,
+ opacity = "0.5",
 }: Props) => {
  const navigate = useNavigate();
 
@@ -24,7 +26,7 @@ export const CheckoutModal = ({
     p: 1,
     alignItems: "center",
     justifyContent: "center",
-    opacity: "0.5",
+    opacity,
    }}
    open={open}
    onClose={onClose}
