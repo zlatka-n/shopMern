@@ -24,3 +24,11 @@ export const useHandleModal = () => {
 
  return { open, handleClose, handleOpen };
 };
+
+export const useHandleBtnId = () => {
+ const [selectedBtnId, setSelectedBtnId] = useState("");
+
+ const handleSelectedBtnId = (id: string) => setSelectedBtnId(id);
+
+ return { selectedBtnId, handleSelectedBtnId };
+};
