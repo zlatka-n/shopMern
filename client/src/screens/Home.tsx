@@ -7,12 +7,11 @@ import { ItemId } from "../api/types";
 import { AddToBasketBtn } from "../components/shared/AddToBasketBtn";
 import { colors, fontSizes } from "../components/shared/styles";
 import { CheckoutModal } from "../components/cart/modal/CheckoutModal";
-import { useHandleModal } from "../shared/utils";
-import { useState } from "react";
+import { useHandleBtnId, useHandleModal } from "../shared/utils";
 
 export const Home = () => {
  const { open, handleClose, handleOpen } = useHandleModal();
- const [selectedBtnId, setSelectedBtnId] = useState("");
+ const { selectedBtnId, handleSelectedBtnId } = useHandleBtnId();
 
  const queryClient = useQueryClient();
 
@@ -34,7 +33,7 @@ export const Home = () => {
 
  const onClickAddToBasket = (itemId: string) => () => {
   mutate({ itemId });
-  setSelectedBtnId(itemId);
+  handleSelectedBtnId(itemId);
  };
 
  return (
