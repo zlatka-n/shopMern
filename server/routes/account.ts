@@ -9,11 +9,17 @@ const ObjectId = require("mongodb").ObjectId;
 
 const accountControllers = require("../controllers/account");
 
-function authenticateToken(req: Request, res: Response, next: NextFunction) {
+function authenticateToken(req: any, res: Response, next: NextFunction) {
  const tokenFromCookie = req.cookies && req.cookies.accessToken;
+ const csrfTokenFromClient = req["headers"]["x-csrf-token"];
 
- if (!tokenFromCookie)
-  return res.status(401).json({ message: "No access token was received." });
+ if (!csrfTokenFromClient)
+  return res.status(401).json({ message: "Missing csrf token." });
+
+ const isCsrfTokenValid = csrfTokenFromClient === req.session.csrfToken;
+
+ if (!tokenFromCookie || !isCsrfTokenValid)
+  return res.status(401).json({ message: "Issues with access/csrf token." });
 
  jwt.verify(
   tokenFromCookie,
