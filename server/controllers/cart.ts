@@ -13,7 +13,9 @@ const getCart = (req: any, res: Response) => {
 
  if (!req.session.cart) req.session.cart = defaultCart;
 
- res.status(200).json({ cart: req.session.cart });
+ res
+  .status(200)
+  .json({ cart: req.session.cart, csrfToken: req.session.csrfToken });
 };
 
 const postCartItem = (req: any, res: Response) => {
