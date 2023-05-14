@@ -40,6 +40,10 @@ export type Cart = {
  };
 };
 
+export type CartItems = {
+ csrfToken?: string;
+} & Cart;
+
 export type UserNames = {
  firstName: string;
  lastName: string;
