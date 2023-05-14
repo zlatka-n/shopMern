@@ -82,7 +82,7 @@ const postSignUp = (req: Request, res: Response) => {
  });
 };
 
-const postLogin = (req: Request, res: Response) => {
+const postLogin = (req: any, res: Response) => {
  const email = req.body.email;
  const password = req.body.password;
 
@@ -125,11 +125,17 @@ const postLogin = (req: Request, res: Response) => {
        { expiresIn: "1d" }
       );
 
-      res.cookie("accessToken", accessToken, { httpOnly: true });
+      const csrfToken = crypto.randomBytes(32).toString("hex");
+
+      req.session.csrfToken = csrfToken;
+
+      res.cookie("accessToken", accessToken, {
+       httpOnly: true,
+      });
       res.cookie("refreshToken", refreshToken, { httpOnly: true });
       res.cookie("isLoggedIn", true);
 
-      return res.json({ message: "User was logged in.", userId });
+      return res.json({ message: "User was logged in.", userId, csrfToken });
      }
     }
    );
