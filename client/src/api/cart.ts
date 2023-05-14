@@ -1,9 +1,13 @@
 import { axiosInstance } from "./axios";
-import { Cart, ItemId } from "./types";
+import { Cart, CartItems, ItemId } from "./types";
 
 export const getCart = async () => {
  try {
-  const { data } = await axiosInstance.get<Cart>("/cart");
+  const { data } = await axiosInstance.get<CartItems>("/cart");
+
+  const { csrfToken } = data;
+  if (csrfToken) axiosInstance.defaults.headers["x-csrf-token"] = csrfToken;
+
   return data;
  } catch (err) {
   throw err;

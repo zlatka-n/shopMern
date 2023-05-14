@@ -6,6 +6,8 @@ export const postLogin = async (reqBody: Login) => {
  try {
   const { data } = await axiosInstance.post("/account/login", reqBody);
   window.sessionStorage.setItem("userId", data.userId);
+  axiosInstance.defaults.headers["x-csrf-token"] = data.csrfToken;
+
   return data;
  } catch (err) {
   console.error("Error during postLogin()");
