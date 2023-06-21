@@ -1,7 +1,10 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { CartItem, Product } from "../routes/types";
+
 const db = require("../db/conn");
 const ObjectId = require("mongodb").ObjectId;
+const stripe = require("stripe")(process.env.STRIPE_TEST_SECRET_KEY);
+
 const { calculateTotalPrice, calculateTotalQty } = require("../shared/utils");
 
 const getCart = (req: any, res: Response) => {
@@ -130,4 +133,34 @@ const putCartItem = (req: any, res: Response) => {
  res.status(202).json({ message: "Quatity for item was updated" });
 };
 
-module.exports = { getCart, postCartItem, deleteCartItem, putCartItem };
+const postCheckoutSession = async (req: Request, res: Response) => {
+ const session = await stripe.checkout.sessions.create({
+  line_items: [
+   {
+    price_data: {
+     currency: "usd",
+     product_data: {
+      name: "Kniha",
+     },
+     unit_amount: 1000,
+    },
+    quantity: 1,
+   },
+  ],
+  payment_method_types: ["card"],
+  mode: "payment",
+  success_url: `http://localhost:5173/success-payment`,
+  cancel_url: `http://localhost:5173/error-payment`,
+ });
+
+ //  res.redirect(303, session.url);
+ res.status(200).json({ url: session.url });
+};
+
+module.exports = {
+ getCart,
+ postCartItem,
+ deleteCartItem,
+ putCartItem,
+ postCheckoutSession,
+};
