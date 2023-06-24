@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { CartItem, Product } from "../routes/types";
 
 const db = require("../db/conn");
@@ -133,27 +133,26 @@ const putCartItem = (req: any, res: Response) => {
  res.status(202).json({ message: "Quatity for item was updated" });
 };
 
-const postCheckoutSession = async (req: Request, res: Response) => {
- const session = await stripe.checkout.sessions.create({
-  line_items: [
-   {
-    price_data: {
-     currency: "usd",
-     product_data: {
-      name: "Kniha",
-     },
-     unit_amount: 1000,
-    },
-    quantity: 1,
+const postCheckoutSession = async (req: any, res: Response) => {
+ const line_items = req.session.cart.items.map((item: any) => ({
+  price_data: {
+   currency: "eur",
+   product_data: {
+    name: item.title,
    },
-  ],
+   unit_amount: item.price * 100,
+  },
+  quantity: item.qty,
+ }));
+
+ const session = await stripe.checkout.sessions.create({
+  line_items,
   payment_method_types: ["card"],
   mode: "payment",
-  success_url: `http://localhost:5173/success-payment`,
-  cancel_url: `http://localhost:5173/error-payment`,
+  success_url: `${process.env.FRONTEND_URL}/success-payment`,
+  cancel_url: `${process.env.FRONTEND_URL}/error-payment`,
  });
 
- //  res.redirect(303, session.url);
  res.status(200).json({ url: session.url });
 };
 
