@@ -10,9 +10,13 @@ type Props = {
 };
 
 export const CartSummary = ({ data }: Props) => {
- const { mutate: postCheckout } = useMutation(postCheckoutSession, {
+ const { mutate: postCheckout } = useMutation(() => postCheckoutSession(), {
   onSuccess: (urlData) => (window.location = urlData.url),
  });
+
+ const onClickCheckout = () => {
+  postCheckout();
+ };
 
  return (
   <Grid
@@ -45,7 +49,7 @@ export const CartSummary = ({ data }: Props) => {
     <Typography fontWeight={600}>{data.cart.totalPrice}</Typography>
    </Stack>
    <Button
-    onClick={() => postCheckout}
+    onClick={onClickCheckout}
     variant="contained"
     sx={{ marginY: 2, textTransform: "none" }}
    >
