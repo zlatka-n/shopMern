@@ -16,6 +16,7 @@ import { ResetPassword } from "./screens/ResetPassword";
 import { ResetPasswordInstruction } from "./screens/ResetPasswordInstruction";
 import { ProtectedRoute } from "./shared/ProtectedRoute";
 import { VerifyAccount } from "./screens/VerifyAccount";
+import SuccessPayment from "./screens/SuccessPayment";
 
 function App() {
  const dispatch = useDispatch();
@@ -50,6 +51,7 @@ function App() {
     <Route path="/verifyAccount" element={<VerifyAccount />} />
 
     <Route path="/cart" element={<Cart />} />
+    <Route path="/success-payment" element={<SuccessPayment />} />
    </Routes>
   </div>
  );
