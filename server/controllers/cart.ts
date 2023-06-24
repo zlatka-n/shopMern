@@ -150,7 +150,7 @@ const postCheckoutSession = async (req: any, res: Response) => {
   payment_method_types: ["card"],
   mode: "payment",
   success_url: `${process.env.FRONTEND_URL}/success-payment`,
-  cancel_url: `${process.env.FRONTEND_URL}/error-payment`,
+  cancel_url: `${process.env.FRONTEND_URL}/cart`,
  });
 
  res.status(200).json({ url: session.url });
