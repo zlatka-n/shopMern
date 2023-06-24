@@ -1,13 +1,19 @@
-import { Grid, Stack, Typography } from "@mui/material";
+import { Button, Grid, Stack, Typography } from "@mui/material";
 import { Cart } from "../../api/types";
 import { colors } from "../shared/styles";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import { useMutation } from "react-query";
+import { postCheckoutSession } from "../../api/cart";
 
 type Props = {
  data: Cart;
 };
 
 export const CartSummary = ({ data }: Props) => {
+ const { mutate: postCheckout } = useMutation(postCheckoutSession, {
+  onSuccess: (urlData) => (window.location = urlData.url),
+ });
+
  return (
   <Grid
    item
@@ -38,6 +44,13 @@ export const CartSummary = ({ data }: Props) => {
     </Typography>
     <Typography fontWeight={600}>{data.cart.totalPrice}</Typography>
    </Stack>
+   <Button
+    onClick={() => postCheckout}
+    variant="contained"
+    sx={{ marginY: 2, textTransform: "none" }}
+   >
+    Checkout
+   </Button>
   </Grid>
  );
 };
