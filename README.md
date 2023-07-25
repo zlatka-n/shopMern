@@ -14,6 +14,7 @@
 - jwt-decode
 - nodemailer + nodemailer-sendgrid
 - express-session + connect-mongodb-session
+- stripe
 
 #### Front-end tech-stack:
 
