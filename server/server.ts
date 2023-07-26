@@ -8,6 +8,7 @@ const authRoutes = require("./routes/auth");
 const myAccountRoutes = require("./routes/account");
 const shopRoutes = require("./routes/shop");
 const cartRoutes = require("./routes/cart");
+const orderRoutes = require("./routes/order")
 
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
@@ -54,6 +55,7 @@ app.use("/account", authRoutes);
 app.use("/products", shopRoutes);
 app.use("/myaccount", myAccountRoutes);
 app.use("/cart", cartRoutes);
+app.use("/order", orderRoutes)
 
 app.listen(port, () => {
  db.connectToMongoDb((err: Error) => console.log(err));
