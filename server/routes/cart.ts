@@ -10,6 +10,4 @@ router.delete("/:id", cartControllers.deleteCartItem);
 
 router.put("/:id", cartControllers.putCartItem);
 
-router.post("/create-checkout", cartControllers.postCheckoutSession);
-
 module.exports = router;
