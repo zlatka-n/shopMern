@@ -44,7 +44,7 @@ export const putItemQuantity = async (reqBody: any) => {
 
 export const postCheckoutSession = async () => {
  try {
-  const { data } = await axiosInstance.post<any>("/cart/create-checkout");
+  const { data } = await axiosInstance.post<any>("/order/create-checkout");
   return data;
  } catch (err) {
   throw err;
