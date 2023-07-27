@@ -28,5 +28,8 @@ module.exports = {
   },
   getProductsCollection: function () {
     return _db.collection('products')
+  },
+  getShopOrder: function () {
+    return _db.collection('shop_order')
   }
 }
