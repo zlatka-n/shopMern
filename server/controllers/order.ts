@@ -1,5 +1,4 @@
 import { Response } from "express";
-import {ObjectId} from "bson";
 import crypto from "crypto";
 
 const db = require("../db/conn");
@@ -37,7 +36,7 @@ const postCheckoutSession = async (req: any, res: Response) => {
         shippingMethod: "TODO: shipping method",
         orderTotal: req.session.cart.totalPrice,
         orderStatus: "pending"
-    }, function (err: Error, orderResponse: any) {
+    }, function (err: Error) {
         if (err) res.json(err);
 
         req.session.cart = null;
