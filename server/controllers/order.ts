@@ -1,5 +1,8 @@
 import { Response } from "express";
+import {ObjectId} from "bson";
+import crypto from "crypto";
 
+const db = require("../db/conn");
 const stripe = require("stripe")(process.env.STRIPE_TEST_SECRET_KEY);
 
 const postCheckoutSession = async (req: any, res: Response) => {
@@ -14,6 +17,8 @@ const postCheckoutSession = async (req: any, res: Response) => {
         quantity: item.qty,
     }));
 
+    if (line_items.length < 1) res.status(400).json({message: 'no items found in the cart'})
+
     const session = await stripe.checkout.sessions.create({
         line_items,
         payment_method_types: ["card"],
@@ -22,7 +27,22 @@ const postCheckoutSession = async (req: any, res: Response) => {
         cancel_url: `${process.env.FRONTEND_URL}/cart`,
     });
 
-    res.status(200).json({ url: session.url });
+    const id = crypto.randomBytes(32).toString("hex")
+    db.getShopOrder().insertOne({
+        id,
+        userId: "TODO: userId",
+        orderDate: new Date().toISOString(),
+        paymentMethod: "card",
+        shippingAddress: "TODO: address",
+        shippingMethod: "TODO: shipping method",
+        orderTotal: req.session.cart.totalPrice,
+        orderStatus: "pending"
+    }, function (err: Error, orderResponse: any) {
+        if (err) res.json(err);
+
+        req.session.cart = null;
+        res.status(200).json({ url: session.url, orderId: id  });
+    })
 };
 
 module.exports = {
