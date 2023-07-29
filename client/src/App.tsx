@@ -51,7 +51,7 @@ function App() {
     <Route path="/verifyAccount" element={<VerifyAccount />} />
 
     <Route path="/cart" element={<Cart />} />
-    <Route path="/success-payment" element={<SuccessPayment />} />
+    <Route path="/success-payment/order" element={<SuccessPayment />} />
    </Routes>
   </div>
  );

@@ -1,9 +1,11 @@
 import { Box, Button, Typography } from "@mui/material";
 import { fontSizes } from "../components/shared/styles";
-import { useNavigate } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const SuccessPayment = () => {
  const navigate = useNavigate();
+ const query = new URLSearchParams(useLocation().search);
+ const orderId = query.get('id');
 
  return (
   <Box
@@ -18,7 +20,7 @@ const SuccessPayment = () => {
     Your order was confirmed
    </Typography>
    <Typography fontSize={fontSizes.medium} fontWeight={500} lineHeight={2}>
-    Order ID: 1234
+    Order ID: {orderId}
    </Typography>
    <Typography fontSize={fontSizes.medium} lineHeight={2}>
     We have sent your order confirmation to email@email.com

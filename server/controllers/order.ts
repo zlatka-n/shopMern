@@ -18,15 +18,16 @@ const postCheckoutSession = async (req: any, res: Response) => {
 
     if (line_items.length < 1) res.status(400).json({message: 'no items found in the cart'})
 
+    const id = crypto.randomBytes(32).toString("hex")
+
     const session = await stripe.checkout.sessions.create({
         line_items,
         payment_method_types: ["card"],
         mode: "payment",
-        success_url: `${process.env.FRONTEND_URL}/success-payment`,
+        success_url: `${process.env.FRONTEND_URL}/success-payment/order?id=${id}`,
         cancel_url: `${process.env.FRONTEND_URL}/cart`,
     });
 
-    const id = crypto.randomBytes(32).toString("hex")
     db.getShopOrder().insertOne({
         id,
         userId: "TODO: userId",
