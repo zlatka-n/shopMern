@@ -4,6 +4,19 @@ import crypto from "crypto";
 const db = require("../db/conn");
 const stripe = require("stripe")(process.env.STRIPE_TEST_SECRET_KEY);
 
+const getPaymentIntent = async (req: any, res: Response) => {
+
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: req.session.cart.totalPrice * 100,
+        currency: 'eur',
+        automatic_payment_methods: {
+            enabled: true,
+        },
+    });
+
+    res.status(200).json({ client_secret: paymentIntent.client_secret });
+}
+
 const postCheckoutSession = async (req: any, res: Response) => {
     const line_items = req.session.cart.items.map((item: any) => ({
         price_data: {
@@ -46,5 +59,6 @@ const postCheckoutSession = async (req: any, res: Response) => {
 };
 
 module.exports = {
-    postCheckoutSession
+    postCheckoutSession,
+    getPaymentIntent
 }
