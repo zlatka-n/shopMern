@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { deleteItemFromCart, getCart } from "../api/cart";
+import { deleteItemFromCart, getCart, getPaymentIntent } from "../api/cart";
 import { colors, fontSizes } from "../components/shared/styles";
 import { ItemCard } from "../components/cart/ItemCard";
 import { CartSummary } from "../components/cart/CartSummary";
@@ -16,6 +16,8 @@ export const Cart = () => {
   staleTime: 180000, //3 mins
   refetchOnMount: false,
  });
+
+ const { data: paymentIntentData } = useQuery("paymentIntent", getPaymentIntent );
 
  const { mutate } = useMutation((id: string) => deleteItemFromCart(id), {
   onMutate: async (itemId) => {
@@ -33,6 +35,7 @@ export const Cart = () => {
   },
   onSettled: () => queryClient.invalidateQueries("cart"),
  });
+
 
  const doesQtyExceed = data
   ? data?.cart.items.some((product) => product.qty > MAX_ITEM_CART_QTY)

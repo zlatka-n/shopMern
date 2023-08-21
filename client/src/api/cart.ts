@@ -50,3 +50,12 @@ export const postCheckoutSession = async () => {
   throw err;
  }
 };
+
+export const getPaymentIntent = async () => {
+ try {
+  const { data } = await axiosInstance.get("/order/payment-intent");
+  return data;
+ } catch (err) {
+  throw err;
+ }
+}
