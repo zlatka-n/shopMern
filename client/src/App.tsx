@@ -17,6 +17,7 @@ import { ResetPasswordInstruction } from "./screens/ResetPasswordInstruction";
 import { ProtectedRoute } from "./shared/ProtectedRoute";
 import { VerifyAccount } from "./screens/VerifyAccount";
 import SuccessPayment from "./screens/SuccessPayment";
+import {CheckoutForm} from "./screens/CheckoutForm";
 
 function App() {
  const dispatch = useDispatch();
@@ -51,6 +52,7 @@ function App() {
     <Route path="/verifyAccount" element={<VerifyAccount />} />
 
     <Route path="/cart" element={<Cart />} />
+    <Route path={'/checkout-form'} element={<CheckoutForm />} />
     <Route path="/success-payment/order" element={<SuccessPayment />} />
    </Routes>
   </div>
