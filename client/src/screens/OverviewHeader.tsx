@@ -1,16 +1,19 @@
-import { Typography } from "@mui/material";
-import { fontSizes } from "../components/shared/styles";
+import { Typography } from '@mui/material';
+import { fontSizes } from '../components/shared/styles';
 
 type Props = {
  heading: string;
  text: string;
 };
 
-export const OverviewHeader = ({ heading, text }: Props) => {
- return (
-  <>
-   <Typography fontSize={fontSizes.xLarge}>{heading}</Typography>
-   <Typography paddingY={2}>{text} </Typography>
-  </>
- );
-};
+export function OverviewHeader({ heading, text }: Props) {
+  return (
+    <>
+      <Typography fontSize={fontSizes.xLarge}>{heading}</Typography>
+      <Typography paddingY={2}>
+        {text}
+        {' '}
+      </Typography>
+    </>
+  );
+}

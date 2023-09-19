@@ -1,6 +1,6 @@
-import { Box, Typography, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { styles } from "../shared/styles";
+import { Box, Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { styles } from '../shared/styles';
 
 type Props = {
  title?: string;
@@ -8,21 +8,21 @@ type Props = {
  buttonName: string;
 };
 
-export const RegisterOrLogIn = ({ title, screenName, buttonName }: Props) => {
- const navigate = useNavigate();
+export function RegisterOrLogIn({ title, screenName, buttonName }: Props) {
+  const navigate = useNavigate();
 
- const navigateToRegister = () => navigate(screenName);
+  const navigateToRegister = () => navigate(screenName);
 
- return (
-  <Box className={styles.inputContainer} marginTop={5}>
-   <Typography fontSize={25}>{title ? title : null}</Typography>
-   <Button
-    variant="contained"
-    sx={{ paddingBlock: "1em" }}
-    onClick={navigateToRegister}
-   >
-    {buttonName}
-   </Button>
-  </Box>
- );
-};
+  return (
+    <Box className={styles.inputContainer} marginTop={5}>
+      <Typography fontSize={25}>{title || null}</Typography>
+      <Button
+        variant="contained"
+        sx={{ paddingBlock: '1em' }}
+        onClick={navigateToRegister}
+      >
+        {buttonName}
+      </Button>
+    </Box>
+  );
+}

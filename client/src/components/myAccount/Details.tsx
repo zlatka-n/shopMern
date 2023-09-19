@@ -1,5 +1,5 @@
-export const Details = () => {
- return (
-  <div>Details DetailsDetailsDetailsDetailsDetailsDetailsDetailsDetails</div>
- );
-};
+export function Details() {
+  return (
+    <div>Details DetailsDetailsDetailsDetailsDetailsDetailsDetailsDetails</div>
+  );
+}

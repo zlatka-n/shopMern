@@ -1,21 +1,23 @@
-import {Button, Grid, Stack, Typography} from "@mui/material";
-import {Cart} from "../../api/types";
-import {colors} from "../shared/styles";
-import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
-import {useNavigate} from "react-router-dom";
+import {
+  Button, Grid, Stack, Typography,
+} from '@mui/material';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import { useNavigate } from 'react-router-dom';
+import { Cart } from '../../api/types';
+import { colors } from '../shared/styles';
 
 type Props = {
   data: Cart;
 };
 
-export const CartSummary = ({data}: Props) => {
-  const navigate = useNavigate()
+export function CartSummary({ data }: Props) {
+  const navigate = useNavigate();
 
   return (
     <Grid
       item
       xs={4}
-      sx={{backgroundColor: colors.white}}
+      sx={{ backgroundColor: colors.white }}
       display="flex"
       flexDirection="column"
       paddingY={2}
@@ -23,10 +25,17 @@ export const CartSummary = ({data}: Props) => {
       marginBottom={4}
       maxHeight={350}
     >
-      <Grid display={"flex"} marginBottom={2}>
-        <ShoppingBasketIcon/>
+      <Grid display="flex" marginBottom={2}>
+        <ShoppingBasketIcon />
         <Typography paddingLeft={1}>
-          You have {data.cart.totalQty} items for a total of {data.cart.totalPrice}{" "}
+          You have
+          {' '}
+          {data.cart.totalQty}
+          {' '}
+          items for a total of
+          {' '}
+          {data.cart.totalPrice}
+          {' '}
           EUR in your basket.
         </Typography>
       </Grid>
@@ -42,12 +51,12 @@ export const CartSummary = ({data}: Props) => {
         <Typography fontWeight={600}>{data.cart.totalPrice}</Typography>
       </Stack>
       <Button
-        onClick={() => navigate("/checkout-form")}
+        onClick={() => navigate('/checkout-form')}
         variant="contained"
-        sx={{marginY: 2, textTransform: "none"}}
+        sx={{ marginY: 2, textTransform: 'none' }}
       >
         Checkout
       </Button>
     </Grid>
   );
-};
+}

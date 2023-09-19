@@ -1,6 +1,6 @@
-import Typography from "@mui/material/Typography";
-import { Link } from "react-router-dom";
-import { IconButton as MuiIconBtn } from "@mui/material";
+import Typography from '@mui/material/Typography';
+import { Link } from 'react-router-dom';
+import { IconButton as MuiIconBtn } from '@mui/material';
 
 type Props = {
  screen: string;
@@ -8,17 +8,17 @@ type Props = {
  name?: string;
 };
 
-export const IconButton = ({ screen, icon, name }: Props) => {
- return (
-  <Link to={`${screen}`} style={{ textDecoration: "none" }}>
-   <MuiIconBtn disableRipple>
-    {icon}
-    {name ? (
-     <Typography color={"white"} marginLeft={1}>
-      {name}
-     </Typography>
-    ) : null}
-   </MuiIconBtn>
-  </Link>
- );
-};
+export function IconButton({ screen, icon, name }: Props) {
+  return (
+    <Link to={`${screen}`} style={{ textDecoration: 'none' }}>
+      <MuiIconBtn disableRipple>
+        {icon}
+        {name ? (
+          <Typography color="white" marginLeft={1}>
+            {name}
+          </Typography>
+        ) : null}
+      </MuiIconBtn>
+    </Link>
+  );
+}
