@@ -1,3 +1,4 @@
+
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 4000;
@@ -13,11 +14,13 @@ const orderRoutes = require("./routes/order")
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
+const stripe = require('stripe')(process.env.STRIPE_TEST_SECRET_KEY);
 
 require("dotenv").config({ path: "./config.env" });
 
 const sessionKey = process.env.SESSION_SECRET;
 const mongoDbUri = process.env.ATLAS_URI;
+const endpointSecret = "whsec_67227e60d78a92ba95db7b6044ae646dadcd36e6809c053f2c2015db1733a529";
 
 const store = new MongoDBStore({
  uri: mongoDbUri,
@@ -56,6 +59,33 @@ app.use("/products", shopRoutes);
 app.use("/myaccount", myAccountRoutes);
 app.use("/cart", cartRoutes);
 app.use("/order", orderRoutes)
+
+app.post('/webhook', express.raw({type: "*/*"}), (request: any, response: any) => {
+    const sig = request.headers['stripe-signature'];
+    console.log(sig)
+    let event;
+
+    console.log(event)
+    try {
+      event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+    } catch (err: any) {
+      response.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+    
+    switch (event.type) {
+      case 'payment_intent.succeeded':
+        const paymentIntentSucceeded = event.data.object;
+        break;
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
+  
+    // Return a 200 response to acknowledge receipt of the event
+    // response.send();
+    response.json({received: true});
+  });
+  
 
 app.listen(port, () => {
  db.connectToMongoDb((err: Error) => console.log(err));
