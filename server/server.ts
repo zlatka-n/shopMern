@@ -51,6 +51,32 @@ app.use(
  })
 );
 
+app.post('/webhook', express.raw({type: 'application/json'}), (request: any, response: any) => {
+  const sig = request.headers['stripe-signature'];
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+  } catch (err: any) {
+    console.log(err.message)
+    response.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
+  
+  switch (event.type) {
+    case 'payment_intent.succeeded':
+      const paymentIntentSucceeded = event.data.object;
+      break;
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+
+  // Return a 200 response to acknowledge receipt of the event
+  // response.send();
+  response.json({received: true});
+});
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -60,31 +86,6 @@ app.use("/myaccount", myAccountRoutes);
 app.use("/cart", cartRoutes);
 app.use("/order", orderRoutes)
 
-app.post('/webhook', express.raw({type: "*/*"}), (request: any, response: any) => {
-    const sig = request.headers['stripe-signature'];
-    console.log(sig)
-    let event;
-
-    console.log(event)
-    try {
-      event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
-    } catch (err: any) {
-      response.status(400).send(`Webhook Error: ${err.message}`);
-      return;
-    }
-    
-    switch (event.type) {
-      case 'payment_intent.succeeded':
-        const paymentIntentSucceeded = event.data.object;
-        break;
-      default:
-        console.log(`Unhandled event type ${event.type}`);
-    }
-  
-    // Return a 200 response to acknowledge receipt of the event
-    // response.send();
-    response.json({received: true});
-  });
   
 
 app.listen(port, () => {
