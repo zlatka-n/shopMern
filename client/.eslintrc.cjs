@@ -33,7 +33,9 @@ module.exports = {
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'import/prefer-default-export': 'off',
+    // eslint-disable-next-line quote-props
     'quotes': ['error', 'single'],
+    'no-useless-catch': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.ts', '.tsx'] }],
     'no-underscore-dangle': 'off',
