@@ -12,10 +12,8 @@ const postPay = async (req: any, res: any) => {
     const { totalPrice } = req.session.cart
 
     const line_items = req.session.cart.items.map((item: any) => ({
-        currency: "eur",
-        product_data: {
-            name: item.title,
-        },
+        product_name: item.title,
+        product_id: item._id,
         unit_amount: item.price,
         quantity: item.qty,
     }));
@@ -25,9 +23,9 @@ const postPay = async (req: any, res: any) => {
 
     const paymentIntent = await stripe.paymentIntents.create({
         amount: totalPrice * 100,
-        currency: 'eur',
         metadata: {"orderId": id},
         receipt_email: email,
+        currency: 'eur'
       });
 
       db.getShopOrder().insertOne({
@@ -39,12 +37,15 @@ const postPay = async (req: any, res: any) => {
         shippingMethod: "TODO: shipping method",
         orderTotal: totalPrice,
         items: line_items,
-        // TODO: update order status in webhook
+        paymentIntent: paymentIntent.id,
+        currency: paymentIntent.currency,
         orderStatus: "pending"
     }, function (err: Error) {
         if (err) res.json(err);
 
         req.session.cart = null;
+        req.session.destroy();
+
         res.json({'client_secret': paymentIntent['client_secret'], "message": "order created"})
 
     })
