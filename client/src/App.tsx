@@ -1,5 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { Address } from './components/myAccount/address';
 import { Details } from './components/myAccount/Details';
 import { Orders } from './components/myAccount/Orders';
@@ -18,6 +20,9 @@ import { ProtectedRoute } from './shared/ProtectedRoute';
 import { VerifyAccount } from './screens/VerifyAccount';
 import SuccessPayment from './screens/SuccessPayment';
 import { Checkout } from './screens/Checkout';
+import { STRIPE_LOAD_KEY } from './config';
+
+const stripePromise = loadStripe(STRIPE_LOAD_KEY);
 
 function App() {
   const dispatch = useDispatch();
@@ -28,33 +33,35 @@ function App() {
 
   return (
     <div>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/:id" element={<Product />} />
-        <Route path="/account/login" element={<Login />} />
-        <Route path="/account/register" element={<Register />} />
+      <Elements stripe={stripePromise}>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/:id" element={<Product />} />
+          <Route path="/account/login" element={<Login />} />
+          <Route path="/account/register" element={<Register />} />
 
-        <Route path="myaccount" element={<ProtectedRoute />}>
-          <Route path="" element={<MyAccount />}>
-            <Route path="address" element={<Address />} />
-            <Route path="details" element={<Details />} />
-            <Route path="orders" element={<Orders />} />
+          <Route path="myaccount" element={<ProtectedRoute />}>
+            <Route path="" element={<MyAccount />}>
+              <Route path="address" element={<Address />} />
+              <Route path="details" element={<Details />} />
+              <Route path="orders" element={<Orders />} />
+            </Route>
           </Route>
-        </Route>
 
-        <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route
-          path="/forgotpassword/instructions"
-          element={<ResetPasswordInstruction />}
-        />
-        <Route path="/passwordReset" element={<ResetPassword />} />
-        <Route path="/verifyAccount" element={<VerifyAccount />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route
+            path="/forgotpassword/instructions"
+            element={<ResetPasswordInstruction />}
+          />
+          <Route path="/passwordReset" element={<ResetPassword />} />
+          <Route path="/verifyAccount" element={<VerifyAccount />} />
 
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout-form" element={<Checkout />} />
-        <Route path="/success-payment/order" element={<SuccessPayment />} />
-      </Routes>
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout-form" element={<Checkout />} />
+          <Route path="/success-payment/order" element={<SuccessPayment />} />
+        </Routes>
+      </Elements>
     </div>
   );
 }
