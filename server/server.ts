@@ -1,3 +1,4 @@
+import { Response } from "express";
 
 const express = require("express");
 const app = express();
@@ -66,14 +67,20 @@ app.post('/webhook', express.raw({type: 'application/json'}), (request: any, res
   switch (event.type) {
     case 'payment_intent.succeeded':
       const paymentIntentSucceeded = event.data.object;
+
+      db.getShopOrder().updateOne(
+        { paymentIntent: paymentIntentSucceeded.id },
+        { $set: { orderStatus:  paymentIntentSucceeded.status } },
+        (err: Error, orderResponse: Response) => {
+          if (err) return orderResponse.json(err);
+        }
+      )
       break;
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
 
-  // Return a 200 response to acknowledge receipt of the event
-  // response.send();
-  response.json({received: true});
+  response.json({ received: true });
 });
 
 app.use(bodyParser.json());
