@@ -2,6 +2,8 @@ import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Cookies from 'js-cookie';
 import { Address } from './components/myAccount/address';
 import { Details } from './components/myAccount/Details';
 import { Orders } from './components/myAccount/Orders';
@@ -26,7 +28,7 @@ const stripePromise = loadStripe(STRIPE_LOAD_KEY);
 
 function App() {
   const dispatch = useDispatch();
-  const isLoggedIn = document.cookie;
+  const isLoggedIn = Cookies.get('isLoggedIn');
 
   if (isLoggedIn) dispatch(setLoginSuccess(true));
   if (!isLoggedIn) dispatch(setLoginSuccess(false));
@@ -59,6 +61,9 @@ function App() {
 
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout-form" element={<Checkout />} />
+          <Route path="stripe" element={<ProtectedRoute />}>
+            <Route path="checkout" element={<Checkout />} />
+          </Route>
           <Route path="/success-payment/order" element={<SuccessPayment />} />
         </Routes>
       </Elements>

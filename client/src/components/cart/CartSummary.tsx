@@ -51,7 +51,7 @@ export function CartSummary({ data }: Props) {
         <Typography fontWeight={600}>{data.cart.totalPrice}</Typography>
       </Stack>
       <Button
-        onClick={() => navigate('/checkout-form')}
+        onClick={() => navigate('/stripe/checkout')}
         variant="contained"
         sx={{ marginY: 2, textTransform: 'none' }}
       >
