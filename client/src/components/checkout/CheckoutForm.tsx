@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import {
   useStripe, useElements, CardElement,
 } from '@stripe/react-stripe-js';
+import { useQueryClient } from 'react-query';
 import { postPay } from '../../api/cart';
 
 export function CheckoutForm() {
   const [email, setEmail] = useState('');
 
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
@@ -37,6 +39,7 @@ export function CheckoutForm() {
 
     if (result?.paymentIntent?.status === 'succeeded') {
       navigate('/success-payment/order', { state: { paymentResult: result } });
+      queryClient.invalidateQueries('cart');
     }
   };
 
