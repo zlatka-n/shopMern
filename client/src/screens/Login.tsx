@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { object, string, SchemaOf } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { setLoginSuccess } from '../redux/accountSlice';
@@ -24,6 +24,7 @@ export function Login() {
     resolver: yupResolver(loginSchema),
   });
 
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -31,7 +32,8 @@ export function Login() {
     postLogin({ email: data.email, password: data.password }).then(() => {
       dispatch(setLoginSuccess(true));
 
-      navigate('/');
+      if (location?.state?.prevPath && location?.state?.prevPath === '/stripe/checkout') navigate('/stripe/checkout');
+      else navigate('/');
     });
   });
 
