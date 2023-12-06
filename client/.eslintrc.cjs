@@ -3,18 +3,13 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'airbnb',
-    'plugin:@typescript-eslint/recommended',
-  ],
+  extends: ['airbnb', 'plugin:@typescript-eslint/recommended'],
   overrides: [
     {
       env: {
         node: true,
       },
-      files: [
-        '.eslintrc.{js,cjs}',
-      ],
+      files: ['.eslintrc.{js,cjs}'],
       parserOptions: {
         sourceType: 'script',
       },
@@ -25,16 +20,14 @@ module.exports = {
     sourceType: 'module',
     parser: '@typescript-eslint/parser',
   },
-  plugins: [
-    'react',
-  ],
+  plugins: ['react'],
   rules: {
     indent: ['error', 2],
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'import/prefer-default-export': 'off',
     // eslint-disable-next-line quote-props
-    'quotes': ['error', 'single'],
+    quotes: ['error', 'single'],
     'no-useless-catch': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.ts', '.tsx'] }],
@@ -46,5 +39,6 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'no-unused-expressions': 'off',
     'guard-for-in': 'off',
+    'object-curly-newline': 'off',
   },
 };
