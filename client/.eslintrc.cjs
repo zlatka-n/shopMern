@@ -40,5 +40,6 @@ module.exports = {
     'no-unused-expressions': 'off',
     'guard-for-in': 'off',
     'object-curly-newline': 'off',
+    'import/no-extraneous-dependencies': 'off',
   },
 };
