@@ -1,8 +1,6 @@
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
-import {
-  Badge, Grid, Stack, IconButton as MuiIconBtn,
-} from '@mui/material';
+import { Badge, Grid, Stack, IconButton as MuiIconBtn } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -16,6 +14,7 @@ import { IconButton } from '../shared/IconButton';
 import { LogInButtons } from './LogInButtons';
 import { getLogout } from '../../api/auth';
 import { getCart } from '../../api/cart';
+import Logo from './logo.svg?react';
 
 export function TopBar() {
   const isLoggedIn = useSelector(selectIsUserLoggedIn);
@@ -48,6 +47,7 @@ export function TopBar() {
   return (
     <AppBar position="static" elevation={0}>
       <Grid container wrap="nowrap" marginY={1} alignItems="center">
+        <Logo />
         <Grid item xs={8} marginX={5}>
           <Stack direction="row" alignItems="center" gap={1}>
             {topBarBtns.map(({ icon, name, screen }) => (
@@ -70,7 +70,10 @@ export function TopBar() {
               />
             )}
             <MuiIconBtn aria-label="cart" onClick={onClickCart} disableRipple>
-              <Badge badgeContent={data ? data.cart.totalQty : 0} color="warning">
+              <Badge
+                badgeContent={data ? data.cart.totalQty : 0}
+                color="warning"
+              >
                 <ShoppingCartIcon sx={{ color: 'white' }} />
               </Badge>
             </MuiIconBtn>
