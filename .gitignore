@@ -3,3 +3,4 @@ client/src/config.ts
 server/node_modules
 server/config.env
 .idea
+.vscode
