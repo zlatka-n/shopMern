@@ -31,7 +31,14 @@ function App() {
   const isLoggedIn = Cookies.get('isLoggedIn');
 
   const location = useLocation();
-  const hiddenRoutes = ['/account/login', '/account/register'];
+  const hiddenRoutes = [
+    '/account/login',
+    '/account/register',
+    '/forgotpassword',
+    '/forgotpassword/instructions',
+    '/passwordReset',
+    '/verifyAccount',
+  ];
   const shouldHideNavBar = hiddenRoutes.includes(location.pathname);
 
   if (isLoggedIn) dispatch(setLoginSuccess(true));

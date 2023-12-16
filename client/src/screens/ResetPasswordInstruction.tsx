@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { ResetInstructions } from '../components/register/ResetInstructions';
 import { GoToHomepage } from '../components/shared/GoToHomepage';
 import { styles } from '../components/shared/styles';
+import { CompanyLogo } from '../components/shared/CompanyLogo';
 
 export function ResetPasswordInstruction() {
   const { state } = useLocation();
@@ -15,6 +16,7 @@ export function ResetPasswordInstruction() {
       flexDirection="column"
       marginTop={5}
     >
+      <CompanyLogo />
       <div className={styles.inputContainer}>
         {email ? <ResetInstructions email={email} /> : <GoToHomepage />}
       </div>

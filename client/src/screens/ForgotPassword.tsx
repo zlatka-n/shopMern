@@ -9,6 +9,7 @@ import { Input } from '../components/shared/Input';
 import { fontSizes, styles } from '../components/shared/styles';
 import { FORGOT_PASSWORD, REQUIRED, WRONG_EMAIL } from '../shared/constants';
 import { Email } from '../shared/types';
+import { CompanyLogo } from '../components/shared/CompanyLogo';
 
 const emailSchema: SchemaOf<Email> = object().shape({
   email: string().email(WRONG_EMAIL).required(REQUIRED),
@@ -39,13 +40,14 @@ export function ForgotPassword() {
       flexDirection="column"
       marginTop={5}
     >
+      <CompanyLogo />
       <form className={styles.inputContainer} onSubmit={onClickContinue}>
         <Typography fontSize={fontSizes.large} fontWeight={500}>
           Recover your email
         </Typography>
         <Typography>
-          Enter the email address associated with your account and we will send you a
-          password reset link.
+          Enter the email address associated with your account and we will send
+          you a password reset link.
         </Typography>
         <Input name="email" control={control} placeholder="Email" />
         <Button

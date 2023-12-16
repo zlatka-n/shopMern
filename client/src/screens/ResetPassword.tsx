@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { ResetOldPassword } from '../components/register/ResetOldPassword';
 import { GoToHomepage } from '../components/shared/GoToHomepage';
 import { styles } from '../components/shared/styles';
+import { CompanyLogo } from '../components/shared/CompanyLogo';
 
 export function ResetPassword() {
   const query = new URLSearchParams(useLocation().search);
@@ -17,6 +18,7 @@ export function ResetPassword() {
       flexDirection="column"
       marginTop={5}
     >
+      <CompanyLogo />
       <div className={styles.inputContainer}>
         {resetToken && userId ? (
           <ResetOldPassword resetToken={resetToken} userId={userId} />

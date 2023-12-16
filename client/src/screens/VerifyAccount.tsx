@@ -5,6 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { getVerifyAccount } from '../api/auth';
 import { GoToHomepage } from '../components/shared/GoToHomepage';
 import { styles } from '../components/shared/styles';
+import { CompanyLogo } from '../components/shared/CompanyLogo';
 
 export function VerifyAccount() {
   const query = new URLSearchParams(useLocation().search);
@@ -22,12 +23,12 @@ export function VerifyAccount() {
     {
       refetchOnMount: false,
       retry: 1,
-    },
+    }
   );
 
   const displayVerificationStatus = () => {
-    let title; let
-      text;
+    let title;
+    let text;
 
     if (isSuccess) {
       title = 'Success';
@@ -37,8 +38,7 @@ export function VerifyAccount() {
     if (isLoading) {
       return (
         <Box display="flex" justifyContent="center">
-          <CircularProgress />
-          {' '}
+          <CircularProgress />{' '}
         </Box>
       );
     }
@@ -58,6 +58,7 @@ export function VerifyAccount() {
       flexDirection="column"
       marginTop={5}
     >
+      <CompanyLogo />
       {displayVerificationStatus()}
     </Box>
   );
