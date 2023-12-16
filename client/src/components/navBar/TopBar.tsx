@@ -1,11 +1,15 @@
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
-import { Badge, Grid, Stack, IconButton as MuiIconBtn } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import {
+  Badge,
+  Grid,
+  IconButton as MuiIconBtn,
+  Typography,
+} from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useQuery, useQueryClient } from 'react-query';
-import { topBarBtns } from './utils';
 import {
   selectIsUserLoggedIn,
   setLoginSuccess,
@@ -47,15 +51,23 @@ export function TopBar() {
   return (
     <AppBar position="static" elevation={0}>
       <Grid container wrap="nowrap" marginY={1} alignItems="center">
-        <Logo />
         <Grid item xs={8} marginX={5}>
-          <Stack direction="row" alignItems="center" gap={1}>
-            {topBarBtns.map(({ icon, name, screen }) => (
-              <div key={screen}>
-                <IconButton screen={screen} icon={icon} name={name} />
-              </div>
-            ))}
-          </Stack>
+          {/* <Stack direction="row" alignItems="center" gap={1}> */}
+          <Link
+            to="/"
+            style={{
+              textDecoration: 'none',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <Logo />
+            <Typography color="white" marginLeft={1}>
+              Bookish
+            </Typography>
+          </Link>
+          {/* </Stack> */}
         </Grid>
 
         <Grid item xs={4} marginX={5}>
