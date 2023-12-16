@@ -1,18 +1,17 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { object, string, SchemaOf } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { setLoginSuccess } from '../redux/accountSlice';
 import { styles, fontSizes } from '../components/shared/styles';
 import { Input } from '../components/shared/Input';
-import {
-  REQUIRED, SIGN_IN, SIGN_UP, WRONG_EMAIL,
-} from '../shared/constants';
+import { REQUIRED, SIGN_IN, SIGN_UP, WRONG_EMAIL } from '../shared/constants';
 import { RegisterOrLogIn } from '../components/register/RegisterOrLogin';
 import { Login as LoginValues } from '../shared/types';
 import { postLogin } from '../api/auth';
+import { CompanyLogo } from '../components/shared/CompanyLogo';
 
 const loginSchema: SchemaOf<LoginValues> = object().shape({
   email: string().email(WRONG_EMAIL).required(REQUIRED),
@@ -32,7 +31,11 @@ export function Login() {
     postLogin({ email: data.email, password: data.password }).then(() => {
       dispatch(setLoginSuccess(true));
 
-      if (location?.state?.prevPath && location?.state?.prevPath === '/stripe/checkout') navigate('/stripe/checkout');
+      if (
+        location?.state?.prevPath &&
+        location?.state?.prevPath === '/stripe/checkout'
+      )
+        navigate('/stripe/checkout');
       else navigate('/');
     });
   });
@@ -45,6 +48,7 @@ export function Login() {
       flexDirection="column"
       marginTop={5}
     >
+      <CompanyLogo />
       <form onSubmit={onSubmit} className={styles.inputContainer}>
         <Typography fontSize={fontSizes.large}>Welcome back</Typography>
         <Input name="email" control={control} placeholder="Email" />
@@ -54,7 +58,11 @@ export function Login() {
           placeholder="Password"
           type="password"
         />
-        <Button onClick={onSubmit} variant="contained" sx={{ paddingBlock: '1em' }}>
+        <Button
+          onClick={onSubmit}
+          variant="contained"
+          sx={{ paddingBlock: '1em' }}
+        >
           {SIGN_IN}
         </Button>
       </form>

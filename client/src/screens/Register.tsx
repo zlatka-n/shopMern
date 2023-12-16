@@ -1,19 +1,16 @@
 import { useForm } from 'react-hook-form';
-import {
-  Alert, Box, Button, Typography,
-} from '@mui/material';
+import { Alert, Box, Button, Typography } from '@mui/material';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { Input } from '../components/shared/Input';
 import { styles } from '../components/shared/styles';
-import {
-  SIGN_UP, SIGN_IN, WRONG_EMAIL, REQUIRED,
-} from '../shared/constants';
+import { SIGN_UP, SIGN_IN, WRONG_EMAIL, REQUIRED } from '../shared/constants';
 import { RegisterOrLogIn } from '../components/register/RegisterOrLogin';
 import { SignUp } from '../shared/types';
 import { postSignUp } from '../api/auth';
 import { passwordSchema } from '../shared/schemas';
+import { CompanyLogo } from '../components/shared/CompanyLogo';
 
 const signUpSchema: yup.SchemaOf<SignUp> = yup.object().shape({
   email: yup.string().email(WRONG_EMAIL).required(REQUIRED),
@@ -45,12 +42,13 @@ export function Register() {
       flexDirection="column"
       marginTop={5}
     >
+      <CompanyLogo />
       <form onSubmit={onSubmit} className={styles.inputContainer}>
         <Typography fontSize={25}>Register</Typography>
         {userExists && (
           <Alert severity="error">
-            The email address you entered already exists in our database. Please, try
-            logging in or enter a different email address.
+            The email address you entered already exists in our database.
+            Please, try logging in or enter a different email address.
           </Alert>
         )}
         <Input name="firstName" control={control} placeholder="First name" />
@@ -62,7 +60,11 @@ export function Register() {
           placeholder="Password"
           type="password"
         />
-        <Button onClick={onSubmit} variant="contained" sx={{ paddingBlock: '1em' }}>
+        <Button
+          onClick={onSubmit}
+          variant="contained"
+          sx={{ paddingBlock: '1em' }}
+        >
           {SIGN_UP}
         </Button>
       </form>
