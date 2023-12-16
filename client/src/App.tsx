@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -30,13 +30,17 @@ function App() {
   const dispatch = useDispatch();
   const isLoggedIn = Cookies.get('isLoggedIn');
 
+  const location = useLocation();
+  const hiddenRoutes = ['/account/login', '/account/register'];
+  const shouldHideNavBar = hiddenRoutes.includes(location.pathname);
+
   if (isLoggedIn) dispatch(setLoginSuccess(true));
   if (!isLoggedIn) dispatch(setLoginSuccess(false));
 
   return (
     <div>
       <Elements stripe={stripePromise}>
-        <NavBar />
+        {!shouldHideNavBar && <NavBar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/:id" element={<Product />} />
