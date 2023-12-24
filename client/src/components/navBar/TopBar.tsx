@@ -4,8 +4,9 @@ import {
   Badge,
   Grid,
   IconButton as MuiIconBtn,
-  Typography,
+  OutlinedInput,
 } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -50,12 +51,30 @@ export function TopBar() {
 
   return (
     <AppBar position="static" elevation={0}>
-      <Grid container wrap="nowrap" marginY={1} alignItems="center">
-        <Grid item xs={8} marginX={5}>
+      <Grid
+        container
+        wrap="nowrap"
+        marginY={1}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Grid item xs={3} marginX={5}>
           <CompanyLogo fontColor="white" />
         </Grid>
 
-        <Grid item xs={4} marginX={5}>
+        <Grid item xs={6}>
+          <OutlinedInput
+            fullWidth
+            sx={{ backgroundColor: 'white', borderRadius: '45px' }}
+            endAdornment={<SearchIcon />}
+            placeholder="Search Bookish"
+            inputProps={{
+              'aria-label': 'weight',
+            }}
+          />
+        </Grid>
+
+        <Grid item xs={3} marginX={5}>
           <Grid container justifyContent="flex-end">
             {isLoggedIn ? (
               <LogInButtons onClick={logOutUser} />
