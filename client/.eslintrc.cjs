@@ -41,5 +41,6 @@ module.exports = {
     'guard-for-in': 'off',
     'object-curly-newline': 'off',
     'import/no-extraneous-dependencies': 'off',
+    'comma-dangle': 'off',
   },
 };
