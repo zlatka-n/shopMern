@@ -1,12 +1,6 @@
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
-import {
-  Badge,
-  Grid,
-  IconButton as MuiIconBtn,
-  OutlinedInput,
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { Badge, Grid, IconButton as MuiIconBtn } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -20,6 +14,7 @@ import { LogInButtons } from './LogInButtons';
 import { getLogout } from '../../api/auth';
 import { getCart } from '../../api/cart';
 import { CompanyLogo } from '../shared/CompanyLogo';
+import { Searchbar } from './Searchbar';
 
 export function TopBar() {
   const isLoggedIn = useSelector(selectIsUserLoggedIn);
@@ -63,15 +58,7 @@ export function TopBar() {
         </Grid>
 
         <Grid item xs={6}>
-          <OutlinedInput
-            fullWidth
-            sx={{ backgroundColor: 'white', borderRadius: '45px' }}
-            endAdornment={<SearchIcon />}
-            placeholder="Search Bookish"
-            inputProps={{
-              'aria-label': 'weight',
-            }}
-          />
+          <Searchbar />
         </Grid>
 
         <Grid item xs={3} marginX={5}>
