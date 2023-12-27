@@ -25,8 +25,8 @@ export function Searchbar() {
       onClose={() => {
         setOpen(false);
       }}
-      isOptionEqualToValue={(option, value) => option.title === value.title}
-      getOptionLabel={(option) => option.title}
+      isOptionEqualToValue={(option, value) => option === value}
+      getOptionLabel={(option) => option}
       options={data ?? []}
       renderInput={(params) => (
         <TextField

@@ -1,9 +1,8 @@
 import { axiosInstance } from './axios';
-import { Book } from './types';
 
 export const getSuggestions = async (keyword: string) => {
   try {
-    const { data } = await axiosInstance.get<Book[]>(
+    const { data } = await axiosInstance.get<string[]>(
       `suggestions?keyword=${keyword}`
     );
     return data;
