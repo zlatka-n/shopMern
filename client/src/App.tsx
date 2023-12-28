@@ -23,6 +23,7 @@ import { VerifyAccount } from './screens/VerifyAccount';
 import SuccessPayment from './screens/SuccessPayment';
 import { Checkout } from './screens/Checkout';
 import { STRIPE_LOAD_KEY } from './config';
+import { SearchResults } from './screens/SearchResults';
 
 const stripePromise = loadStripe(STRIPE_LOAD_KEY);
 
@@ -76,6 +77,8 @@ function App() {
             <Route path="checkout" element={<Checkout />} />
           </Route>
           <Route path="/success-payment/order" element={<SuccessPayment />} />
+
+          <Route path="/search" element={<SearchResults />} />
         </Routes>
       </Elements>
     </div>
