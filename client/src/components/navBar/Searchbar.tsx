@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from 'react-query';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Autocomplete, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { getSuggestions } from '../../api/search';
@@ -15,8 +16,27 @@ export function Searchbar() {
     }
   );
 
+  const navigate = useNavigate();
+
+  const handleQueryParams = (newValue: string | null) => {
+    if (newValue) {
+      navigate({
+        pathname: 'search',
+        search: createSearchParams({
+          q: newValue,
+        }).toString(),
+      });
+    }
+  };
+  const handleKeyPress: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+    if (e.key === 'Enter') {
+      handleQueryParams(keyword);
+    }
+  };
+
   return (
     <Autocomplete
+      freeSolo
       fullWidth
       open={open}
       onOpen={() => {
@@ -31,6 +51,7 @@ export function Searchbar() {
       renderInput={(params) => (
         <TextField
           {...params}
+          onKeyDown={(e) => handleKeyPress(e)}
           InputProps={{
             ...params.InputProps,
             endAdornment: <SearchIcon />,
@@ -49,7 +70,8 @@ export function Searchbar() {
           }}
         />
       )}
-      onInputChange={(e) => setKeyword(e.target.value)}
+      onInputChange={(e) => setKeyword((e.target as HTMLInputElement).value)}
+      onChange={(_, newValue) => handleQueryParams(newValue)}
     />
   );
 }
