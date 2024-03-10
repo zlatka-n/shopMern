@@ -42,5 +42,6 @@ module.exports = {
     'object-curly-newline': 'off',
     'import/no-extraneous-dependencies': 'off',
     'comma-dangle': 'off',
+    'nonblock-statement-body': 'off',
   },
 };
