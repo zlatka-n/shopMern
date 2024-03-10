@@ -1,44 +1,62 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
-import { useForm } from 'react-hook-form';
+import { useFormState } from 'react-dom';
+import { Box, Button, FormLabel, TextField, Typography } from '@mui/material';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { object, string, SchemaOf } from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect } from 'react';
 import { setLoginSuccess } from '../redux/accountSlice';
 import { styles, fontSizes } from '../components/shared/styles';
-import { Input } from '../components/shared/Input';
-import { REQUIRED, SIGN_IN, SIGN_UP, WRONG_EMAIL } from '../shared/constants';
+import { REQUIRED, SIGN_IN, SIGN_UP } from '../shared/constants';
 import { RegisterOrLogIn } from '../components/register/RegisterOrLogin';
-import { Login as LoginValues } from '../shared/types';
 import { postLogin } from '../api/auth';
 import { CompanyLogo } from '../components/shared/CompanyLogo';
 
-const loginSchema: SchemaOf<LoginValues> = object().shape({
-  email: string().email(WRONG_EMAIL).required(REQUIRED),
-  password: string().required(REQUIRED),
-});
+const handleSubmit = async (
+  previousState: string | undefined | null,
+  formData: FormData
+) => {
+  const userName = formData.get('userName');
+  const password = formData.get('password');
+
+  return {
+    userName: userName?.toString(),
+    password: password?.toString(),
+    isInvalid: {
+      userName: !userName,
+      password: !password,
+    },
+  };
+};
 
 export function Login() {
-  const { handleSubmit, control } = useForm<LoginValues>({
-    resolver: yupResolver(loginSchema),
-  });
-
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const onSubmit = handleSubmit(async (data) => {
-    postLogin({ email: data.email, password: data.password }).then(() => {
-      dispatch(setLoginSuccess(true));
-
-      if (
-        location?.state?.prevPath &&
-        location?.state?.prevPath === '/stripe/checkout'
-      )
-        navigate('/stripe/checkout');
-      else navigate('/');
-    });
+  const [state, formAction] = useFormState(handleSubmit, {
+    userName: null,
+    password: null,
+    isInValid: {
+      userName: true,
+      password: true,
+    },
   });
+
+  useEffect(() => {
+    const { userName, password } = state;
+
+    if (userName && password) {
+      postLogin({ email: userName, password: password as string }).then(() => {
+        dispatch(setLoginSuccess(true));
+
+        if (
+          location?.state?.prevPath &&
+          location?.state?.prevPath === '/stripe/checkout'
+        ) {
+          navigate('/stripe/checkout');
+        } else navigate('/');
+      });
+    }
+  }, [state]);
 
   return (
     <Box
@@ -49,20 +67,16 @@ export function Login() {
       marginTop={5}
     >
       <CompanyLogo />
-      <form onSubmit={onSubmit} className={styles.inputContainer}>
-        <Typography fontSize={fontSizes.large}>Welcome back</Typography>
-        <Input name="email" control={control} placeholder="Email" />
-        <Input
-          name="password"
-          control={control}
-          placeholder="Password"
-          type="password"
-        />
-        <Button
-          onClick={onSubmit}
-          variant="contained"
-          sx={{ paddingBlock: '1em' }}
-        >
+      <form action={formAction} className={styles.inputContainer}>
+        <TextField name="userName" variant="outlined" />
+        {state.isInvalid?.userName && (
+          <FormLabel color="error">{REQUIRED}</FormLabel>
+        )}
+        <TextField name="password" variant="outlined" type="password" />
+        {state.isInvalid?.password && (
+          <FormLabel color="error">{REQUIRED}</FormLabel>
+        )}
+        <Button type="submit" variant="contained" sx={{ paddingBlock: '1em' }}>
           {SIGN_IN}
         </Button>
       </form>
