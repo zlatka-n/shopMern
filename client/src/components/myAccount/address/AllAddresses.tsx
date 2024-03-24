@@ -1,26 +1,41 @@
+/* eslint-disable indent */
+import { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
-import { putAddress } from '../../../api/myaccount';
+import { getAddresses, putAddress } from '../../../api/myaccount';
 import { Address } from '../../../api/types';
 import { Modal } from '../modal/Modal';
 import { addressValidationSchema } from '../types';
 import { AddressCard } from './AddressCard';
 import { CreateAddress } from './CreateAddress';
 import { useHandleModal } from '../../../shared/utils';
+import { EditModal } from '../modal/EditModal';
 
-type Props = {
- addresses: Address[];
-};
+export function AllAddresses() {
+  const [addressId, setAddressId] = useState<string | undefined>();
+  const [data, setData] = useState<Address[]>();
 
-export function AllAddresses({ addresses }: Props) {
   const { open, handleClose, handleOpen } = useHandleModal();
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation((address) => putAddress(address), {
     onSuccess: () => queryClient.invalidateQueries('addresses'),
   });
+
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      try {
+        const response = await getAddresses();
+        setData(response?.addresses);
+      } catch (error) {
+        throw error;
+      }
+    };
+
+    fetchAddresses();
+  }, []);
 
   const {
     control,
@@ -34,12 +49,12 @@ export function AllAddresses({ addresses }: Props) {
 
   const onEditClick = (id: string) => () => {
     handleOpen();
-    const addressForEdit = addresses?.filter((address) => address._id === id);
+    const addressForEdit = data?.filter((address) => address._id === id) ?? [];
 
     for (const property in addressForEdit[0]) {
       setValue(
         `${property as keyof Omit<Address, '_id'>}`,
-        addressForEdit[0][property as keyof Omit<Address, '_id'>],
+        addressForEdit[0][property as keyof Omit<Address, '_id'>]
       );
     }
   };
@@ -58,29 +73,27 @@ export function AllAddresses({ addresses }: Props) {
 
   return (
     <Grid container alignItems="center" gap={4}>
-      {addresses?.length < 3 ? (
-        <Grid item md={3.5} xs={11} border="1px solid">
-          <CreateAddress />
-        </Grid>
-      ) : null}
-      {addresses?.length > 0
-        ? addresses.map(
-          ({
-            address, city, zipCode, country, additionalInfo, _id,
-          }) => (
-            <Grid item key={_id} md={3.5} xs={11}>
-              <AddressCard
-                address={address}
-                city={city}
-                zipCode={zipCode}
-                country={country}
-                additionalInfo={additionalInfo}
-                onClick={onEditClick(_id)}
-                _id={_id}
-              />
-            </Grid>
-          ),
-        )
+      {/* {data?.length < 3 ? ( */}
+      <Grid item md={3.5} xs={11} border="1px solid">
+        <CreateAddress />
+      </Grid>
+      {/* ) : null} */}
+      {data && data?.length > 0
+        ? data?.map(
+            ({ address, city, zipCode, country, additionalInfo, _id }) => (
+              <Grid item key={_id} md={3.5} xs={11}>
+                <AddressCard
+                  address={address}
+                  city={city}
+                  zipCode={zipCode}
+                  country={country}
+                  additionalInfo={additionalInfo}
+                  onClick={onEditClick(_id)}
+                  _id={_id}
+                />
+              </Grid>
+            )
+          )
         : null}
       <Modal
         open={open}
@@ -89,6 +102,10 @@ export function AllAddresses({ addresses }: Props) {
         title="Edit your address"
         onSubmit={onSubmitEditAddress}
       />
+      {/* <EditModal
+        open={open}
+        onClose={handleClose}
+      /> */}
     </Grid>
   );
 }
