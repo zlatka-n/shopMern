@@ -68,13 +68,18 @@ export function Login() {
     >
       <CompanyLogo />
       <form action={formAction} className={styles.inputContainer}>
-        <TextField name="userName" variant="outlined" />
+        <TextField name="userName" variant="outlined" label="Email" />
         {state.isInvalid?.userName && (
-          <FormLabel color="error">{REQUIRED}</FormLabel>
+          <Typography color="error">{REQUIRED}</Typography>
         )}
-        <TextField name="password" variant="outlined" type="password" />
+        <TextField
+          name="password"
+          variant="outlined"
+          type="password"
+          label="Password"
+        />
         {state.isInvalid?.password && (
-          <FormLabel color="error">{REQUIRED}</FormLabel>
+          <Typography color="error">{REQUIRED}</Typography>
         )}
         <Button type="submit" variant="contained" sx={{ paddingBlock: '1em' }}>
           {SIGN_IN}
